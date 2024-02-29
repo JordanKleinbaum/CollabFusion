@@ -1,5 +1,6 @@
 # CollabFusion Collaboration Software
-[![Svelte][Svelte.dev]][Svelte-url]
+[![C#][https://static-00.iconduck.com/assets.00/c-sharp-c-icon-1822x2048-wuf3ijab.png]][[CSharp-url](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps)]
+
 ## Log-In With Accounts
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/baf300d6-2162-420c-b456-9a6db78b1a53)
 ## Create New Users
