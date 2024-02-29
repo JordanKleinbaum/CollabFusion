@@ -1,0 +1,59 @@
+﻿@page
+@model SignalRChat.Pages.SWOTModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+}
+
+<br />
+<h3>Create a SWOT Analysis</h3>
+
+<form asp-page="SWOT">
+
+    <div class="form-group">
+        <label class="form-label">SWOT Title</label>
+        <input asp-for="NewKnowledgeItem.KnowledgeTitle" class="form-control" placeholder="Enter SWOT Title"> @*Dont need type or name for inputs*@
+        <span asp-validation-for="NewKnowledgeItem.KnowledgeTitle" class="text-danger"></span>                     @*For invalid form submissions*@
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">SWOT Subject</label>
+        <input asp-for="NewKnowledgeItem.KnowledgeSubject" class="form-control" placeholder="Enter Knowledge Subject">
+        <span asp-validation-for="NewKnowledgeItem.KnowledgeSubject" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Strengths</label>
+        <textarea asp-for="NewKnowledgeItem.Strengths" class="form-control" rows="3" placeholder="Enter Strengths"></textarea>
+        <span asp-validation-for="NewKnowledgeItem.Strengths" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Weaknesses</label>
+        <textarea asp-for="NewKnowledgeItem.Weaknesses" class="form-control" rows="3" placeholder="Enter Weaknesses"></textarea>
+        <span asp-validation-for="NewKnowledgeItem.Weaknesses" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Opportunities</label>
+        <textarea asp-for="NewKnowledgeItem.Opportunities" class="form-control" rows="3" placeholder="Enter Opportunities"></textarea>
+        <span asp-validation-for="NewKnowledgeItem.Opportunities" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Threats</label>
+        <textarea asp-for="NewKnowledgeItem.Threats" class="form-control" rows="3" placeholder="Enter Threats"></textarea>
+        <span asp-validation-for="NewKnowledgeItem.Threats" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Date</label>
+        <input asp-for="NewKnowledgeItem.KNDate" class="form-control">
+        <span asp-validation-for="NewKnowledgeItem.KNDate" class="text-danger"></span>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button asp-page="SWOT" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
+    <button asp-page="SWOT" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
+</form>

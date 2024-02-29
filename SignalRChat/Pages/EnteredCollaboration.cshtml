@@ -1,0 +1,164 @@
+﻿@page
+@using System.Data.SqlClient
+@using SignalRChat.Pages.DB
+@model SignalRChat.Pages.EnteredCollaborationModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+
+}
+<br />
+
+<h1>@Model.CollaborationName</h1>
+<br />
+
+<form asp-action="EnteredCollaboration">
+    <p>Choose a Knowledge Item you wish to display:</p>
+    <select asp-for="KnowledgeID" asp-items="Model.KnowledgeItems" class="form-control">
+        <option value="" selected disabled>Choose a Knowledge Item</option>
+    </select>
+    <br />
+    <input type="submit" asp-page-handler="Submit" class="btn btn-primary" />
+</form>
+
+
+
+<br />
+
+<h1>Knowledge Items</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>KnowledgeID</th> *@
+            <th>Knowledge Title</th>
+            <th>Knowledge Subject</th>
+            <th>Category</th>
+            <th>Information</th>
+            <th>Knowledge Date</th>
+            @* <th>UserID</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            SqlDataReader KnowledgeItemReader = DBClass.GetSingleKnowledgeItem(Model.KnowledgeID);
+
+            while (KnowledgeItemReader.Read())
+            {
+                <tr>
+                    @*<td>@KnowledgeItemReader["KnowledgeID"]</td>*@
+                    <td>@KnowledgeItemReader["KnowledgeTitle"]</td>
+                    <td>@KnowledgeItemReader["KnowledgeSubject"]</td>
+                    <td>@KnowledgeItemReader["Category"]</td>
+                    <td>@KnowledgeItemReader["Information"]</td>
+                    <td>@KnowledgeItemReader["KNDate"]</td>
+                    @*<td>@KnowledgeItemReader["UserID"]</td>*@
+
+                </tr>
+            }
+
+            DBClass.CollabFusionDBConnection.Close();
+
+
+
+        }
+
+    </tbody>
+</table>
+<a asp-page="/KnowledgeItem" class="btn btn-primary">Create Knowledge Item</a>
+<hr />
+<br />
+<br />
+
+
+<form asp-action="EnteredCollaboration">
+    <p>Choose a Plan you wish to display:</p>
+    <select asp-for="PlanID" asp-items="Model.Plans" class="form-control">
+        <option value="" selected disabled>Choose a Plan</option>
+    </select>
+    <br />
+    <input type="submit" asp-page-handler="Submit" class="btn btn-primary" />
+</form>
+
+<br />
+<h1>Plans</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>PlanID</th> *@
+            <th>Plan Name</th>
+            <th>Plan Contents</th>
+            <th>Date Created</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
+
+            while (PlanReader.Read())
+            {
+                <tr>
+                    @*<td>@PlanReader["PlanID"]</td>*@
+                    <td>@PlanReader["PlanName"]</td>
+                    <td>@PlanReader["PlanContents"]</td>
+                    <td>@PlanReader["DateCreated"]</td>
+                    @*<td>@PlanReader["CollabID"]</td>*@
+
+                </tr>
+            }
+            DBClass.CollabFusionDBConnection.Close();
+        }
+
+
+    </tbody>
+</table>
+<div style="display: flex; justify-content: space-between;">
+    <a asp-page="/CreatePlan" class="btn btn-primary">Create a Plan</a>
+    <div>
+        <a asp-page="PlanStep" class="btn btn-primary">Add Step</a>
+        <a asp-page="AllSteps" class="btn btn-primary">See All Steps</a>
+    </div>
+</div>
+
+
+<hr />
+<br />
+<br />
+
+<br />
+<h1>Chat</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Message</th>
+            <th>Time of Message</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            string sqlQuery = $"SELECT Users.FirstName, Chat.ChatText, Chat.TimeStamp FROM Chat INNER JOIN Users ON Chat.UserID = Users.UserID WHERE CollabID = {HttpContext.Session.GetInt32("collabid")} ORDER BY Chat.TimeStamp";
+            SqlDataReader ChatReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+            while (ChatReader.Read())
+            {
+                <tr>
+                    <td>@ChatReader["FirstName"]</td>
+                    <td>@ChatReader["ChatText"]</td>
+                    <td>@ChatReader["TimeStamp"]</td>
+                </tr>
+            }
+            DBClass.CollabFusionDBConnection.Close();
+        }
+    </tbody>
+</table>
+<div style="display: flex; justify-content: flex-end; gap: 1em;">
+    <a asp-page="AddChat" class="btn btn-primary">Add A Chat</a>
+</div>
+<br />
+<a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>

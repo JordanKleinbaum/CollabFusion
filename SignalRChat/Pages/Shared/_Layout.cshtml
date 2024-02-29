@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CollabFusion</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CollabFusion.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-xxl">
+            <a asp-page="/CollabHub" class="fw-bold text-white bg-dark" style="text-decoration: none; font-size: 1.6em;">CollabFusion</a>
+            @*Toggle Button for Smaller Screens*@
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            @*Navbar Links*@
+            <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+                <ul class="navbar-nav">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/CollabHub">Collaboration Hub</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/KnowledgeLibrary">Knowledge Library</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/DataSets">DataSets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/AllUsers">All Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" style="color: white;" asp-page="/Index" asp-route-logout="true">Logout: @ViewData["username"]</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

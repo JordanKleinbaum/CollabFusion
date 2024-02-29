@@ -1,0 +1,55 @@
+﻿@page
+@model SignalRChat.Pages.PlansModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+}
+<br />
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4>
+            Welcome to Plans
+        </h4>
+        <a asp-page="/CreatePlan" class="btn btn-primary">Create a Plan</a>
+    </div>
+    <h6>Your Plans</h6>
+    <hr />
+    <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+
+        <div class="card" style="max-width: 20rem; position: relative;">
+            <div class="card-body" style="text-align: center; display: flex; flex-direction: column;">
+                <h5 class="card-title">Plan 1</h5>
+                <p class="card-text">Plan 1 Details.</p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                    <a href="#" class="btn btn-secondary btn-sm">Go to Plan</a>
+                    <a asp-page="/PlanStep" class="btn btn-primary btn-sm" style="margin-left: 5px;">Add a Step</a>
+                    <a href="#" class="btn btn-danger btn-sm" style="margin-left: 5px;">Edit this Plan</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card" style="max-width: 20rem; position: relative;">
+            <div class="card-body" style="text-align: center; display: flex; flex-direction: column;">
+                <h5 class="card-title">Plan 2</h5>
+                <p class="card-text">Plan 2 Details.</p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                    <a href="#" class="btn btn-secondary btn-sm">Go to Plan</a>
+                    <a asp-page="/PlanStep" class="btn btn-primary btn-sm" style="margin-left: 5px;">Add a Step</a>
+                    <a href="#" class="btn btn-danger btn-sm" style="margin-left: 5px;">Edit this Plan</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card" style="max-width: 20rem; position: relative;">
+            <div class="card-body" style="text-align: center; display: flex; flex-direction: column;">
+                <h5 class="card-title">Plan 3</h5>
+                <p class="card-text">Plan 3 Details.</p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                    <a href="#" class="btn btn-secondary btn-sm">Go to Plan</a>
+                    <a asp-page="/PlanStep" class="btn btn-primary btn-sm" style="margin-left: 5px;">Add a Step</a>
+                    <a href="#" class="btn btn-danger btn-sm" style="margin-left: 5px;">Edit this Plan</a>
+                </div>
+            </div>
+        </div>
+    </section>

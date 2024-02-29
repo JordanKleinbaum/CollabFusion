@@ -1,0 +1,37 @@
+﻿@page
+@model SignalRChat.Pages.AllStepsModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+
+}
+<br />
+<h1>View Your Plans</h1>
+<hr />
+
+@foreach (var plan in Model.PlanList)
+{
+    <br />
+    <h4>All Steps for @plan.PlanName</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Step Title</th>
+                <th>Step Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var PlanStep in Model.MatchingPlanStepList)
+            {
+                if (PlanStep.PlanID == plan.PlanID)
+                {
+                    <tr>
+                        <td>@PlanStep.StepTitle</td>
+                        <td>@PlanStep.StepDescription</td>
+                    </tr>
+                }
+                
+            }
+        </tbody>
+    </table>
+}

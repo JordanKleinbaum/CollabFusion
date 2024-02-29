@@ -1,0 +1,85 @@
+﻿@page
+@model SignalRChat.Pages.DataSetsModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+<br />
+@if (Model.UploadSuccessful)
+{
+    <div class="alert alert-success" role="alert">
+        Upload successful!
+    </div>
+}
+
+@if (Model.FileList != null && !Model.UploadSuccessful)
+{
+    <div class="alert alert-danger" role="alert">
+        Error: The file '@Model.ErrorFileName' already exists in the database. 
+        <ol>
+            <li>Please choose a different file</li>
+            <li>Or change the name of @Model.ErrorFileName to something else.</li>
+        </ol> 
+    </div>
+}
+
+<h3>Create a Dataset</h3>
+
+@if (Model.ModelState.IsValid)
+{
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="col-md-10">
+                <p>Choose Files to Upload:</p>
+                <input asp-for="FileList" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" multiple />
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Upload File(s)" class="btn btn-dark" />
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var modelError in Model.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@modelError.ErrorMessage</p>
+        }
+    </div>
+}
+
+<br />
+
+@if (Model.ExcelDataDict != null && Model.ExcelDataDict.Count > 0)
+{
+    <hr />
+    @foreach (var excelDataEntry in Model.ExcelDataDict)
+    {
+        <h4>@excelDataEntry.Key</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach (var header in excelDataEntry.Value.FirstOrDefault())
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in excelDataEntry.Value.Skip(1))
+                {
+                    <tr>
+                        @foreach (var cell in row)
+                        {
+                            <td>@cell</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+    }
+}

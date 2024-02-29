@@ -1,0 +1,32 @@
+﻿@page
+@model SignalRChat.Pages.PlanStepModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+
+<h2>Create a Step</h2>
+
+<form asp-page="PlanStep">
+    <select asp-for="NewPlanStep.PlanID" class="form-control">
+        <option selected disabled>Choose A Plan ...</option>
+        @foreach (var plan in Model.PlanList)
+        {
+            <option value="@plan.PlanID">@plan.PlanName</option>
+        }
+    </select>
+    <label for="stepTitle">Step Title:</label>
+    <br>
+    <input asp-for="NewPlanStep.StepTitle" class="form-control" required>
+
+    <br><br>
+
+    <label for="stepDescription">Step Description:</label>
+    <br>
+    <textarea asp-for="NewPlanStep.StepDescription" rows="4" class="form-control" required></textarea>
+
+    <br><br>
+
+    <button type="submit" class="btn btn-primary">Add Step to Plan</button>
+    <button asp-page="PlanStep" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
+    <button asp-page="PlanStep" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
+</form>

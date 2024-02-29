@@ -1,0 +1,23 @@
+﻿@page
+@model SignalRChat.Pages.CollabSpaceModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+
+<br />
+<h3>Please Enter the Information</h3>
+<form asp-page="CollabSpace">
+    <div class="form-group">
+        <label class="form-label">Collaboration Name</label>
+        <input asp-for="CollaborationName" placeholder="Enter Collaboration Name">
+        <span asp-validation-for="CollaborationName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Collaboration Notes</label>
+        <textarea asp-for="CollaborationNotes" class="form-control" rows="4" placeholder="Enter Notes"></textarea>
+        <span asp-validation-for="CollaborationNotes" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create New Collaboration</button>
+    <button asp-page="CollabSpace" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
+    <button asp-page="CollabSpace" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
+</form>

@@ -1,0 +1,16 @@
+﻿@page
+@model SignalRChat.Pages.AddChatModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+}
+<br />
+<h3>Add A Chat</h3>
+<form asp-page="AddChat">
+    <p>Enter Text:</p>
+    <br />
+    <input asp-for="NewChat.ChatText"/>
+    <span asp-validation-for="NewChat.ChatText" class="text-danger"></span>
+    <input type="submit" class="btn btn-primary" />
+</form>
+

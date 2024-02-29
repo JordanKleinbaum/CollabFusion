@@ -1,0 +1,44 @@
+﻿@page
+@model SignalRChat.Pages.AllUsersModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+
+<br />
+<h4>Welcome to All Users</h4>
+<h6>Your Users</h6>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            @* <th>UserID</th> *@
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Zip Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.UserList)
+        {
+            <tr>
+                @* <td>@user.UserID</td> *@
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@user.Street</td>
+                <td>@user.City</td>
+                <td>@user.State</td>
+                <td>@user.Country</td>
+                <td>@user.ZipCode</td>
+            </tr>
+        }
+    </tbody>
+</table>

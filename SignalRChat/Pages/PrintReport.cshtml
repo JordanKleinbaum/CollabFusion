@@ -1,0 +1,86 @@
+﻿@page
+@model SignalRChat.Pages.PrintReportModel
+@{
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+<br />
+<h1 style="display: flex; justify-content: center;">Report for @Model.CollaborationName</h1>
+<p style="display: flex; justify-content: center; font-weight: bold;">Date: @Model.CurrentDate</p>
+<br />
+
+
+@*MAIN ANALYSIS SECTION*@
+
+<h2>Main Analysis</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Plan Name</th>
+            <th>Plan Contents</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Plan in Model.PlanList)
+        {
+            <tr>
+                <td>@Plan.PlanName</td>
+                <td>@Plan.PlanContents</td>
+                <td>@Plan.DateCreated</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*RESEARCH SECTION*@
+
+<br />
+<h2>Research</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Knowledge Title</th>
+            <th>Knowledge Subject</th>
+            <th>Category</th>
+            <th>Information</th>
+            <th>Knowledge Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var KnowledgeItem in Model.KnowledgeItemList)
+        {
+            <tr>
+                <td>@KnowledgeItem.KnowledgeTitle</td>
+                <td>@KnowledgeItem.KnowledgeSubject</td>
+                <td>@KnowledgeItem.Category</td>
+                <td>@KnowledgeItem.Information</td>
+                <td>@KnowledgeItem.KNDate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*USERS SECTION*@
+
+<br />
+<h3>Contributed Users</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var UserItem in Model.UserList)
+        {
+            <tr>
+                <td>@UserItem.FirstName</td>
+                <td>@UserItem.LastName</td>
+
+            </tr>
+        }
+    </tbody>
+</table>

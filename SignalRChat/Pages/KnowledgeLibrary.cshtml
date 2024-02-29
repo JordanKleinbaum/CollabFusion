@@ -1,0 +1,56 @@
+﻿@page
+@model SignalRChat.Pages.KnowledgeLibraryModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="./css/carousel.css" />
+</head>
+<body>
+    <br />
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4>
+            Welcome to Knowledge Library
+        </h4>
+    </div>
+        <br />
+    <br />
+    <h6>Your Knowledge Item</h6>
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>KnowledgeID</th> *@
+                <th>Knowledge Title</th>
+                <th>Knowledge Subject</th>
+                <th>Category</th>
+                <th>Information</th>
+                <th>Knowledge Date</th>
+                @* <th>UserID</th> *@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var KnowledgeItem in Model.KnowledgeItemList)
+            {
+                <tr>
+                    @* <td>@KnowledgeItem.KnowledgeID</td> *@
+                    <td>@KnowledgeItem.KnowledgeTitle</td>
+                    <td>@KnowledgeItem.KnowledgeSubject</td>
+                    <td>@KnowledgeItem.Category</td>
+                    <td>@KnowledgeItem.Information</td>
+                    <td>@KnowledgeItem.KNDate</td>
+                    @* <td>@KnowledgeItem.UserID</td>
+                    <td>@KnowledgeItem.CollabID</td>
+                    <td>@KnowledgeItem.KnowledgeLibID</td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

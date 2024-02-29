@@ -1,0 +1,18 @@
+-- CIS 484 AUTH SQL
+
+-- CREATE A DB CALLED "AUTH" AND PUT THIS QUERY IN THERE. IT IS ALL CAPS.
+
+CREATE TABLE HashedCredentials (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NULL,
+    Password NVARCHAR(MAX) NULL
+);
+
+INSERT INTO HashedCredentials (Username, Password)
+VALUES ('ben.eidelkind', '1000:J197jbwOPp0I8IMUiDtrgKVaAIylp8tC:f2L9dLr7MtnI3jIcebnvmU3M/44=');
+
+INSERT INTO HashedCredentials (Username, Password)
+VALUES ('jeremy.ezell', '1000:zsDR29i4uiq/0WPmCUdl9qqWft0kfIsu:A4ByLoLd097z7KGERhxlG/fWV8o=');
+
+INSERT INTO HashedCredentials (Username, Password)
+VALUES ('admin', '1000:GPrtNqdAm4FN5SoGGrylL0Pvlo9y2biu:Y90JvQ0msPi1f8TXiROc7USrn5g=');

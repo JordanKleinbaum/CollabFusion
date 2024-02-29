@@ -1,0 +1,31 @@
+﻿@page
+@model SignalRChat.Pages.AllChatsModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>ChatText</th>
+            <th>TimeStamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var chat in Model.ChatList)
+        {
+            <tr>
+                @foreach (var users in Model.UsersList)
+                {
+                    if (users.UserID == chat.UserID)
+                    {
+                        <td>@users.Username</td>
+                    }
+                }
+                <td>@chat.ChatText</td>
+                <td>@chat.TimeStamp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-page="EnteredCollaboration" class="btn btn-primary">Back to Collaboration</a>

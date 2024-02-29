@@ -1,0 +1,50 @@
+﻿@page
+@model SignalRChat.Pages.KnowledgeItemModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+}
+
+<br />
+<h3>Create a Knowledge Item</h3>
+
+<div class="d-flex justify-content-end">
+    <a asp-page="/SWOT" class="btn btn-primary">Create a SWOT Analysis</a>
+</div>
+
+<form asp-page="KnowledgeItem">
+    <div class="form-group">
+        <label class="form-label">Knowledge Title</label>
+        <input asp-for="NewKnowledgeItem.KnowledgeTitle" class="form-control" placeholder="Enter Knowledge Title"> @*Dont need type or name for inputs*@
+        <span asp-validation-for="NewKnowledgeItem.KnowledgeTitle" class="text-danger"></span>                     @*For invalid form submissions*@
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Knowledge Subject</label>
+        <input asp-for="NewKnowledgeItem.KnowledgeSubject" class="form-control" placeholder="Enter Knowledge Subject">
+        <span asp-validation-for="NewKnowledgeItem.KnowledgeSubject" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Category</label>
+        <input asp-for="NewKnowledgeItem.Category" class="form-control" placeholder="Enter Category">
+        <span asp-validation-for="NewKnowledgeItem.Category" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Information</label>
+        <textarea asp-for="NewKnowledgeItem.Information" class="form-control" rows="3" placeholder="Enter Threats"></textarea>
+        <span asp-validation-for="NewKnowledgeItem.Information" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Date</label>
+        <input asp-for="NewKnowledgeItem.KNDate" class="form-control">
+        <span asp-validation-for="NewKnowledgeItem.KNDate" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button asp-page="KnowledgeItem" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
+    <button asp-page="KnowledgeItem" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
+</form>

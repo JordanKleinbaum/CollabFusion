@@ -1,0 +1,40 @@
+﻿@page
+@model SignalRChat.Pages.CreatePlanModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+}
+
+<br />
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h4>
+        Create a Plan
+    </h4>
+</div>
+<hr />
+
+<form asp-page="CreatePlan">
+    <div class="form-group">
+        <label>Plan Name</label>
+        <input asp-for="NewPlan.PlanName" class="form-control" placeholder="enter plan name" required>
+        <span asp-validation-for="NewPlan.PlanName" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>Plan Contents</label>
+        <textarea asp-for="NewPlan.PlanContents" class="form-control" rows="3" placeholder="begin typing..." required></textarea>
+        <span asp-validation-for="NewPlan.PlanContents" class="text-danger"></span>
+
+    </div>
+    <br />
+    <div class="form-group">
+        <label>Date</label>
+        <input asp-for="NewPlan.DateCreated" type="date" class="form-control" required>
+        <span asp-validation-for="NewPlan.DateCreated" class="text-danger"></span>
+
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button asp-page="CreatePlan" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
+    <button asp-page="CreatePlan" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
+</form>

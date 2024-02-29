@@ -1,0 +1,77 @@
+﻿@page
+@model SignalRChat.Pages.IndexModel
+@{
+    Layout = "~/Pages/Shared/_LayoutLoggedOut.cshtml";
+}
+
+
+@{
+    if(ViewData["LoginMessage"] != null)
+    {
+        <br />
+        if (ViewData["LoginMessage"] == "Successfully Logged Out!")
+        {
+            <h3 class="text-success">@ViewData["LoginMessage"]</h3>
+        }
+        if (ViewData["LoginMessage"] == "Username and/or Password Incorrect")
+        {
+            <h3 class="text-danger">@ViewData["LoginMessage"]</h3>
+        }
+        
+    }
+
+    if (ViewData["LoginMessage"] == null)
+    {
+        <br />
+        <h3>Welcome to CollabFusion!</h3>
+    }
+}
+
+@{
+    if(HttpContext.Session.GetString("username") != null)
+    {
+        <h3>Already Logged In As: @HttpContext.Session.GetString("username")</h3>
+        // Log out here
+        <form asp-page="Index" asp-page-handler="LogoutHandler">
+        <input type="submit" class="btn btn-danger" value="Logout"/>
+        </form>
+    }
+
+    else if (HttpContext.Session.GetString("LoginError") != null)
+    {
+        <p class="text-danger">@HttpContext.Session.GetString("LoginError")</p>
+
+
+        // Let the user try login again.
+        <form asp-page="Index">
+        <label>Enter Username:</label>
+        <input asp-for="Username" class="form-control" placeholder="Enter Username" required/>
+        <br />
+        <label>Enter Password:</label>
+            <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+            <br />
+        <input type="submit" class="btn btn-primary"/>
+        </form>
+        <br />
+    }
+
+    else
+    {
+        
+        // First time loading the page
+
+        <form asp-page="Index">
+        <label>Enter Username:</label>
+        <input asp-for="Username" class="form-control" placeholder="Enter Username" required/>
+        <br />
+        <label>Enter Password:</label>
+        <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required/>
+        <br />
+        <input type="submit" class="btn btn-primary"/>
+        </form>
+        <br />
+    }
+}
+<br />
+<br />
+<h1 style="text-align: center;">Jordan Kleinbaum, Sean Mundie, and Ben Eidelkind</h1>
