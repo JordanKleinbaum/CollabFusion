@@ -1,4 +1,3 @@
-# CollabFusion Collaboration Software
 # Front End: **C#, ASP.NET Core Razor Pages**
 # Back End: **Microsoft SQL Server**
 
