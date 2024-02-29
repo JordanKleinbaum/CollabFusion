@@ -1,6 +1,6 @@
 # CollabFusion Collaboration Software
-## Front End: **C#, ASP.NET Core Razor Pages**
-## Back End: **Microsoft SQL Server**
+# Front End: **C#, ASP.NET Core Razor Pages**
+# Back End: **Microsoft SQL Server**
 
 ## Log-In With Accounts
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/baf300d6-2162-420c-b456-9a6db78b1a53)
