@@ -1,3 +1,5 @@
+# CollabFusion Collaboration Software
+
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/baf300d6-2162-420c-b456-9a6db78b1a53)
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/20d65572-fca1-4b0f-a12b-57ff25c18e0b)
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/a29095a6-c4dc-4345-8a4b-cc18098ad1d0)
