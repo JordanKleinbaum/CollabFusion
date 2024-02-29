@@ -1,5 +1,5 @@
 # CollabFusion Collaboration Software
-* [![Svelte][Svelte.dev]][Svelte-url]
+[![Svelte][Svelte.dev]][Svelte-url]
 ## Log-In With Accounts
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/baf300d6-2162-420c-b456-9a6db78b1a53)
 ## Create New Users
