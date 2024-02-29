@@ -1,7 +1,8 @@
 # CollabFusion Collaboration Software
 
-## Ability to log-in with accounts
+## Log-In With Accounts
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/baf300d6-2162-420c-b456-9a6db78b1a53)
+## Create New Users
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/20d65572-fca1-4b0f-a12b-57ff25c18e0b)
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/a29095a6-c4dc-4345-8a4b-cc18098ad1d0)
 ![image](https://github.com/JordanKleinbaum/CollabFusion/assets/122086411/05aac540-4f4f-48c5-88b6-db9d98af805d)
