@@ -162,3 +162,40 @@
 </div>
 <br />
 <a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>
+
+@*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
+@* @if (Model.SWOTs != null && Model.SWOTs.Any())
+{
+    <h3>SWOT Analysis</h3>
+    <div class="swot-container">
+        <div class="swot-section">
+            <h4>Strengths</h4>
+            @foreach (var swot in Model.SWOTs)
+            {
+                <p>@swot.Strength</p>
+            }
+        </div>
+        <div class="swot-section">
+            <h4>Weaknesses</h4>
+            @foreach (var swot in Model.SWOTs)
+            {
+                <p>@swot.Weakness</p>
+            }
+        </div>
+        <div class="swot-section">
+            <h4>Opportunities</h4>
+            @foreach (var swot in Model.SWOTs)
+            {
+                <p>@swot.Opportunity</p>
+            }
+        </div>
+        <div class="swot-section">
+            <h4>Threats</h4>
+            @foreach (var swot in Model.SWOTs)
+            {
+                <p>@swot.Threat</p>
+            }
+        </div>
+    </div>
+} *@
+@*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
