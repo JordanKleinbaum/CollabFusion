@@ -61,7 +61,7 @@ else
     DirectoryInfo imagesFolder = new DirectoryInfo(imagesDir);
 
     var fileListing = imagesFolder.GetFiles();
-
+    <h6>Download Files</h6>
     foreach (var file in fileListing)
     {
         <a href="/Uploads/@file.Name" target="_blank">@file.Name</a>
