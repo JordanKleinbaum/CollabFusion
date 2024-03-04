@@ -11,7 +11,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="./css/carousel.css" />
 </head>
-<body>
+ <body>
     <br />
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h4>
@@ -20,37 +20,60 @@
     </div>
         <br />
     <br />
-    <h6>Your Knowledge Item</h6>
-    <hr />
 
-    <table class="table">
-        <thead>
-            <tr>
-                @* <th>KnowledgeID</th> *@
-                <th>Knowledge Title</th>
-                <th>Knowledge Subject</th>
-                <th>Category</th>
-                <th>Information</th>
-                <th>Knowledge Date</th>
-                @* <th>UserID</th> *@
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var KnowledgeItem in Model.KnowledgeItemList)
+    <form method="post" asp-page-handler="Search">
+        <label for="SearchTerm" style="display: block;">Search Knowledge Library:</label>
+        <input type="text" asp-for="SearchTerm" />
+        <button type="submit">Search</button>
+        <br />
+    </form>
+
+    <br />
+    <br />
+
+<h2>Knowledge View</h2>
+<table class="table table-bordered table-responsive table-hover">
+    <thead>
+        <tr>
+            <th>Knowledge ID:</th>
+            <th>Knowledge Title:</th>
+            <th>Knowledge Subject:</th>
+            <th>Category:</th>
+            <th>Information:</th>
+           @* <th>Date and Time:</th>
+            <th>Knowledge Information:</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.KnowledgeItemList != null && Model.KnowledgeItemList.Any())
+        {
+            foreach (var know in Model.KnowledgeItemList)
             {
                 <tr>
-                    @* <td>@KnowledgeItem.KnowledgeID</td> *@
-                    <td>@KnowledgeItem.KnowledgeTitle</td>
-                    <td>@KnowledgeItem.KnowledgeSubject</td>
-                    <td>@KnowledgeItem.Category</td>
-                    <td>@KnowledgeItem.Information</td>
-                    <td>@KnowledgeItem.KNDate</td>
-                    @* <td>@KnowledgeItem.UserID</td>
-                    <td>@KnowledgeItem.CollabID</td>
-                    <td>@KnowledgeItem.KnowledgeLibID</td> *@
+                    <td class="text-danger">@know.KnowledgeID</td>
+                    <td>@know.KnowledgeTitle</td>
+                    <td>@know.KnowledgeSubject</td>
+                    <td>@know.Category</td>
+                    <td>@know.Information</td>
+                  @*  <td>@know.FullDateAndTime</td>
+                    <td>@know.KnowledgeInfo</td> *@
+                    @* <td>
+                        <a asp-page="/Functions/EditKnowledge" class="btn btn-primary" asp-route-knowledgeid="@know.KnowledgeID">Edit</a>
+                    </td> *@
                 </tr>
             }
-        </tbody>
-    </table>
-</body>
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">No match found</td>
+            </tr>
+        }
+    </tbody>
+</table>
+    </body>
+<br />
+@* <a asp-page="/Functions/KnowledgeItem" class="btn btn-primary spaceBtn">Add Knowledge Item</a> *@
+
+
 </html>

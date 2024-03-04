@@ -525,5 +525,38 @@ namespace SignalRChat.Pages.DB
             cmdInsert.Connection.Close();
         }
 
+
+        public static List<KnowledgeItem> SearchKnowledge(string SearchTerm)
+        {
+            List<KnowledgeItem> SearchedKnowledgeItem = new List<KnowledgeItem>();
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+                string sqlQuery = "SELECT * FROM KnowledgeItem WHERE KnowledgeTitle LIKE @SearchTerm";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@SearchTerm", "%" + SearchTerm + "%");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            KnowledgeItem knowledge = new KnowledgeItem
+                            {
+                                KnowledgeID = Int32.Parse(reader["KnowledgeID"].ToString()),
+                                KnowledgeTitle = reader["KnowledgeTitle"].ToString(),
+                                KnowledgeSubject = reader["KnowledgeSubject"].ToString(),
+                                Category = reader["Category"].ToString(),
+                                Information = reader["Information"].ToString()
+                                //FullDateAndTime = reader["FullDateAndTime"].ToString(),
+                                //KnowledgeInfo = reader["KnowledgeInfo"].ToString()
+                            };
+                            SearchedKnowledgeItem.Add(knowledge);
+                        }
+                    }
+                }
+            }
+            return SearchedKnowledgeItem;
+        }
+
     }
 }

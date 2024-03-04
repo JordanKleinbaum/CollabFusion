@@ -14,6 +14,8 @@ namespace SignalRChat.Pages
 
         public List<Users> UsersList { get; set; } = new List<Users>();
 
+        public string SearchTerm { get; set; }
+
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
@@ -30,24 +32,25 @@ namespace SignalRChat.Pages
                 }
                 userReader.Close();
 
-                SqlDataReader knowledgeReader = DBClass.GetAllKnowledgeItems();
-                while (knowledgeReader.Read())
-                {
-                    KnowledgeItemList.Add(new KnowledgeItem
-                    {
-                        KnowledgeID = Convert.ToInt32(knowledgeReader["KnowledgeID"]),
-                        KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
-                        KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
-                        Category = knowledgeReader["Category"].ToString(),
-                        Information = knowledgeReader["Information"]?.ToString(),
-                        KNDate = knowledgeReader["KNDate"] as DateTime?,
-                        UserID = Convert.ToInt32(knowledgeReader["UserID"]),
-                        //CollabID = Convert.ToInt32(knowledgeReader["CollabID"]),  <---- DON'T DELETE THESE WE NEED THEM LATER
-                        //KnowledgeLibID = Convert.ToInt32(knowledgeReader["KnowledgeLibID"]) <---- DON'T DELETE THESE WE NEED THEM LATER
-                    });
-                }
-                knowledgeReader.Close();
+                //SqlDataReader knowledgeReader = DBClass.GetAllKnowledgeItems();
+                //while (knowledgeReader.Read())
+                //{
+                //    KnowledgeItemList.Add(new KnowledgeItem
+                //    {
+                //        KnowledgeID = Convert.ToInt32(knowledgeReader["KnowledgeID"]),
+                //        KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
+                //        KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
+                //        Category = knowledgeReader["Category"].ToString(),
+                //        Information = knowledgeReader["Information"]?.ToString(),
+                //        KNDate = knowledgeReader["KNDate"] as DateTime?,
+                //        UserID = Convert.ToInt32(knowledgeReader["UserID"]),
+                //        //CollabID = Convert.ToInt32(knowledgeReader["CollabID"]),  <---- DON'T DELETE THESE WE NEED THEM LATER
+                //        //KnowledgeLibID = Convert.ToInt32(knowledgeReader["KnowledgeLibID"]) <---- DON'T DELETE THESE WE NEED THEM LATER
+                //    });
+                //}
+                //knowledgeReader.Close();
 
+                LoadAllKnowledge();
                 // Close your connection in DBClass
                 DBClass.CollabFusionDBConnection.Close();
                 return Page();
@@ -58,6 +61,39 @@ namespace SignalRChat.Pages
                 return RedirectToPage("Index");
             }
 
+        }
+
+
+        public IActionResult OnPostSearch(String SearchTerm)
+        {
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                KnowledgeItemList = DB.DBClass.SearchKnowledge(SearchTerm);
+
+            }
+            else
+            {
+                LoadAllKnowledge();
+            }
+            return Page();
+        }
+        private void LoadAllKnowledge()
+        {
+            SqlDataReader knowledgeReader = DB.DBClass.GetAllKnowledgeItems();
+            while (knowledgeReader.Read())
+            {
+                KnowledgeItemList.Add(new KnowledgeItem
+                {
+                    KnowledgeID = Int32.Parse(knowledgeReader["KnowledgeID"].ToString()),
+                    KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
+                    KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
+                    Category = knowledgeReader["Category"].ToString(),
+                    Information = knowledgeReader["Information"].ToString()
+                    //FullDateAndTime = reader["FullDateAndTime"].ToString(),
+                    //KnowledgeInfo = reader["KnowledgeInfo"].ToString()
+                });
+            }
+            DB.DBClass.CollabFusionDBConnection.Close();
         }
 
     }
