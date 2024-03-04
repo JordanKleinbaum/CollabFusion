@@ -182,7 +182,7 @@ namespace SignalRChat.Pages
 
             DBClass.CollabFusionDBConnection.Close();
 
-            return RedirectToPage("KnowledgeItem");
+            return RedirectToPage("EnteredCollaboration", new { collaborationId = NewKnowledgeItem.CollabID });
         }
     }
 
