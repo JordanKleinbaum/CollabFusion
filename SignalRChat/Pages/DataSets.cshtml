@@ -53,6 +53,23 @@ else
 
 <br />
 
+@*Displaying The Already Uploaded Files*@
+@{
+    string imagesDir = Directory.GetCurrentDirectory();
+    imagesDir += @"\wwwroot\Uploads\";
+    <br />
+    DirectoryInfo imagesFolder = new DirectoryInfo(imagesDir);
+
+    var fileListing = imagesFolder.GetFiles();
+
+    foreach (var file in fileListing)
+    {
+        <a href="/Uploads/@file.Name" target="_blank">@file.Name</a>
+        <br />
+    }
+}
+@*Displaying The Already Uploaded Files*@
+
 @if (Model.ExcelDataDict != null && Model.ExcelDataDict.Count > 0)
 {
     <hr />
