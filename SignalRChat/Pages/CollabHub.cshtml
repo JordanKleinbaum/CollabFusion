@@ -33,9 +33,9 @@
     <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
         @foreach (var collab in Model.Collaborations)
         {
-            <div class="card" style="max-width: 20rem;">
-                <div class="card-body" style="text-align: center;">
-                    <h5 class="card-title">@collab.CollaborationName</h5>
+            <div class="card" style="max-width: 20rem; ">
+                <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                    <h6 class="card-title">@collab.CollaborationName</h6>
                     <p class="card-text">@collab.NotesAndInformation</p>
                     <a asp-page="/EnteredCollaboration" asp-route-collaborationId="@collab.CollabID" class="btn btn-primary">Enter Collaboration</a>
 
