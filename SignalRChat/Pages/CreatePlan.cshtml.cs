@@ -78,7 +78,7 @@ namespace SignalRChat.Pages
 
             DBClass.CollabFusionDBConnection.Close();
 
-            return RedirectToPage("CreatePlan");
+            return RedirectToPage("EnteredCollaboration", new { collaborationId = NewPlan.CollabID });
         }
 
     }
