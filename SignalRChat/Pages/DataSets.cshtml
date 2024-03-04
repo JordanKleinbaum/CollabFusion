@@ -29,14 +29,14 @@
     <form method="post" enctype="multipart/form-data">
         <div class="form-group">
             <div class="col-md-10">
-                <p>Choose Files to Upload:</p>
-                <input asp-for="FileList" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" multiple />
+                <h5>Upload Files</h5>
+                <input asp-for="FileList" value="Upload Files" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" multiple />
             </div>
         </div>
         <br />
         <div class="form-group">
             <div class="col-md-10">
-                <input type="submit" value="Upload File(s)" class="btn btn-dark" />
+                <input type="submit" value="Submit File" class="btn btn-dark" />
             </div>
         </div>
     </form>
