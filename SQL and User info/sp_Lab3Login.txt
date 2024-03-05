@@ -1,0 +1,17 @@
+-- RUN THIS QUERY IN THE AUTH DATABASE
+
+CREATE PROCEDURE sp_Lab3Login
+-- Add incoming parameters here
+@Username AS NVARCHAR(50)
+
+AS
+BEGIN
+	-- Prevents the message indicating the number
+	-- of rows impacted by the query from being
+	-- included in the results.
+	SET NOCOUNT ON;
+
+	SELECT Password 
+	FROM HashedCredentials
+	WHERE Username = @Username;
+END;

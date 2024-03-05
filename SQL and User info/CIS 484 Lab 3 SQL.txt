@@ -1,0 +1,197 @@
+-- CREATE A DB CALLED "Lab3" AND PUT THIS QUERY IN THERE.
+
+-- Create `User` table
+CREATE TABLE Users (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+    Username VARCHAR(255),
+    
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    Email VARCHAR(255),
+    Phone VARCHAR(20),
+    Street VARCHAR(255),
+    City VARCHAR(255),
+    State VARCHAR(50),
+    Country VARCHAR(50),
+    ZipCode VARCHAR(20)
+);
+
+-- Create `Collaboration` table
+CREATE TABLE Collaboration (
+    CollabID INT IDENTITY(1,1) PRIMARY KEY,
+    CollaborationName VARCHAR(255),
+    NotesAndInformation TEXT
+);
+
+-- Create `Analysis` table
+CREATE TABLE Analysis (
+    AnalysisID INT IDENTITY(1,1) PRIMARY KEY,
+    AnalysisType VARCHAR(255),
+    Details TEXT,
+    UserID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- Create `Dataset` table
+CREATE TABLE Dataset (
+    DatasetID INT IDENTITY(1,1) PRIMARY KEY,
+    DatasetDetails TEXT,
+    UploadDate DATE,
+    UserID INT,
+    AnalysisID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (AnalysisID) REFERENCES Analysis(AnalysisID)
+);
+
+-- Create `Data_Collab` table
+CREATE TABLE Data_Collab (
+    DataCollabID INT IDENTITY(1,1) PRIMARY KEY,
+    DatasetID INT,
+    CollabID INT,
+    FOREIGN KEY (DatasetID) REFERENCES Dataset(DatasetID),
+    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID)
+);
+
+-- Create `Collab_User` table
+CREATE TABLE Collab_User (
+    CollabUserID INT IDENTITY(1,1) PRIMARY KEY,
+    CollabID INT,
+    UserID INT,
+    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- Create `Chat` table
+CREATE TABLE Chat (
+    ChatID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT, -- Change to reference UserID
+    ChatText TEXT,
+    TimeStamp DATETIME,
+    CollabID INT,
+    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) -- Change to reference UserID
+);
+
+-- Create `KnowledgeLibrary` table
+CREATE TABLE KnowledgeLibrary (
+    KnowledgeLibID INT IDENTITY(1,1) PRIMARY KEY
+);
+
+-- Create `KnowledgeItem` table
+CREATE TABLE KnowledgeItem (
+    KnowledgeID INT IDENTITY(1,1) PRIMARY KEY,
+    KnowledgeTitle VARCHAR(255),
+    KnowledgeSubject VARCHAR(255),
+    Category VARCHAR(255),
+    Information TEXT,
+    KNDate DATE,
+    UserID INT,
+    CollabID INT,
+    KnowledgeLibID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID),
+    FOREIGN KEY (KnowledgeLibID) REFERENCES KnowledgeLibrary(KnowledgeLibID)
+);
+
+-- Create `Plan` table
+CREATE TABLE Plans (
+    PlanID INT IDENTITY(1,1) PRIMARY KEY,
+    PlanName VARCHAR(255),
+    PlanContents TEXT,
+    DateCreated DATE,
+    CollabID INT,
+    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID)
+);
+
+-- Create `PlanStep` table
+CREATE TABLE PlanStep (
+    PlanStepID INT IDENTITY(1,1) PRIMARY KEY,
+    StepTitle VARCHAR(255),
+    StepDescription TEXT,
+    PlanID INT,
+    FOREIGN KEY (PlanID) REFERENCES Plans(PlanID)
+);
+
+-- Create `Login` table
+CREATE TABLE Login (
+    LoginID INT IDENTITY(1,1) PRIMARY KEY,
+    Username VARCHAR(255),
+    
+    TypeOfUser VARCHAR(50),
+    UserID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode)
+VALUES
+('ben.eidelkind', 'Ben', 'Eidelkind', 'ben.eidel@gmail.com', '123-456-7890', '123 Main St', 'Fairfax', 'VA', 'USA', '22039'),
+('jeremy.ezell', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801'),
+('admin', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801');
+
+
+-- Insert sample collaboration
+INSERT INTO Collaboration (CollaborationName, NotesAndInformation)
+VALUES
+('Project Alpha', 'Initial project setup and objectives.'),
+('Project Beta', 'Focus on data analysis and collection.');
+
+-- Insert sample knowledgeItem
+INSERT INTO KnowledgeItem (KnowledgeTitle, KnowledgeSubject, Category, Information, KNDate, UserID, CollabID, KnowledgeLibID)
+VALUES
+('Best Practices', 'Data Analysis', 'Research', 'Summary of best practices in data analysis.', '2024-01-01', 1, 1, NULL),
+('Survey Techniques', 'Survey Design', 'Methodology', 'Overview of effective survey design techniques.', '2024-01-02', 2, 2, NULL);
+
+-- Insert sample plans
+INSERT INTO Plans (PlanName, PlanContents, DateCreated, CollabID)
+VALUES
+('Alpha Phase 1 Planning', 'Outline of phase 1 activities.', '2024-01-10', 1),
+('Alpha Phase 2 Planning', 'Outline of phase 2 activities.', '2024-02-01', 1);
+
+INSERT INTO Plans (PlanName, PlanContents, DateCreated, CollabID)
+VALUES
+('Beta Phase 1 Planning', 'Outline of phase 1 activities.', '2024-01-10', 2),
+('Beta Phase 2 Planning', 'Outline of phase 2 activities.', '2024-02-01', 2);
+
+-- Insert 3 steps for PlanID 1
+INSERT INTO PlanStep (StepTitle, StepDescription, PlanID)
+VALUES
+('Step 1', 'Initial project setup and team orientation.', 1),
+('Step 2', 'Define project scope and objectives.', 1),
+('Step 3', 'Allocate resources and assign tasks.', 1);
+
+-- Insert 3 steps for PlanID 2
+INSERT INTO PlanStep (StepTitle, StepDescription, PlanID)
+VALUES
+('Step 1', 'Gather initial data sets and prepare analysis tools.', 2),
+('Step 2', 'Conduct preliminary analysis and review findings.', 2),
+('Step 3', 'Develop action plan based on analysis results.', 2);
+
+-- Insert 3 steps for PlanID 3
+INSERT INTO PlanStep (StepTitle, StepDescription, PlanID)
+VALUES
+('Step 1', 'Initial project setup and team orientation.', 3),
+('Step 2', 'Define project scope and objectives.', 3),
+('Step 3', 'Allocate resources and assign tasks.', 3);
+
+-- Insert 3 steps for PlanID 4
+INSERT INTO PlanStep (StepTitle, StepDescription, PlanID)
+VALUES
+('Step 1', 'Gather initial data sets and prepare analysis tools.', 4),
+('Step 2', 'Conduct preliminary analysis and review findings.', 4),
+('Step 3', 'Develop action plan based on analysis results.', 4);
+
+-- Insert Chats
+INSERT INTO Chat (ChatText, TimeStamp, CollabID, UserID)
+VALUES ('This is the first chat message for Alpha.', '2024-02-19 12:34:56', 1, 1);
+
+INSERT INTO Chat (ChatText, TimeStamp, CollabID, UserID)
+VALUES ('This is the second chat message for Alpha.', '2024-02-19 12:35:56', 1, 2);
+
+-- Insert Chats
+INSERT INTO Chat (ChatText, TimeStamp, CollabID, UserID)
+VALUES ('This is the first chat message for Beta.', '2024-02-19 12:34:56', 2, 1);
+
+INSERT INTO Chat (ChatText, TimeStamp, CollabID, UserID)
+VALUES ('This is the second chat message for Beta.', '2024-02-19 12:35:56', 2, 2);
+
+
