@@ -161,8 +161,14 @@
     <a asp-page="AddChat" class="btn btn-primary">Add A Chat</a>
 </div>
 <br />
-<a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>
+@if ((int)ViewData["collabid"] == 1)
+{
+    <a class="btn btn-primary" asp-page="/DataSets" style="width: 100%">View Excel Data</a>
 
+}
+<br />
+<br />
+<a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>
 @*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
 @* @if (Model.SWOTs != null && Model.SWOTs.Any())
 {

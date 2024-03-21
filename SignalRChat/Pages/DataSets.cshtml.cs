@@ -210,7 +210,34 @@ namespace SignalRChat.Pages
             }
         }
 
+        public IActionResult OnPostDeleteFile(string fileName)
+        {
+            // Delete table from SQL database
+            string tableName = Path.GetFileNameWithoutExtension(fileName).Replace(" ", "_");
+            string deleteTableQuery = $"DROP TABLE IF EXISTS [{tableName}]";
 
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(deleteTableQuery, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            // Delete file from "Uploads" folder
+            var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+            var filePath = Path.Combine(uploadDirectory, fileName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            // Redirect back to the page
+            return RedirectToPage();
+        }
 
 
 

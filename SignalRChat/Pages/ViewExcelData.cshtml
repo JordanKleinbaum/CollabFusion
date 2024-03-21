@@ -1,0 +1,34 @@
+﻿@page
+@model SignalRChat.Pages.ViewExcelDataModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+
+}
+<br />
+<h3>@Model.FileName</h3>
+
+@if (Model.ExcelData != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var header in Model.ExcelData.FirstOrDefault())
+                {
+                    <th>@header</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.ExcelData.Skip(1))
+            {
+                <tr>
+                    @foreach (var cell in row)
+                    {
+                        <td>@cell</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a class="btn btn-primary" asp-page="/DataSets">Go Back</a>
