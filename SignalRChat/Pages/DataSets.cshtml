@@ -28,6 +28,7 @@
         <div class="form-group">
             <div class="col-md-10">
                 <h2>Upload Files</h2>
+                <br />
                 <input asp-for="FileList" value="Upload Files" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" multiple />
             </div>
         </div>
@@ -60,7 +61,6 @@ else
     var fileListing = imagesFolder.GetFiles();
     <hr />
     <br />
-    <h2>Download Files</h2>
         <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
         @foreach (var file in fileListing)
         {
@@ -70,7 +70,7 @@ else
                     <a class="btn btn-primary mb-3" asp-page="/ViewExcelData" asp-route-fileName="@file.Name">View</a>
                     <a href="/Uploads/@file.Name" target="_blank" class="btn btn-success mb-3">Download</a>
                     <form method="post" onsubmit="return confirm('Are you sure you want to delete this file?');">
-                        <button type="submit" asp-page-handler="DeleteFile" asp-route-fileName="@file.Name" class="btn btn-danger">Delete</button>
+                        <button type="submit" asp-page-handler="DeleteFile" asp-route-fileName="@file.Name" class="btn btn-danger" style="width: 100%;">Delete</button>
                     </form>
                 </div>
             </div>

@@ -13,21 +13,34 @@ namespace SignalRChat.Pages
         public string FileName { get; private set; }
         public List<List<string>> ExcelData { get; private set; }
 
-        public void OnGet(string fileName)
+        public IActionResult OnGet(string fileName)
         {
             FileName = fileName;
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", fileName);
 
-            if (Path.GetExtension(fileName).ToLower() == ".csv")
+            if (HttpContext.Session.GetString("username") != null)
             {
-                ExcelData = ReadCsv(filePath);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", fileName);
+
+                if (Path.GetExtension(fileName).ToLower() == ".csv")
+                {
+                    ExcelData = ReadCsv(filePath);
+                }
+                else if (Path.GetExtension(fileName).ToLower() == ".xlsx")
+                {
+                    ExcelData = ReadExcel(filePath);
+                }
+                // Add other supported file formats if necessary
+                return Page();
             }
-            else if (Path.GetExtension(fileName).ToLower() == ".xlsx")
+            else
             {
-                ExcelData = ReadExcel(filePath);
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("Index");
             }
-            // Add other supported file formats if necessary
+
+
         }
+
 
         private List<List<string>> ReadCsv(string filePath)
         {
@@ -74,17 +87,6 @@ namespace SignalRChat.Pages
             }
         }
 
-        public IActionResult OnGet()
-        {
-            if (HttpContext.Session.GetString("username") != null)
-            {
-                return Page();
-            }
-            else
-            {
-                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
-                return RedirectToPage("Index");
-            }
-        }
+
     }
 }
