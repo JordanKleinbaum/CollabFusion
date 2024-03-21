@@ -68,8 +68,6 @@
 <a asp-page="/KnowledgeItem" class="btn btn-primary">Create Knowledge Item</a>
 <hr />
 <br />
-<br />
-
 
 <form asp-action="EnteredCollaboration">
     <p>Choose a Plan you wish to display:</p>
@@ -123,14 +121,9 @@
         <a asp-page="AllSteps" class="btn btn-primary">See All Steps</a>
     </div>
 </div>
-
-
 <hr />
 <br />
-<br />
-
-<br />
-<h1>Chat</h1>
+@* <h1>Chat</h1>
 <table class="table">
     <thead>
         <tr>
@@ -160,9 +153,15 @@
 <div style="display: flex; justify-content: flex-end; gap: 1em;">
     <a asp-page="AddChat" class="btn btn-primary">Add A Chat</a>
 </div>
+<br /> *@
+@if ((int)ViewData["collabid"] == 1)
+{
+    <a class="btn btn-primary" asp-page="/DataSets" style="width: 100%">View Excel Data</a>
+
+}
+<br />
 <br />
 <a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>
-
 @*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
 @* @if (Model.SWOTs != null && Model.SWOTs.Any())
 {
