@@ -23,7 +23,6 @@
     if (ViewData["LoginMessage"] == null)
     {
         <br />
-        <h3>Welcome to CollabFusion!</h3>
     }
 }
 
@@ -57,18 +56,35 @@
 
     else
     {
-        
         // First time loading the page
+        <br />
+        <br />
+        <br />
+        <section style="display: flex; align-items: center;">
+            <div style="flex: 1;">
+                <img src="./images/InOffice.svg" style="max-width: 100%;" />
+            </div>
+            <div style="flex: 1;">
+            <br />
+                <form asp-page="Index">
+                    <label>Username:</label>
+                    <input asp-for="Username" class="form-control" placeholder="Enter Username" required />
+                    <br />
+                    <label>Password:</label>
+                    <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+                    <br />
+                    <input type="submit" class="btn btn-primary" style="width: 100%; background-color: #293A7F;" value="Login"/>
+                </form>
+                <br />
+                <div style="display: flex; align-items: center;">
+                    <hr style="flex: 1; margin: 0;">
+                    <p style="margin: 0 10px;">or</p>
+                    <hr style="flex: 1; margin: 0;">
+                </div>
+                <label>Don't have an account?</label>
+                <a class="btn" style="width: 100%; border: 1px solid #293A7F" asp-page="/User">Create an Account</a>
 
-        <form asp-page="Index">
-        <label>Enter Username:</label>
-        <input asp-for="Username" class="form-control" placeholder="Enter Username" required/>
-        <br />
-        <label>Enter Password:</label>
-        <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required/>
-        <br />
-        <input type="submit" class="btn btn-primary"/>
-        </form>
-        <br />
+            </div>
+        </section>
     }
 }
