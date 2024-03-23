@@ -19,15 +19,17 @@
             <h4>
                 Welcome to Collaborations, @Model.UserFirstName!
             </h4>
-            <h6>
-                Your Collaborations
-            </h6>
         </div>
         <div>
             <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
         </div>
     </div>
     <hr />
+
+    <h6>
+        Your Collaborations
+    </h6>
+    <br />
 
     <!-- Display existing collaborations -->
     <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
