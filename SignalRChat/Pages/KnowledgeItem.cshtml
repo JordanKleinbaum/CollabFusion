@@ -9,7 +9,7 @@
 <h3>Create a Knowledge Item</h3>
 
 <div class="d-flex justify-content-end">
-    <a asp-page="/SWOT" class="btn btn-primary">Create a SWOT Analysis</a>
+    <a asp-page="/SWOT" class="btn" style="background-color: #293A7F; color: white;">Create a SWOT Analysis</a>
 </div>
 
 <form asp-page="KnowledgeItem">
@@ -44,7 +44,7 @@
         <span asp-validation-for="NewKnowledgeItem.KNDate" class="text-danger"></span>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn" style="background-color: #293A7F; color: white;">Submit</button>
     <button asp-page="KnowledgeItem" asp-page-handler="PopulateButton" class="btn btn-secondary" formnovalidate>Populate</button>
     <button asp-page="KnowledgeItem" asp-page-handler="ClearButton" class="btn btn-secondary" formnovalidate>Clear</button>
 </form>

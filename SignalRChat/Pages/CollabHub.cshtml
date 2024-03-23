@@ -24,7 +24,7 @@
             </h6>
         </div>
         <div>
-            <a asp-page="/CollabSpace" class="btn btn-primary">Create New Collaboration</a>
+            <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
         </div>
     </div>
     <hr />
@@ -37,8 +37,7 @@
                 <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                     <h6 class="card-title">@collab.CollaborationName</h6>
                     <p class="card-text">@collab.NotesAndInformation</p>
-                    <a asp-page="/EnteredCollaboration" asp-route-collaborationId="@collab.CollabID" class="btn btn-primary">Enter Collaboration</a>
-
+                    <a asp-page="/EnteredCollaboration" asp-route-collaborationId="@collab.CollabID" class="btn" style="background-color: #293A7F; color: white;">Enter Collaboration</a>
                 </div>
             </div>
         }
