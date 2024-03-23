@@ -18,15 +18,10 @@
         <option value="" selected disabled>Choose a Knowledge Item</option>
     </select>
     <br />
-    <input type="submit" asp-page-handler="Submit" class="btn btn-primary" />
+    <input type="submit" asp-page-handler="Submit" class="btn" style="background-color: #293A7F; color: white;" />
 </form>
-
-
-
 <br />
-
 <h1>Knowledge Items</h1>
-
 <table class="table">
     <thead>
         <tr>
@@ -58,14 +53,11 @@
             }
 
             DBClass.CollabFusionDBConnection.Close();
-
-
-
         }
 
     </tbody>
 </table>
-<a asp-page="/KnowledgeItem" class="btn btn-primary">Create Knowledge Item</a>
+<a asp-page="/KnowledgeItem" class="btn" style="background-color: #293A7F; color: white;">Create Knowledge Item</a>
 <hr />
 <br />
 
@@ -75,7 +67,7 @@
         <option value="" selected disabled>Choose a Plan</option>
     </select>
     <br />
-    <input type="submit" asp-page-handler="Submit" class="btn btn-primary" />
+    <input type="submit" asp-page-handler="Submit" class="btn" style="background-color: #293A7F; color: white;" />
 </form>
 
 <br />
@@ -115,10 +107,10 @@
     </tbody>
 </table>
 <div style="display: flex; justify-content: space-between;">
-    <a asp-page="/CreatePlan" class="btn btn-primary">Create a Plan</a>
+    <a asp-page="/CreatePlan" class="btn" style="background-color: #293A7F; color: white;">Create a Plan</a>
     <div>
-        <a asp-page="PlanStep" class="btn btn-primary">Add Step</a>
-        <a asp-page="AllSteps" class="btn btn-primary">See All Steps</a>
+        <a asp-page="PlanStep" class="btn" style="background-color: #293A7F; color: white;">Add Step</a>
+        <a asp-page="AllSteps" class="btn" style="background-color: #293A7F; color: white;">See All Steps</a>
     </div>
 </div>
 <hr />
@@ -156,12 +148,12 @@
 <br /> *@
 @if ((int)ViewData["collabid"] == 1)
 {
-    <a class="btn btn-primary" asp-page="/DataSets" style="width: 100%">View Excel Data</a>
+    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
 
 }
 <br />
 <br />
-<a asp-page="PrintReport" class="btn btn-primary" style="width: 100%">Print Report</a>
+<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
 @*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
 @* @if (Model.SWOTs != null && Model.SWOTs.Any())
 {
