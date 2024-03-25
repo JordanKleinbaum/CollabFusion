@@ -503,7 +503,7 @@ namespace SignalRChat.Pages.DB
         // PQ -> USER.CSHTML.CS
         public static void ParameterizedCreateUser(Users newUser)
         {
-            string insertQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode)";
+            string insertQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode, @Admin)";
             SqlCommand cmdInsert = new SqlCommand();
             cmdInsert.Connection = CollabFusionDBConnection;
             cmdInsert.Connection.ConnectionString = CollabFusionDBConnString;
@@ -519,6 +519,7 @@ namespace SignalRChat.Pages.DB
             cmdInsert.Parameters.AddWithValue("@State", newUser.State);
             cmdInsert.Parameters.AddWithValue("@Country", newUser.Country);
             cmdInsert.Parameters.AddWithValue("@ZipCode", newUser.ZipCode);
+            cmdInsert.Parameters.AddWithValue("@Admin", newUser.Admin);
 
             cmdInsert.Connection.Open();
             cmdInsert.ExecuteNonQuery();
