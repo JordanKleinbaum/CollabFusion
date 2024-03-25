@@ -64,7 +64,7 @@ namespace SignalRChat.Pages
         /*DATABASE STUFF*/
         public IActionResult OnGet()
         {
-            if (HttpContext.Session.GetString("username") != null)
+            if (HttpContext.Session.GetString("username") == null)
             {
                 return RedirectToPage("CollabHub");
             }
@@ -109,7 +109,7 @@ namespace SignalRChat.Pages
 
             DBClass.CollabFusionDBConnection.Close();
 
-            return RedirectToPage("Index");
+            return RedirectToPage("CollabHub");
         }
     }
 }
