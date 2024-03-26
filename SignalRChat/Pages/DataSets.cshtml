@@ -56,7 +56,7 @@ else
     <br />
     DirectoryInfo imagesFolder = new DirectoryInfo(imagesDir);
 
-    var fileListing = imagesFolder.GetFiles();
+    var fileListing = imagesFolder.GetFiles().OrderByDescending(f => f.LastWriteTime);
     <hr />
     <br />
         <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
@@ -64,7 +64,7 @@ else
         {
             <div class="card" style="max-width: 20rem;">
                 <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h5 class="card-title mb-3">@file.Name</h5>
+                    <h5 class="card-title mb-3">@file.Name</h5>                   
                     <a class="btn mb-3" style="background-color: #293A7F; color: white;" asp-page="/ViewExcelData" asp-route-fileName="@file.Name">View</a>
                     <a class="btn mb-3" style="background-color: #293A7F; color: white;" asp-page="/RevenueAnalysis">Revenue Analysis</a>
                     <a href="/Uploads/@file.Name" target="_blank" class="btn mb-3" style="background-color: #293A7F; color: white;">Download</a>
