@@ -34,7 +34,7 @@ namespace SignalRChat.Pages
                 NewUser.City = "Scotch Plains";
                 NewUser.Street = "2220 New York Avenue";
                 NewUser.ZipCode = "07076";
-                NewUser.Admin = "No";
+                NewUser.Admin = "General User";
             }
             return Page();
         }
