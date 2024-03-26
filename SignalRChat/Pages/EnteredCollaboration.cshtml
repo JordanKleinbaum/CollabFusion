@@ -5,21 +5,10 @@
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
     ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
-
 }
 <br />
 
 <h1>@Model.CollaborationName</h1>
-<br />
-
-<form asp-action="EnteredCollaboration">
-    <p>Choose a Knowledge Item you wish to display:</p>
-    <select asp-for="KnowledgeID" asp-items="Model.KnowledgeItems" class="form-control">
-        <option value="" selected disabled>Choose a Knowledge Item</option>
-    </select>
-    <br />
-    <input type="submit" asp-page-handler="Submit" class="btn" style="background-color: #293A7F; color: white;" />
-</form>
 <br />
 <h1>Knowledge Items</h1>
 <table class="table">
@@ -36,7 +25,7 @@
     </thead>
     <tbody>
         @{
-            SqlDataReader KnowledgeItemReader = DBClass.GetSingleKnowledgeItem(Model.KnowledgeID);
+            SqlDataReader KnowledgeItemReader = DBClass.GetAllKnowledgeItems();
 
             while (KnowledgeItemReader.Read())
             {
@@ -60,131 +49,4 @@
 <a asp-page="/KnowledgeItem" class="btn" style="background-color: #293A7F; color: white;">Create Knowledge Item</a>
 <hr />
 <br />
-
-<form asp-action="EnteredCollaboration">
-    <p>Choose a Plan you wish to display:</p>
-    <select asp-for="PlanID" asp-items="Model.Plans" class="form-control">
-        <option value="" selected disabled>Choose a Plan</option>
-    </select>
-    <br />
-    <input type="submit" asp-page-handler="Submit" class="btn" style="background-color: #293A7F; color: white;" />
-</form>
-
-<br />
-<h1>Plans</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            @* <th>PlanID</th> *@
-            <th>Plan Name</th>
-            <th>Plan Contents</th>
-            <th>Date Created</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @{
-            SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
-
-            while (PlanReader.Read())
-            {
-                <tr>
-                    @*<td>@PlanReader["PlanID"]</td>*@
-                    <td>@PlanReader["PlanName"]</td>
-                    <td>@PlanReader["PlanContents"]</td>
-                    <td>@PlanReader["DateCreated"]</td>
-                    @*<td>@PlanReader["CollabID"]</td>*@
-
-                </tr>
-            }
-            DBClass.CollabFusionDBConnection.Close();
-        }
-
-
-    </tbody>
-</table>
-<div style="display: flex; justify-content: space-between;">
-    <a asp-page="/CreatePlan" class="btn" style="background-color: #293A7F; color: white;">Create a Plan</a>
-    <div>
-        <a asp-page="PlanStep" class="btn" style="background-color: #293A7F; color: white;">Add Step</a>
-        <a asp-page="AllSteps" class="btn" style="background-color: #293A7F; color: white;">See All Steps</a>
-    </div>
-</div>
-<hr />
-<br />
-@* <h1>Chat</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>User</th>
-            <th>Message</th>
-            <th>Time of Message</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @{
-            string sqlQuery = $"SELECT Users.FirstName, Chat.ChatText, Chat.TimeStamp FROM Chat INNER JOIN Users ON Chat.UserID = Users.UserID WHERE CollabID = {HttpContext.Session.GetInt32("collabid")} ORDER BY Chat.TimeStamp";
-            SqlDataReader ChatReader = DBClass.GeneralReaderQuery(sqlQuery);
-
-            while (ChatReader.Read())
-            {
-                <tr>
-                    <td>@ChatReader["FirstName"]</td>
-                    <td>@ChatReader["ChatText"]</td>
-                    <td>@ChatReader["TimeStamp"]</td>
-                </tr>
-            }
-            DBClass.CollabFusionDBConnection.Close();
-        }
-    </tbody>
-</table>
-<div style="display: flex; justify-content: flex-end; gap: 1em;">
-    <a asp-page="AddChat" class="btn btn-primary">Add A Chat</a>
-</div>
-<br /> *@
-@* @if ((int)ViewData["collabid"] == 1)
-{
-    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
-
-} *@
 <a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
-@*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
-@* @if (Model.SWOTs != null && Model.SWOTs.Any())
-{
-    <h3>SWOT Analysis</h3>
-    <div class="swot-container">
-        <div class="swot-section">
-            <h4>Strengths</h4>
-            @foreach (var swot in Model.SWOTs)
-            {
-                <p>@swot.Strength</p>
-            }
-        </div>
-        <div class="swot-section">
-            <h4>Weaknesses</h4>
-            @foreach (var swot in Model.SWOTs)
-            {
-                <p>@swot.Weakness</p>
-            }
-        </div>
-        <div class="swot-section">
-            <h4>Opportunities</h4>
-            @foreach (var swot in Model.SWOTs)
-            {
-                <p>@swot.Opportunity</p>
-            }
-        </div>
-        <div class="swot-section">
-            <h4>Threats</h4>
-            @foreach (var swot in Model.SWOTs)
-            {
-                <p>@swot.Threat</p>
-            }
-        </div>
-    </div>
-} *@
-@*ADDING JUANS SWOT TABLE. NEED TO CHANGE ERD TO HAVE A SWOT TABLE FIRST FOR THIS TO WORK*@
