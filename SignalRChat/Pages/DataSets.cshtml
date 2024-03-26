@@ -66,6 +66,7 @@ else
                 <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                     <h5 class="card-title mb-3">@file.Name</h5>
                     <a class="btn mb-3" style="background-color: #293A7F; color: white;" asp-page="/ViewExcelData" asp-route-fileName="@file.Name">View</a>
+                    <a class="btn mb-3" style="background-color: #293A7F; color: white;" asp-page="/RevenueAnalysis">Revenue Analysis</a>
                     <a href="/Uploads/@file.Name" target="_blank" class="btn mb-3" style="background-color: #293A7F; color: white;">Download</a>
                     <form method="post" onsubmit="return confirm('Are you sure you want to delete this file?');">
                         <button type="submit" asp-page-handler="DeleteFile" asp-route-fileName="@file.Name" class="btn btn-danger" style="width: 100%;">Delete</button>
