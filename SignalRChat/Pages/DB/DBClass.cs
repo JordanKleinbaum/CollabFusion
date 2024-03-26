@@ -315,6 +315,28 @@ namespace SignalRChat.Pages.DB
             return firstName;
         }
 
+        public static string GetAdminByUsername(string username)
+        {
+            string adminYesOrNo = "";
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                string sqlQuery = "SELECT Admin FROM Users WHERE Username = @Username";
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.AddWithValue("@Username", username);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        adminYesOrNo = reader["Admin"].ToString();
+                    }
+                }
+            }
+            return adminYesOrNo;
+        }
+
+
+
 
 
         // Insert Into Chat Table
@@ -503,7 +525,7 @@ namespace SignalRChat.Pages.DB
         // PQ -> USER.CSHTML.CS
         public static void ParameterizedCreateUser(Users newUser)
         {
-            string insertQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode)";
+            string insertQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode, @Admin)";
             SqlCommand cmdInsert = new SqlCommand();
             cmdInsert.Connection = CollabFusionDBConnection;
             cmdInsert.Connection.ConnectionString = CollabFusionDBConnString;
@@ -519,6 +541,7 @@ namespace SignalRChat.Pages.DB
             cmdInsert.Parameters.AddWithValue("@State", newUser.State);
             cmdInsert.Parameters.AddWithValue("@Country", newUser.Country);
             cmdInsert.Parameters.AddWithValue("@ZipCode", newUser.ZipCode);
+            cmdInsert.Parameters.AddWithValue("@Admin", newUser.Admin);
 
             cmdInsert.Connection.Open();
             cmdInsert.ExecuteNonQuery();

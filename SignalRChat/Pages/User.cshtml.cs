@@ -34,6 +34,7 @@ namespace SignalRChat.Pages
                 NewUser.City = "Scotch Plains";
                 NewUser.Street = "2220 New York Avenue";
                 NewUser.ZipCode = "07076";
+                NewUser.Admin = "No";
             }
             return Page();
         }
@@ -55,6 +56,7 @@ namespace SignalRChat.Pages
                 NewUser.City = "";
                 NewUser.Street = "";
                 NewUser.ZipCode = "";
+                NewUser.Admin = "";
             }
             return Page();
         }
@@ -62,7 +64,7 @@ namespace SignalRChat.Pages
         /*DATABASE STUFF*/
         public IActionResult OnGet()
         {
-            if (HttpContext.Session.GetString("username") != null)
+            if (HttpContext.Session.GetString("username") == null)
             {
                 return RedirectToPage("CollabHub");
             }
@@ -83,7 +85,8 @@ namespace SignalRChat.Pages
                     City = userReader["City"].ToString(),
                     State = userReader["State"]?.ToString(),
                     Country = userReader["Country"].ToString(),
-                    ZipCode = userReader["ZipCode"].ToString()
+                    ZipCode = userReader["ZipCode"].ToString(),
+                    Admin = userReader["Admin"].ToString()
                 });
             }
 
@@ -106,7 +109,7 @@ namespace SignalRChat.Pages
 
             DBClass.CollabFusionDBConnection.Close();
 
-            return RedirectToPage("Index");
+            return RedirectToPage("CollabHub");
         }
     }
 }

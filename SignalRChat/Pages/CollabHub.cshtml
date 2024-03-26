@@ -2,6 +2,9 @@
 @model SignalRChat.Pages.CollabHubModel
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["adminStatus"] = HttpContext.Session.GetString("_Admin");
+    string adminStatus = ViewData["adminStatus"] as string;
+
 }
 
 <!DOCTYPE html>
@@ -20,15 +23,22 @@
                 Welcome to Collaborations, @Model.UserFirstName!
             </h4>
         </div>
-        <div>
-            <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
-        </div>
+        @if (adminStatus == "Yes")
+        {
+            <div>
+                <a asp-page="/User" class="btn" style="background-color: #293A7F; color: white;">Create New Account</a>
+                <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
+            </div>
+        }
     </div>
     <hr />
 
     <h6>
         Your Collaborations
     </h6>
+    <h1>
+        
+    </h1>
     <br />
 
     <!-- Display existing collaborations -->

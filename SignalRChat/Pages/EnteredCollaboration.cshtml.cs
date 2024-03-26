@@ -51,7 +51,7 @@ namespace SignalRChat.Pages
                 // Get the CollabName
                 HttpContext.Session.SetInt32("collabid", collaborationid);
                 var collabid = HttpContext.Session.GetInt32("collabid");
-                SqlDataReader CollaborationNameReader = DBClass.GeneralReaderQuery($"SELECT CollaborationName FROM Collaboration WHERE CollabID = {HttpContext.Session.GetInt32("collabid")}");
+                SqlDataReader CollaborationNameReader = DBClass.GeneralReaderQuery($"SELECT CollaborationName FROM Collaboration WHERE CollabID = {collabid}");
                 if (CollaborationNameReader.Read())
                 {
                     CollaborationName = CollaborationNameReader["CollaborationName"].ToString();

@@ -14,5 +14,7 @@
         public String? State { get; set; }
         public String Country { get; set; }
         public String? ZipCode { get; set; }
+
+        public String Admin { get; set; }
     }
 }
