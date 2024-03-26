@@ -20,12 +20,34 @@ namespace SignalRChat.Pages
         public bool UploadSuccessful { get; private set; }
         public string ErrorFileName { get; private set; }
 
+        public List<string> UploadedFileNames { get; set; } = new List<string>(); // New property
+
         // SQL Server connection string
         private readonly string _connectionString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
 
         // OnPost, Upload the files to the Uploads Folder in wwwroot
         public IActionResult OnPost()
         {
+
+            foreach (var formFile in FileList)
+            {
+                if (formFile.Length > 0)
+                {
+                    var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+                    var filePath = Path.Combine(uploadDirectory, formFile.FileName);
+
+                    // Save the file to the server
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        formFile.CopyTo(stream);
+                    }
+
+                    UploadedFileNames.Add(formFile.FileName); // Add the file name to the list
+                    UploadSuccessful = true;
+                }
+            }
+            
+
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             ExcelDataDict = new Dictionary<string, List<List<object>>>();
