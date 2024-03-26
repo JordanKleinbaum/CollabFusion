@@ -10,9 +10,9 @@
 
 <h1>@Model.CollaborationName</h1>
 <br />
-<h1>Knowledge Items</h1>
-<table class="table">
-    <thead>
+<h1>Knowledge Items (Turn into Analysis Eventually)</h1>
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
             @* <th>KnowledgeID</th> *@
             <th>Knowledge Title</th>
@@ -20,6 +20,7 @@
             <th>Category</th>
             <th>Information</th>
             <th>Knowledge Date</th>
+            <th>Actions</th>
             @* <th>UserID</th> *@
         </tr>
     </thead>
@@ -36,6 +37,10 @@
                     <td>@KnowledgeItemReader["Category"]</td>
                     <td>@KnowledgeItemReader["Information"]</td>
                     <td>@KnowledgeItemReader["KNDate"]</td>
+                    <td>
+                        <button type="button" class="btn btn-primary">Edit</button>
+                    </td>
+
                     @*<td>@KnowledgeItemReader["UserID"]</td>*@
 
                 </tr>
@@ -46,6 +51,7 @@
 
     </tbody>
 </table>
+
 <a asp-page="/KnowledgeItem" class="btn" style="background-color: #293A7F; color: white;">Create Knowledge Item</a>
 <hr />
 <br />
