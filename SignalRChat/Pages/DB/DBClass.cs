@@ -315,6 +315,28 @@ namespace SignalRChat.Pages.DB
             return firstName;
         }
 
+        public static string GetAdminByUsername(string username)
+        {
+            string adminYesOrNo = "";
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                string sqlQuery = "SELECT Admin FROM Users WHERE Username = @Username";
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.AddWithValue("@Username", username);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        adminYesOrNo = reader["Admin"].ToString();
+                    }
+                }
+            }
+            return adminYesOrNo;
+        }
+
+
+
 
 
         // Insert Into Chat Table

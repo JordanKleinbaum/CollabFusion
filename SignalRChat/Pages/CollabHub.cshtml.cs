@@ -5,6 +5,7 @@ using SignalRChat.Pages.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 
 namespace SignalRChat.Pages
 {
@@ -15,17 +16,28 @@ namespace SignalRChat.Pages
 
         [BindProperty]
         public Collaboration NewCollaboration { get; set; }
-        
+
         [BindProperty]
         public int CollabID { get; set; }
+
+        // Session 
+        public string Admin { get; set; }
 
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
             {
+
+
                 var username = HttpContext.Session.GetString("username");
                 UserFirstName = DBClass.GetFirstNameByUsername(username);
-                Collaborations = DBClass.GetAllCollaborations(); // Retrieve all collaborations from the database
+                Collaborations = DBClass.GetAllCollaborations();
+
+                // Retrieve admin status from the database and store it in the session
+                Admin = DBClass.GetAdminByUsername(username);
+                HttpContext.Session.SetString("_Admin", Admin);
+
+
                 return Page();
             }
             else
@@ -34,6 +46,8 @@ namespace SignalRChat.Pages
                 return RedirectToPage("Index");
             }
         }
+
+
 
         public IActionResult OnPost()
         {

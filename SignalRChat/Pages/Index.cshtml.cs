@@ -18,6 +18,8 @@ namespace SignalRChat.Pages
         public string Username { get; set; }
         [BindProperty]
         public string Password { get; set; }
+        [BindProperty]
+        public string Admin { get; set; }
 
         public IActionResult OnGet(String logout)
         {
