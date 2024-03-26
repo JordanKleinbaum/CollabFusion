@@ -146,11 +146,87 @@
     <a asp-page="AddChat" class="btn btn-primary">Add A Chat</a>
 </div>
 <br /> *@
-@if ((int)ViewData["collabid"] == 1)
-{
-    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
+@{
+    if ((int)ViewData["collabid"] == 1)
+    {
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
 
+    }
+    else if ((int)ViewData["collabid"] == 2)
+    {
+        <h1>@Model.CollaborationName</h1>
+        <br />
+
+        <h1>Pest Analysis</h1>
+        <br/>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    
+                    <th>Title</th>
+                    <th>Decription</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
+
+                    while (PlanReader.Read())
+                    {
+                        <tr>
+                            <td>@PlanReader["PlanName"]</td>
+                            <td>@PlanReader["PlanContents"]</td>
+                            <td>@PlanReader["DateCreated"]</td>
+                        </tr>
+                    }
+                    DBClass.CollabFusionDBConnection.Close();
+                }
+
+
+            </tbody>
+        </table>
+
+        <h1>SWOT Analysis</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
+
+                    while (PlanReader.Read())
+                    {
+                        <tr>
+                            <td>@PlanReader["PlanName"]</td>
+                            <td>@PlanReader["PlanContents"]</td>
+                            <td>@PlanReader["DateCreated"]</td>
+                            <td></td>
+                        </tr>
+                    }
+                    DBClass.CollabFusionDBConnection.Close();
+                }
+
+
+            </tbody>
+        </table>
+
+    }
 }
+
+
 <br />
 <br />
 <a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
