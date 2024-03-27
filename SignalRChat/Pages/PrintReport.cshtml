@@ -9,30 +9,7 @@
 <p style="display: flex; justify-content: center; font-weight: bold;">Date: @Model.CurrentDate</p>
 <br />
 
-
-@*MAIN ANALYSIS SECTION*@
-
 <h2>Main Analysis</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Plan Name</th>
-            <th>Plan Contents</th>
-            <th>Date Created</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var Plan in Model.PlanList)
-        {
-            <tr>
-                <td>@Plan.PlanName</td>
-                <td>@Plan.PlanContents</td>
-                <td>@Plan.DateCreated</td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 @*RESEARCH SECTION*@
 
@@ -79,8 +56,40 @@
             <tr>
                 <td>@UserItem.FirstName</td>
                 <td>@UserItem.LastName</td>
-
             </tr>
         }
     </tbody>
 </table>
+
+<button id="printDownloadButton" class="btn btn-primary">Download Report</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script>
+    document.getElementById("printDownloadButton").addEventListener("click", function () {
+        // Hide the navbar before generating PDF
+        var navbar = document.getElementById("navbarContainer");
+        navbar.style.visibility = "hidden";
+
+        // Hide the button before generating PDF
+        var button = document.getElementById("printDownloadButton");
+        button.style.visibility = "hidden";
+
+        setTimeout(function () {
+            // Convert HTML content to PDF using html2pdf.js
+            var element = document.body; // Or any other element you want to convert
+            html2pdf(element, {
+                margin: 1,
+                filename: 'document.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { dpi: 192, letterRendering: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } // For vertical, change landscape to portrait
+            }).then(function () {
+                // Show the button again after PDF generation
+                button.style.visibility = "visible";
+                // Show the navbar again after PDF generation
+                navbar.style.visibility = "visible";
+            });
+        }, 1); // Adjust the delay as needed
+    });
+</script>
+

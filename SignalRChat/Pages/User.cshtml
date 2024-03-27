@@ -1,14 +1,10 @@
 ﻿@page
 @model SignalRChat.Pages.UserModel
 @{
-    Layout = "~/Pages/Shared/_LayoutLoggedOut.cshtml";
+    ViewData["username"] = HttpContext.Session.GetString("username");
+
 }
 <br />
-<br />
-<br />
-<br />
-
-
 <section style="display: flex; align-items: center;">
     <div style="flex: 1;">
         <img src="./images/InOffice.svg" style="max-width: 100%;" />
@@ -29,7 +25,6 @@
                 </div>
             </div>
             <br />
-
             <div style="display: flex;">
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">First Name</label>
@@ -158,6 +153,7 @@
                     <span asp-validation-for="NewUser.Street" class="text-danger"></span>
                 </div>
             </div>
+            <br />
             <div style="display: flex;">
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">ZipCode</label>
@@ -166,11 +162,11 @@
                 </div>
 
                 <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Admin?</label>
+                    <label class="form-label">Permissions</label>
                     <select asp-for="NewUser.Admin" class="form-control">
                         <option selected disabled>Choose ...</option>
-                        <option>Yes</option>
-                        <option>No</option>
+                        <option>Admin</option>
+                        <option>General User</option>
                     </select>
                     <span asp-validation-for="NewUser.Admin" class="text-danger"></span>
                 </div>
