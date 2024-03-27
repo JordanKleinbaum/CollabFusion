@@ -1,11 +1,12 @@
 using SignalRChat.Hubs;
+using SignalRChat.Pages.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-
+builder.Services.AddScoped<DBClass>();
 // Configuring the session
 builder.Services.AddSession();
 

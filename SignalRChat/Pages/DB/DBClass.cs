@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Pages.DB;
 using SignalRChat.Pages.DataClasses;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace SignalRChat.Pages.DB
 {
@@ -122,9 +123,41 @@ namespace SignalRChat.Pages.DB
 
             return tempReader;
         }
+  
 
-        // Read all Plans
-        public static SqlDataReader GetAllPlans()
+public async Task<Document> GetSingleFileAsync(int id)
+    {
+        Document document = null;
+
+        using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+        {
+            await connection.OpenAsync();
+
+            using (SqlCommand cmdRead = new SqlCommand("SELECT * FROM Document WHERE Id = @Id", connection))
+            {
+                cmdRead.Parameters.AddWithValue("@Id", id);
+
+                using (SqlDataReader reader = await cmdRead.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        document = new Document
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FileName = reader.GetString(reader.GetOrdinal("FileName")),
+                            FileData = (byte[])reader["FileData"]
+                            // Populate other properties as needed
+                        };
+                    }
+                }
+            }
+        }
+
+        return document;
+    }
+
+    // Read all Plans
+    public static SqlDataReader GetAllPlans()
         {
             SqlCommand cmdRead = new SqlCommand();
             cmdRead.Connection = CollabFusionDBConnection;
