@@ -52,7 +52,7 @@ namespace SignalRChat.Pages
         {
             if (!string.IsNullOrEmpty(SearchTerm))
             {
-                KnowledgeItemList = DB.DBClass.SearchKnowledge(SearchTerm);
+                Doc = DB.DBClass.SearchKnowledge(SearchTerm);
 
             }
             else
