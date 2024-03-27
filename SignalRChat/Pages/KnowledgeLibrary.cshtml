@@ -31,46 +31,50 @@
     <br />
     <br />
 
-<h2>Knowledge View</h2>
-<table class="table table-bordered table-responsive table-hover">
-    <thead>
-        <tr>
-            <th>Knowledge ID:</th>
-            <th>Knowledge Title:</th>
-            <th>Knowledge Subject:</th>
-            <th>Category:</th>
-            <th>Information:</th>
-           @* <th>Date and Time:</th>
-            <th>Knowledge Information:</th> *@
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.KnowledgeItemList != null && Model.KnowledgeItemList.Any())
-        {
-            foreach (var know in Model.KnowledgeItemList)
+    <h1>Document Repository</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Date Uploaded</th>
+                <th>Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Doc)
             {
                 <tr>
-                    <td class="text-danger">@know.KnowledgeID</td>
-                    <td>@know.KnowledgeTitle</td>
-                    <td>@know.KnowledgeSubject</td>
-                    <td>@know.Category</td>
-                    <td>@know.Information</td>
-                  @*  <td>@know.FullDateAndTime</td>
-                    <td>@know.KnowledgeInfo</td> *@
-                    @* <td>
-                        <a asp-page="/Functions/EditKnowledge" class="btn btn-primary" asp-route-knowledgeid="@know.KnowledgeID">Edit</a>
-                    </td> *@
+                    <td>@document.FileName</td>
+                    <td>@document.DateAdded.ToShortDateString()</td>
+                    <td>
+                        <!-- Add a button to trigger the download -->
+                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                    </td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="7">No match found</td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+            <script>
+                function downloadDocument(fileName, fileData) {
+                    // Create a blob from the base64 encoded file data
+                    var byteCharacters = atob(fileData);
+                    var byteNumbers = new Array(byteCharacters.length);
+                    for (var i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    var byteArray = new Uint8Array(byteNumbers);
+                    var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                    // Create a link element and trigger a download
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            </script>
+        </tbody>
+    </table>
     </body>
 <br />
 @*  <a asp-page="KnowledgeItem" class="btn btn-primary spaceBtn">Add Knowledge Item</a>  *@

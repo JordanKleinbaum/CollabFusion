@@ -15,6 +15,7 @@ namespace SignalRChat.Pages
         public List<Users> UsersList { get; set; } = new List<Users>();
 
         public string SearchTerm { get; set; }
+        public List<Document> Doc { get; set; } = new List<Document>();
 
         public IActionResult OnGet()
         {
@@ -31,24 +32,7 @@ namespace SignalRChat.Pages
                     });
                 }
                 userReader.Close();
-
-                //SqlDataReader knowledgeReader = DBClass.GetAllKnowledgeItems();
-                //while (knowledgeReader.Read())
-                //{
-                //    KnowledgeItemList.Add(new KnowledgeItem
-                //    {
-                //        KnowledgeID = Convert.ToInt32(knowledgeReader["KnowledgeID"]),
-                //        KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
-                //        KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
-                //        Category = knowledgeReader["Category"].ToString(),
-                //        Information = knowledgeReader["Information"]?.ToString(),
-                //        KNDate = knowledgeReader["KNDate"] as DateTime?,
-                //        UserID = Convert.ToInt32(knowledgeReader["UserID"]),
-                //        //CollabID = Convert.ToInt32(knowledgeReader["CollabID"]),  <---- DON'T DELETE THESE WE NEED THEM LATER
-                //        //KnowledgeLibID = Convert.ToInt32(knowledgeReader["KnowledgeLibID"]) <---- DON'T DELETE THESE WE NEED THEM LATER
-                //    });
-                //}
-                //knowledgeReader.Close();
+                DBClass.CollabFusionDBConnection.Close();
 
                 LoadAllKnowledge();
                 // Close your connection in DBClass
@@ -74,27 +58,31 @@ namespace SignalRChat.Pages
             else
             {
                 LoadAllKnowledge();
+                //DBClass.CollabFusionDBConnection.Close();
+
             }
             return Page();
         }
         private void LoadAllKnowledge()
         {
-            SqlDataReader knowledgeReader = DB.DBClass.GetAllKnowledgeItems();
-            while (knowledgeReader.Read())
+            //Document LOGIC START
+            //Document LOGIC START
+            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
+
+            while (reader.Read())
             {
-                KnowledgeItemList.Add(new KnowledgeItem
+                Doc.Add(new Document
                 {
-                    KnowledgeID = Int32.Parse(knowledgeReader["KnowledgeID"].ToString()),
-                    KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
-                    KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
-                    Category = knowledgeReader["Category"].ToString(),
-                    Information = knowledgeReader["Information"].ToString()
-                    //FullDateAndTime = reader["FullDateAndTime"].ToString(),
-                    //KnowledgeInfo = reader["KnowledgeInfo"].ToString()
+                    Id = Convert.ToInt32(reader["Id"]),
+                    FileName = reader["FileName"].ToString(),
+                    FileData = (byte[])reader["FileData"],
+                    DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                    AnalysisType = reader["AnalysisType"].ToString()
                 });
             }
+            reader.Close();
             DB.DBClass.CollabFusionDBConnection.Close();
-        }
 
+        }
     }
 }
