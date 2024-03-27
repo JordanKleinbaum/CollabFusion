@@ -56,7 +56,6 @@
             <tr>
                 <td>@UserItem.FirstName</td>
                 <td>@UserItem.LastName</td>
-
             </tr>
         }
     </tbody>
@@ -67,6 +66,14 @@
 
 <script>
     document.getElementById("printDownloadButton").addEventListener("click", function () {
+        // Hide the navbar before generating PDF
+        var navbar = document.getElementById("navbarContainer");
+        navbar.style.visibility = "hidden";
+
+        // Hide the button before generating PDF
+        var button = document.getElementById("printDownloadButton");
+        button.style.visibility = "hidden";
+
         setTimeout(function () {
             // Convert HTML content to PDF using html2pdf.js
             var element = document.body; // Or any other element you want to convert
@@ -75,8 +82,14 @@
                 filename: 'document.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { dpi: 192, letterRendering: true },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } // For vertical, change landscape to portrait
+            }).then(function () {
+                // Show the button again after PDF generation
+                button.style.visibility = "visible";
+                // Show the navbar again after PDF generation
+                navbar.style.visibility = "visible";
             });
-        }, 500); // Adjust the delay as needed
+        }, 1); // Adjust the delay as needed
     });
 </script>
+
