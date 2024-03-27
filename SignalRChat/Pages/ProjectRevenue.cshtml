@@ -1,0 +1,73 @@
+﻿@page
+@model SignalRChat.Pages.ProjectRevenueModel
+@{
+}
+
+
+<h3>Project Revenue</h3>
+<form asp-page="ProjectRevenue">
+    <!-- Textbox for Title -->
+    <div class="form-group">
+        <label class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" placeholder="Enter Title">
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <!-- Textbox for Description -->
+    <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</form>
+
+
+<h1>Linear Regression Results</h1>
+
+<p>R-Squared: @ViewData["RSquared"]</p>
+<p>Y-Intercept: @ViewData["YIntercept"]</p>
+<p>Slope: @ViewData["Slope"]</p>
+
+
+<canvas id="linearRegressionChart" width="400" height="400"></canvas>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Get the y-intercept and slope values from ViewData
+        var yIntercept = @Html.Raw(Json.Serialize(ViewData["YIntercept"]));
+        var slope = @Html.Raw(Json.Serialize(ViewData["Slope"]));
+
+        // Generate data points for the linear regression line
+        var dataPoints = [];
+        var minX = 0; // Minimum x-value for the chart
+        var maxX = 10; // Maximum x-value for the chart
+
+        for (var x = minX; x <= maxX; x++) {
+            var y = yIntercept + slope * x;
+            dataPoints.push({ x: x, y: y });
+        }
+
+        // Chart.js configuration
+        var ctx = document.getElementById('linearRegressionChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Linear Regression Line',
+                    data: dataPoints,
+                    borderColor: 'blue',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+    }
