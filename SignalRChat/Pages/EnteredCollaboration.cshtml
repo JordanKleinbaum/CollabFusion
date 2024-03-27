@@ -189,22 +189,22 @@
             <thead>
                 <tr>
                     <th>File Name</th>
-                    <th>Analysis Type</th>
                     <th>Date Uploaded</th>
                     <th>Command</th>
                 </tr>
             </thead>
             <tbody>
-
+                @foreach (var document in Model.PESTDocuments)
+                {
                     <tr>
-                        <td>FileName</td>
-                        <td>.AnalysisType</td>
-                        <td>DateAdded.ToShortDateString()</td>
+                        <td>@document.FileName</td>
+                        <td>@document.DateAdded.ToShortDateString()</td>
                         <td>
-                            <a class="btn btn-primary">View</a>
+                            <!-- Assuming you want to provide a link to view the document -->
+                            <a href="@Url.Page("/ViewDocument", new { id = document.Id })" class="btn btn-primary">View Document</a>
                         </td>
                     </tr>
-                
+                }
             </tbody>
         </table>
 

@@ -42,6 +42,8 @@ namespace SignalRChat.Pages
         public string UserFirstName { get; set; }
 
         public string CollaborationName { get; set; }
+        public List<Document> PESTDocuments { get; set; } = new List<Document>();
+
 
 
         public IActionResult OnGet(int collaborationid)
@@ -137,6 +139,27 @@ namespace SignalRChat.Pages
                 DBClass.CollabFusionDBConnection.Close();
 
                 // ChatID LOGIC END
+
+                //Document LOGIC START
+                SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE AnalysisType = 'PEST'");
+
+                // Populate PESTDocuments list with data from the database
+                while (reader.Read())
+                {
+                    PESTDocuments.Add(new Document
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        FileName = reader["FileName"].ToString(),
+                        FileData = (byte[])reader["FileData"],
+                        DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                        AnalysisType = reader["AnalysisType"].ToString()
+                    });
+                }
+                reader.Close();
+                DBClass.CollabFusionDBConnection.Close();
+
+                //DOCUMENT LOGIC END
+
 
                 return Page();
             }
