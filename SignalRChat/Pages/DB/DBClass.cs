@@ -581,5 +581,21 @@ namespace SignalRChat.Pages.DB
             return SearchedKnowledgeItem;
         }
 
+        public static void InsertDocument(Document d)
+        {
+            string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
+
+            using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                cmdDocInsert.Parameters.AddWithValue("@FileName", d.FileName);
+                cmdDocInsert.Parameters.AddWithValue("@FileData", d.FileData);
+                cmdDocInsert.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmdDocInsert.Parameters.AddWithValue("@AnalysisType", d.AnalysisType);
+
+                CollabFusionDBConnection.Open();
+                cmdDocInsert.ExecuteNonQuery();
+            }
+        }
+
     }
 }

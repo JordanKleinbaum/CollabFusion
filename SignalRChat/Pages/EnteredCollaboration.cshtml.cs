@@ -209,6 +209,5 @@ namespace SignalRChat.Pages
             return Page();
         }
 
-
     }
 }

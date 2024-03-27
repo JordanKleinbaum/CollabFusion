@@ -168,28 +168,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var document in Model.SWOTDocuments)
-                {
+    
                     <tr>
-                        <td>@document.FileName</td>
-                        <td>@document.AnalysisType</td>
-                        <td>@document.DateUploaded.ToShortDateString()</td>
+                        <td>FileName</td>
+                        <td>AnalysisType</td>
+                        <td>DateAdded.ToShortDateString()</td>
                         <td>
-                            <a href="/DocumentViewer?documentId=@document.Id" class="btn btn-primary">View</a>
+                            <a class="btn btn-primary">View</a>
                         </td>
                     </tr>
-                }
+                
             </tbody>
         </table>
 
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="swotFile">Select SWOT File:</label>
-                <input type="file" class="form-control-file" id="swotFile" name="file" accept=".docx,.doc">
-            </div>
-            <input type="hidden" name="analysisType" value="SWOT">
-            <button type="submit" class="btn btn-primary">Upload SWOT</button>
-        </form>
+        <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
 
         <h1>PEST Analysis</h1>
         <table class="table">
@@ -202,28 +194,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var document in Model.PESTDocuments)
-                {
+
                     <tr>
-                        <td>@document.FileName</td>
-                        <td>@document.AnalysisType</td>
-                        <td>@document.DateUploaded.ToShortDateString()</td>
+                        <td>FileName</td>
+                        <td>.AnalysisType</td>
+                        <td>DateAdded.ToShortDateString()</td>
                         <td>
-                            <a href="/DocumentViewer?documentId=@document.Id" class="btn btn-primary">View</a>
+                            <a class="btn btn-primary">View</a>
                         </td>
                     </tr>
-                }
+                
             </tbody>
         </table>
 
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="pestFile">Select PEST File:</label>
-                <input type="file" class="form-control-file" id="pestFile" name="file" accept=".docx,.doc">
-            </div>
-            <input type="hidden" name="analysisType" value="PEST">
-            <button type="submit" class="btn btn-primary">Upload PEST</button>
-        </form>
+     
 
     }
 }
