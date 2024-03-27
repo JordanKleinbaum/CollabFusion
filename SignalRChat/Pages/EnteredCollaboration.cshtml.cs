@@ -42,7 +42,7 @@ namespace SignalRChat.Pages
         public string UserFirstName { get; set; }
 
         public string CollaborationName { get; set; }
-        public List<Document> PESTDocuments { get; set; } = new List<Document>();
+        public List<Document> Doc { get; set; } = new List<Document>();
 
 
 
@@ -146,7 +146,7 @@ namespace SignalRChat.Pages
                 // Populate PESTDocuments list with data from the database
                 while (reader.Read())
                 {
-                    PESTDocuments.Add(new Document
+                    Doc.Add(new Document
                     {
                         Id = Convert.ToInt32(reader["Id"]),
                         FileName = reader["FileName"].ToString(),
