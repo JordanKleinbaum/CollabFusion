@@ -157,71 +157,73 @@
         <h1>@Model.CollaborationName</h1>
         <br />
 
-        <h1>Pest Analysis</h1>
-        <br/>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    
-                    <th>Title</th>
-                    <th>Decription</th>
-                    <th>Date Uploaded</th>
-                    <th>Command</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @{
-                    SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
-
-                    while (PlanReader.Read())
-                    {
-                        <tr>
-                            <td>@PlanReader["PlanName"]</td>
-                            <td>@PlanReader["PlanContents"]</td>
-                            <td>@PlanReader["DateCreated"]</td>
-                        </tr>
-                    }
-                    DBClass.CollabFusionDBConnection.Close();
-                }
-
-
-            </tbody>
-        </table>
-
         <h1>SWOT Analysis</h1>
         <table class="table">
             <thead>
                 <tr>
-                    
-                    <th>Title</th>
-                    <th>Description</th>
+                    <th>File Name</th>
+                    <th>Analysis Type</th>
                     <th>Date Uploaded</th>
                     <th>Command</th>
-                   
                 </tr>
             </thead>
             <tbody>
-
-                @{
-                    SqlDataReader PlanReader = DBClass.GetSinglePlan(Model.PlanID);
-
-                    while (PlanReader.Read())
-                    {
-                        <tr>
-                            <td>@PlanReader["PlanName"]</td>
-                            <td>@PlanReader["PlanContents"]</td>
-                            <td>@PlanReader["DateCreated"]</td>
-                            <td></td>
-                        </tr>
-                    }
-                    DBClass.CollabFusionDBConnection.Close();
+                @foreach (var document in Model.SWOTDocuments)
+                {
+                    <tr>
+                        <td>@document.FileName</td>
+                        <td>@document.AnalysisType</td>
+                        <td>@document.DateUploaded.ToShortDateString()</td>
+                        <td>
+                            <a href="/DocumentViewer?documentId=@document.Id" class="btn btn-primary">View</a>
+                        </td>
+                    </tr>
                 }
-
-
             </tbody>
         </table>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="swotFile">Select SWOT File:</label>
+                <input type="file" class="form-control-file" id="swotFile" name="file" accept=".docx,.doc">
+            </div>
+            <input type="hidden" name="analysisType" value="SWOT">
+            <button type="submit" class="btn btn-primary">Upload SWOT</button>
+        </form>
+
+        <h1>PEST Analysis</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Analysis Type</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.PESTDocuments)
+                {
+                    <tr>
+                        <td>@document.FileName</td>
+                        <td>@document.AnalysisType</td>
+                        <td>@document.DateUploaded.ToShortDateString()</td>
+                        <td>
+                            <a href="/DocumentViewer?documentId=@document.Id" class="btn btn-primary">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="pestFile">Select PEST File:</label>
+                <input type="file" class="form-control-file" id="pestFile" name="file" accept=".docx,.doc">
+            </div>
+            <input type="hidden" name="analysisType" value="PEST">
+            <button type="submit" class="btn btn-primary">Upload PEST</button>
+        </form>
 
     }
 }
