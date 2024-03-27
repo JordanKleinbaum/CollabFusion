@@ -1,17 +1,25 @@
 ﻿@page "{id:int}"
 @model SignalRChat.Pages.ViewDocumentModel
 @{
-    ViewData["Title"] = "View Document";
+    ViewData["Title"] = "File has been Downloaded";
 }
 
-<h1>View Document</h1>
+<h1>File has been Downloaded</h1>
 
 @if (Model.Document != null)
 {
     <h2>@Model.Document.FileName</h2>
-    <p>Date Added: @Model.Document.DateAdded.ToShortDateString()</p>
 
-    <embed src="data:application/pdf;base64,@(Convert.ToBase64String(Model.Document.FileData))" type="application/pdf" width="100%" height="600px" />
+    <!-- Embed the document using appropriate HTML element -->
+    @if (Model.Document.FileName.EndsWith(".pdf"))
+    {
+        <embed src="data:application/pdf;base64,@(Convert.ToBase64String(Model.Document.FileData))" type="application/pdf" width="100%" height="600px" />
+    }
+    else if (Model.Document.FileName.EndsWith(".docx"))
+    {
+        <iframe src="data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,@(Convert.ToBase64String(Model.Document.FileData))" width="100%" height="600px"></iframe>
+    }
+    <!-- Add more conditions for other document types as needed -->
 }
 else
 {

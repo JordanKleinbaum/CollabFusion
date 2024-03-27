@@ -42,8 +42,8 @@ namespace SignalRChat.Pages
         public string UserFirstName { get; set; }
 
         public string CollaborationName { get; set; }
-        public List<Document> PESTDocuments { get; set; } = new List<Document>();
-
+        public List<Document> Doc { get; set; } = new List<Document>();
+        public List<Document> Doc2 { get; set; } = new List<Document>();
 
 
         public IActionResult OnGet(int collaborationid)
@@ -146,7 +146,7 @@ namespace SignalRChat.Pages
                 // Populate PESTDocuments list with data from the database
                 while (reader.Read())
                 {
-                    PESTDocuments.Add(new Document
+                    Doc.Add(new Document
                     {
                         Id = Convert.ToInt32(reader["Id"]),
                         FileName = reader["FileName"].ToString(),
@@ -160,7 +160,22 @@ namespace SignalRChat.Pages
 
                 //DOCUMENT LOGIC END
 
+                SqlDataReader reader2 = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE AnalysisType = 'SWOT'");
 
+                // Populate SWOT list with data from the database
+                while (reader2.Read())
+                {
+                    Doc2.Add(new Document
+                    {
+                        Id = Convert.ToInt32(reader2["Id"]),
+                        FileName = reader2["FileName"].ToString(),
+                        FileData = (byte[])reader2["FileData"],
+                        DateAdded = Convert.ToDateTime(reader2["DateAdded"]),
+                        AnalysisType = reader2["AnalysisType"].ToString()
+                    });
+                }
+                reader2.Close();
+                DBClass.CollabFusionDBConnection.Close();
                 return Page();
             }
             else
