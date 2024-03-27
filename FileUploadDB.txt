@@ -1,0 +1,10 @@
+CREATE TABLE [Document]
+(
+    Id INT PRIMARY KEY IDENTITY,
+    FileName NVARCHAR(255), -- Assuming file names are up to 255 characters
+    FileData VARBINARY(MAX) NOT NULL,
+    DateAdded DATETIME,
+    AnalysisType NVARCHAR(50) -- Assuming analysis type names are up to 50 characters
+);
+
+--create a databse called FileUpload--
