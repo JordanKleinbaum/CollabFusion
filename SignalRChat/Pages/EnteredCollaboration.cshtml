@@ -154,9 +154,10 @@
     }
     else if ((int)ViewData["collabid"] == 2)
     {
+
         <h1>@Model.CollaborationName</h1>
         <br />
-
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
         <h1>SWOT Analysis</h1>
         <table class="table">
             <thead>
@@ -181,7 +182,7 @@
             </tbody>
         </table>
 
-        <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
+        // <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
 
         <h1>PEST Analysis</h1>
         <table class="table">

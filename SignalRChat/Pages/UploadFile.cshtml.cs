@@ -36,7 +36,9 @@ namespace SignalRChat.Pages
                     };
 
                     DBClass.InsertDocument(document);
+                    DBClass.CollabFusionDBConnection.Close();
                     return RedirectToPage("/Index");
+
                 }
             }
             return Page();
