@@ -16,6 +16,7 @@ namespace SignalRChat.Pages
 
         public void OnGet()
         {
+            
         }
 
         public IActionResult OnPost()
