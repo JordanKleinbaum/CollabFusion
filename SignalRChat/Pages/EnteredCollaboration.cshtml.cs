@@ -43,6 +43,7 @@ namespace SignalRChat.Pages
 
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
+        public List<Document> Doc2 { get; set; } = new List<Document>();
 
 
 
@@ -159,6 +160,23 @@ namespace SignalRChat.Pages
                 DBClass.CollabFusionDBConnection.Close();
 
                 //DOCUMENT LOGIC END
+                SqlDataReader reader2 = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE AnalysisType = 'SWOT'");
+
+                // Populate SWOT list with data from the database
+                while (reader2.Read())
+                {
+                    Doc2.Add(new Document
+                    {
+                        Id = Convert.ToInt32(reader2["Id"]),
+                        FileName = reader2["FileName"].ToString(),
+                        FileData = (byte[])reader2["FileData"],
+                        DateAdded = Convert.ToDateTime(reader2["DateAdded"]),
+                        AnalysisType = reader2["AnalysisType"].ToString()
+                    });
+                }
+                reader2.Close();
+                DBClass.CollabFusionDBConnection.Close();
+
 
 
                 return Page();
