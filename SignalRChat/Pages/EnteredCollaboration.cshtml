@@ -13,45 +13,100 @@
     if ((int)ViewData["collabid"] == 1)
     {
         <br />
-        <h1>Knowledge Items (Turn into Analysis Eventually)</h1>
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
+        <h1>Revenue Projections</h1>
+        <table class="table">
+            <thead>
                 <tr>
-                    @* <th>KnowledgeID</th> *@
-                    <th>Knowledge Title</th>
-                    <th>Knowledge Subject</th>
-                    <th>Category</th>
-                    <th>Information</th>
-                    <th>Knowledge Date</th>
-                    <th>Actions</th>
-                    @* <th>UserID</th> *@
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
                 </tr>
             </thead>
             <tbody>
-                @{
-                    SqlDataReader KnowledgeItemReader = DBClass.GetAllKnowledgeItems();
-
-                    while (KnowledgeItemReader.Read())
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Revenue Projection")
                     {
                         <tr>
-                            @*<td>@KnowledgeItemReader["KnowledgeID"]</td>*@
-                            <td>@KnowledgeItemReader["KnowledgeTitle"]</td>
-                            <td>@KnowledgeItemReader["KnowledgeSubject"]</td>
-                            <td>@KnowledgeItemReader["Category"]</td>
-                            <td>@KnowledgeItemReader["Information"]</td>
-                            <td>@KnowledgeItemReader["KNDate"]</td>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
                             <td>
-                                <button type="button" class="btn" style="color: white; width: 100%; background-color: #293A7F;">Edit</button>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                             </td>
-
-                            @*<td>@KnowledgeItemReader["UserID"]</td>*@
-
                         </tr>
                     }
-
-                    DBClass.CollabFusionDBConnection.Close();
                 }
 
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        <br />
+        <h1>Spending Growth Projections</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Spending Growth Projections")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
             </tbody>
         </table>
 
@@ -59,31 +114,390 @@
         <br />
         <br />
         <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
+
     }
+
     else if ((int)ViewData["collabid"] == 2)
     {
+    
         <br />
-        <h1>SWOT Analysis</h1>
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
+
+
+        <h1>Benchmarcking Anlaysis</h1>
         <table class="table">
             <thead>
                 <tr>
                     <th>File Name</th>
-                    <th>Analysis Type</th>
                     <th>Date Uploaded</th>
                     <th>Command</th>
                 </tr>
             </thead>
             <tbody>
-    
-                    <tr>
-                        <td>FileName</td>
-                        <td>AnalysisType</td>
-                        <td>DateAdded.ToShortDateString()</td>
-                        <td>
-                            <a class="btn btn-primary">View</a>
-                        </td>
-                    </tr>
-                
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Benchmarking Analysis")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        <h1>Best Practices Documents</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Best Practices")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }   
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        // <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
+
+        <h1>SWOT Analysis</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Benchmark SWOT Analysis")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
+
+
+
+    }
+
+    else if ((int)ViewData["collabid"] == 3)
+    {
+
+        <br />
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
+
+
+        <h1>Legal Requirements</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Legal Requirement")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        <h1>Best Practices Documents</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Management Practice")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+        // <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
+
+       
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
+
+    }
+
+    else if ((int)ViewData["collabid"] == 4)
+    {
+
+        <br />
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
+
+
+        <h1>Tax Assesment</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Tax Assesment")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+
+      
+
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
+
+    }
+
+
+     
+    else if ((int)ViewData["collabid"] == 5)
+    {
+        <br />
+
+        <h1>SWOT Analysis</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Economic Development SWOT Analysis")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
             </tbody>
         </table>
 
@@ -101,18 +515,43 @@
             <tbody>
                 @foreach (var document in Model.Doc)
                 {
-                    <tr>
-                        <td>@document.FileName</td>
-                        <td>@document.DateAdded.ToShortDateString()</td>
-                        <td>
-                            <!-- Assuming you want to provide a link to view the document -->
-                            <a href="@Url.Page("/ViewDocument", new { id = document.Id })" class="btn btn-primary">View Document</a>
-                        </td>
-                    </tr>
+                    if (document.AnalysisType == "Economic Development PEST Analysis")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
                 }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
             </tbody>
         </table>
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
+
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Document</a>
 
      
 
