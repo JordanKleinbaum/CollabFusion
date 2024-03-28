@@ -38,7 +38,13 @@ namespace SignalRChat.Pages
 
                     DBClass.InsertDocument(document);
                     DBClass.CollabFusionDBConnection.Close();
-                    return RedirectToPage("/EnteredCollaboration", new { collaborationid = HttpContext.Session.GetInt32("collabid") });
+
+                    // Set success message in TempData
+                    TempData["UploadSuccessMessage"] = "File uploaded successfully.";
+
+
+                    return RedirectToPage("/UploadFile");
+                    //return RedirectToPage("/EnteredCollaboration", new { collaborationid = HttpContext.Session.GetInt32("collabid") });
                 }
             }
             return Page();

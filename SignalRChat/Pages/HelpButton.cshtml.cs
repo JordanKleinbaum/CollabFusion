@@ -12,7 +12,7 @@ namespace SignalRChat.Pages
     {
         public List<Document> Doc { get; set; } = new List<Document>();
 
-        public IActionResult OnGet(int collaborationid)
+        public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
             {
