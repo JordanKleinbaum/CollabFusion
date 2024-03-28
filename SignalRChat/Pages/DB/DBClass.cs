@@ -549,13 +549,13 @@ namespace SignalRChat.Pages.DB
         }
 
 
-        public static List<KnowledgeItem> SearchKnowledge(string SearchTerm)
+        public static List<Document> SearchKnowledge(string SearchTerm)
         {
-            List<KnowledgeItem> SearchedKnowledgeItem = new List<KnowledgeItem>();
+            List<Document> SearchedDocument = new List<Document>();
             using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
             {
                 connection.Open();
-                string sqlQuery = "SELECT * FROM KnowledgeItem WHERE KnowledgeTitle LIKE @SearchTerm";
+                string sqlQuery = "SELECT * FROM Document WHERE FileName LIKE @SearchTerm";
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
                     command.Parameters.AddWithValue("@SearchTerm", "%" + SearchTerm + "%");
@@ -563,22 +563,20 @@ namespace SignalRChat.Pages.DB
                     {
                         while (reader.Read())
                         {
-                            KnowledgeItem knowledge = new KnowledgeItem
+                            Document knowledge = new Document
                             {
-                                KnowledgeID = Int32.Parse(reader["KnowledgeID"].ToString()),
-                                KnowledgeTitle = reader["KnowledgeTitle"].ToString(),
-                                KnowledgeSubject = reader["KnowledgeSubject"].ToString(),
-                                Category = reader["Category"].ToString(),
-                                Information = reader["Information"].ToString()
-                                //FullDateAndTime = reader["FullDateAndTime"].ToString(),
-                                //KnowledgeInfo = reader["KnowledgeInfo"].ToString()
+                                Id = Convert.ToInt32(reader["Id"]),
+                                FileName = reader["FileName"].ToString(),
+                                FileData = (byte[])reader["FileData"],
+                                DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                                AnalysisType = reader["AnalysisType"].ToString()
                             };
-                            SearchedKnowledgeItem.Add(knowledge);
+                            SearchedDocument.Add(knowledge);
                         }
                     }
                 }
             }
-            return SearchedKnowledgeItem;
+            return SearchedDocument;
         }
 
         public static void InsertDocument(Document d)
