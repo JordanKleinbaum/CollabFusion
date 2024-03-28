@@ -17,28 +17,27 @@
 </head>
 <body>
     <br />
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div style="display: flex; flex-direction: column;">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+        <div class="mb-3 mb-md-0">
             <h4>
                 Welcome to Collaborations, @Model.UserFirstName!
             </h4>
         </div>
         @if (adminStatus == "Admin")
         {
-            <div>
-                <a asp-page="/User" class="btn" style="background-color: #293A7F; color: white;">Create New Account</a>
+            <div class="d-flex" style="gap: 1em;">
+                <a asp-page="/User" class="btn mr-md-2" style="background-color: #293A7F; color: white;">Create New Account</a>
                 <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
             </div>
         }
     </div>
+
+
     <hr />
 
-    <h6>
+    <h6 class="centerTitlePlease">
         Your Collaborations
     </h6>
-    <h1>
-        
-    </h1>
     <br />
 
     <!-- Display existing collaborations -->
