@@ -27,7 +27,7 @@
     <div style="max-width: 500px; margin: 0 auto; background-color: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <form method="post" enctype="multipart/form-data">
             <div style="margin-bottom: 20px;">
-                <h2 style="margin-top: 0; text-align: center;" >Upload Files</h2>
+                <h2 style="margin-top: 0; text-align: center;" >Upload Excel Files</h2>
                 <br />
                 <input style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 100%; box-sizing: border-box;" asp-for="FileList" value="Upload Files" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" multiple />
             </div>
@@ -37,6 +37,9 @@
             </div>
         </form>
     </div>
+    <br />
+    <br />
+    <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
 }
 else
 {

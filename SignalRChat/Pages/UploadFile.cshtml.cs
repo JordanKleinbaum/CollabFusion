@@ -38,8 +38,7 @@ namespace SignalRChat.Pages
 
                     DBClass.InsertDocument(document);
                     DBClass.CollabFusionDBConnection.Close();
-                    return RedirectToPage("/Index");
-
+                    return RedirectToPage("/EnteredCollaboration", new { collaborationid = HttpContext.Session.GetInt32("collabid") });
                 }
             }
             return Page();

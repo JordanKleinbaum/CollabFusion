@@ -109,11 +109,13 @@
                 </script>
             </tbody>
         </table>
-
-        <a asp-page="/KnowledgeItem" class="btn" style="background-color: #293A7F; color: white;">Create Knowledge Item</a>
         <br />
         <br />
         <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
+        <br />
+        <br />
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Document</a>
+
 
     }
 
@@ -121,8 +123,6 @@
     {
     
         <br />
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
-
 
         <h1>Benchmarcking Anlaysis</h1>
         <table class="table">
@@ -269,8 +269,8 @@
                 </script>
             </tbody>
         </table>
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Document</a>
 
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
 
 
 
@@ -278,11 +278,7 @@
 
     else if ((int)ViewData["collabid"] == 3)
     {
-
         <br />
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
-
-
         <h1>Legal Requirements</h1>
         <table class="table">
             <thead>
@@ -382,18 +378,12 @@
         // <a asp-page="/UploadFile" class="btn btn-primary">Upload SWOT</a>
 
        
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Document</a>
 
     }
 
     else if ((int)ViewData["collabid"] == 4)
     {
-
-        <br />
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Analysis Document</a>
-
-
-        <h1>Tax Assesment</h1>
         <table class="table">
             <thead>
                 <tr>
@@ -443,7 +433,7 @@
 
       
 
-        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload PEST Document</a>
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Document</a>
 
     }
 
@@ -557,6 +547,12 @@
 
     }
 }
+
+<br />
+<br />
 <a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
+<br />
+<br />
+<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
 
 
