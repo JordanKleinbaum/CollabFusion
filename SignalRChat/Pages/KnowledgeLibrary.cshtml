@@ -13,25 +13,16 @@
 </head>
  <body>
     <br />
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h4>
-            Welcome to Knowledge Library
-        </h4>
-    </div>
-        <br />
+    <h1>Document Repository</h1>
     <br />
-
     <form method="post" asp-page-handler="Search">
-        <label for="SearchTerm" style="display: block;">Search Knowledge Library:</label>
-        <input type="text" asp-for="SearchTerm" />
+        <label for="SearchTerm" style="display: block;">Search Documents:</label>
+        <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" />
         <button type="submit">Search</button>
         <br />
     </form>
 
     <br />
-    <br />
-
-    <h1>Document Repository</h1>
     <table class="table">
         <thead>
             <tr>
