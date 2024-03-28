@@ -1,0 +1,65 @@
+﻿@page
+@model SignalRChat.Pages.HelpButtonModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    }
+ @{
+   
+    
+
+        <h1>Help Documents</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Date Uploaded</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model.Doc)
+                {
+                    if (document.AnalysisType == "Help Document")
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <!-- Add a button to trigger the download -->
+                                <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+                <script>
+                    function downloadDocument(fileName, fileData) {
+                        // Create a blob from the base64 encoded file data
+                        var byteCharacters = atob(fileData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                        // Create a link element and trigger a download
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                </script>
+            </tbody>
+        </table>
+    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Help Document</a>
+
+
+
+
+
+}
+
+
