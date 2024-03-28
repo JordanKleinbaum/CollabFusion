@@ -43,8 +43,7 @@ namespace SignalRChat.Pages
 
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
-        public List<Document> Doc2 { get; set; } = new List<Document>();
-
+       
 
 
         public IActionResult OnGet(int collaborationid)
@@ -78,71 +77,10 @@ namespace SignalRChat.Pages
                 //Close your connection in DBClass
                 DBClass.CollabFusionDBConnection.Close();
 
-                // Populate ChatList with user data
-                SqlDataReader chatReader = DBClass.GetAllChats();
-                while (chatReader.Read())
-                {
-                    ChatList.Add(new Chat
-                    {
-                        ChatID = Convert.ToInt32(chatReader["ChatID"]),
-                        UserID = Convert.ToInt32(chatReader["UserID"]),
-                        ChatText = chatReader["ChatText"].ToString(),
-                        TimeStamp = chatReader["TimeStamp"] as DateTime?,
-                    });
-                }
-                // Close the chatReader and the DataBase Connection
-                chatReader.Close();
-                DBClass.CollabFusionDBConnection.Close();
-
-
-                // Populate the KnowledgeItem SELECT control
-                SqlDataReader KnowledgeItemReader = DBClass.GeneralReaderQuery("SELECT * FROM KnowledgeItem WHERE CollabID = " + HttpContext.Session.GetInt32("collabid"));
-
-                KnowledgeItems = new List<SelectListItem>();
-
-                while (KnowledgeItemReader.Read())
-                {
-                    KnowledgeItems.Add(
-                        new SelectListItem(
-                            KnowledgeItemReader["KnowledgeTitle"].ToString(),
-                            KnowledgeItemReader["KnowledgeID"].ToString()));
-                }
-
-                DBClass.CollabFusionDBConnection.Close();
-
-                // Populate the KnowledgeItem SELECT control
-                SqlDataReader PlanReader = DBClass.GeneralReaderQuery("SELECT * FROM Plans WHERE CollabID = " + HttpContext.Session.GetInt32("collabid"));
-
-                Plans = new List<SelectListItem>();
-
-                while (PlanReader.Read())
-                {
-                    Plans.Add(
-                        new SelectListItem(
-                            PlanReader["PlanName"].ToString(),
-                            PlanReader["PlanID"].ToString()));
-                }
-
-                DBClass.CollabFusionDBConnection.Close();
-
-                // ChatID LOGIC START
-                SqlDataReader ChatReader = DBClass.GeneralReaderQuery("Select * FROM Chat");
-
-                Chats = new List<SelectListItem>();
-
-                while (ChatReader.Read())
-                {
-                    Chats.Add(new SelectListItem(
-                        ChatReader["UserID"].ToString(),
-                        ChatReader["ChatText"].ToString()));
-                    //ChatReader["TimeStamp"].ToString()));
-                }
-                DBClass.CollabFusionDBConnection.Close();
-
-                // ChatID LOGIC END
+   
 
                 //Document LOGIC START
-                SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE AnalysisType = 'PEST'");
+                SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
 
                 // Populate PESTDocuments list with data from the database
                 while (reader.Read())
@@ -159,25 +97,7 @@ namespace SignalRChat.Pages
                 reader.Close();
                 DBClass.CollabFusionDBConnection.Close();
 
-                //DOCUMENT LOGIC END
-                SqlDataReader reader2 = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE AnalysisType = 'SWOT'");
-
-                // Populate SWOT list with data from the database
-                while (reader2.Read())
-                {
-                    Doc2.Add(new Document
-                    {
-                        Id = Convert.ToInt32(reader2["Id"]),
-                        FileName = reader2["FileName"].ToString(),
-                        FileData = (byte[])reader2["FileData"],
-                        DateAdded = Convert.ToDateTime(reader2["DateAdded"]),
-                        AnalysisType = reader2["AnalysisType"].ToString()
-                    });
-                }
-                reader2.Close();
-                DBClass.CollabFusionDBConnection.Close();
-
-
+                
 
                 return Page();
             }
@@ -190,42 +110,6 @@ namespace SignalRChat.Pages
 
         public void OnPostSubmit()
         {
-            // Populate the KnowledgeItem SELECT control again, just like in OnGet
-            SqlDataReader KnowledgeItemReader = DBClass.GeneralReaderQuery("SELECT * FROM KnowledgeItem");
-
-            KnowledgeItems = new List<SelectListItem>();
-
-            while (KnowledgeItemReader.Read())
-            {
-                KnowledgeItems.Add(
-                    new SelectListItem
-                    {
-                        Text = KnowledgeItemReader["KnowledgeTitle"].ToString(),
-                        Value = KnowledgeItemReader["KnowledgeID"].ToString(),
-                        Selected = (KnowledgeItemReader["KnowledgeID"].ToString() == KnowledgeID.ToString())
-                    });
-            }
-
-            DBClass.CollabFusionDBConnection.Close();
-
-
-            // Populate the Plan SELECT control again, just like in OnGet
-            SqlDataReader PlanReader = DBClass.GeneralReaderQuery("SELECT * FROM Plans");
-
-            Plans = new List<SelectListItem>();
-
-            while (PlanReader.Read())
-            {
-                Plans.Add(
-                    new SelectListItem
-                    {
-                        Text = PlanReader["PlanName"].ToString(),
-                        Value = PlanReader["PlanID"].ToString(),
-                        Selected = (PlanReader["PlanID"].ToString() == PlanID.ToString())
-                    });
-            }
-
-            DBClass.CollabFusionDBConnection.Close();
 
             // Populate UsersList with user data from the database
             SqlDataReader userReader = DBClass.GetAllUsers();
@@ -245,8 +129,7 @@ namespace SignalRChat.Pages
 
         public IActionResult OnPost()
         {
-            DBClass.InsertChat(Chat);
-            DBClass.CollabFusionDBConnection.Close();
+            
             return Page();
         }
 
