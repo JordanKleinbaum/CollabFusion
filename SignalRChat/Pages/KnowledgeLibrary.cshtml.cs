@@ -67,7 +67,7 @@ namespace SignalRChat.Pages
         {
             //Document LOGIC START
             //Document LOGIC START
-            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
+            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document Order By DateAdded Desc");
 
             while (reader.Read())
             {
