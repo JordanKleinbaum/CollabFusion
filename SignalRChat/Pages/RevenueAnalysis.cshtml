@@ -3,35 +3,119 @@
 @{
 }
 <br />
-<h1>Revenue Analysis</h1>
-<form asp-page="RevenueAnalysis">
-    <div style="display: flex;">
-        
-    </div>
-    <br />
-    <div style="display: flex; gap: 2em;">
-        <div style="flex: 1;">
-            <img style="max-width: 645px;" src="https://www.health.state.mn.us/communities/practice/resources/phqitoolbox/images/scatter_ex_atlanticcities.jpg" />
-            <button class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Analysis</button>
-        </div>
-        <div style="flex: 1;">
-            <div class="form-group" style="flex: 1;">
-                <label class="form-label">Title</label>
-                <input class="form-control" placeholder="Enter Title">
-            </div>
-            <div class="form-group" style="flex: 1;">
-                <label class="form-label">Description</label>
-                <input class="form-control" placeholder="Enter Description">
-            </div>
-            <label class="form-label">Inflation</label>
-            <input type="number" class="form-control" placeholder="Enter Inflation" value="0" oninput="this.value = this.value">
-            <label class="form-label">Interest</label>
-            <input type="number" class="form-control" placeholder="Enter Interest" value="0" oninput="this.value = this.value">
-            <br />
-            <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Analyze</button>
-            <h3 style="text-align: center;">Projection: 5% increase in 3 years</h3>
-        </div>
-    </div>
-</form>
 <br />
-<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/DataSets">&#8592; Back</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <label class="font-weight-bold">Chart Type:</label>
+        </div>
+        <div class="col-md-3">
+            <select id="ChartType" class="form-control">
+                <option selected disabled>Select Chart Type</option>
+                <option>bar</option>
+                <option>line</option>
+                <option>pie</option>
+                <option>doughnut</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input id="ID" value="Show Graph" type="button" class="btn" style="background-color: #293A7F; color: white;" />
+        </div>
+    </div>
+</div>
+
+
+
+<div id="ChartView" style="max-width: 50%;">
+    <canvas id="myChart"></canvas>
+</div>
+
+<form asp-page="RevenueAnalysis">
+    <div class="form-group">
+        <label class="form-label">Analysis Title</label>
+        <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
+        <span asp-validation-for="AnalysisName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Analysis Description</label>
+        <textarea asp-for="AnalysisDescription" class="form-control" rows="4" placeholder="Enter Analysis Description"></textarea>
+        <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn" style="background-color: #293A7F; color: white;">Save Analysis</button>
+</form>
+
+
+@*ChartJS*@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var xAxisData = @Html.Raw(Json.Serialize(Model.XAxisData));
+        var yAxisData = @Html.Raw(Json.Serialize(Model.YAxisData));
+        var xAxisTitle = "@Model.XAxisTitle";
+        var yAxisTitle = "@Model.YAxisTitle";
+
+        // Function to create the initial chart on page load
+        function createChart(chartType) {
+            const ctx = $('#myChart');
+            new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: yAxisData,
+                    datasets: [{
+                        label: xAxisTitle,
+                        data: xAxisData,
+                        borderWidth: 1,
+                        backgroundColor: getRandomColorArray(yAxisData.length),
+                        fill: false, // Prevent area fill below line
+                        borderColor: 'rgb(75, 192, 192)', // Line color
+                        tension: 0.1 // Adjust curve tension (0 for straight lines)
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: xAxisTitle
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: yAxisTitle
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Call the function to create the initial chart on page load
+        createChart('line');
+
+        // Event listener for changing chart type
+        $("#ID").click(function () {
+            var chartType = $("#ChartType").val();
+            var chartView = document.getElementById("ChartView");
+
+            chartView.innerHTML = '&nbsp;';
+            $('#ChartView').append('<canvas id="myChart"></canvas>');
+
+            createChart(chartType);
+        });
+    });
+
+    // Function to generate an array of random colors
+    function getRandomColorArray(length) {
+        var colors = [];
+        for (var i = 0; i < length; i++) {
+            var randomColor = 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ', 0.7)';
+            colors.push(randomColor);
+        }
+        return colors;
+    }
+</script>
