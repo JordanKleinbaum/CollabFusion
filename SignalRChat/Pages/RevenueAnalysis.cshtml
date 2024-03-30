@@ -63,10 +63,10 @@
             new Chart(ctx, {
                 type: chartType,
                 data: {
-                    labels: yAxisData,
+                    labels: xAxisData,
                     datasets: [{
-                        label: xAxisTitle,
-                        data: xAxisData,
+                        label: yAxisTitle,
+                        data: yAxisData,
                         borderWidth: 1,
                         backgroundColor: getRandomColorArray(yAxisData.length),
                         fill: false, // Prevent area fill below line
@@ -75,6 +75,10 @@
                     }]
                 },
                 options: {
+                    animation: {
+                        // Add animation delay in milliseconds
+                        delay: 500,
+                    },
                     scales: {
                         x: {
                             title: {
@@ -89,7 +93,8 @@
                             },
                             beginAtZero: true
                         }
-                    }
+                    },
+
                 }
             });
         }
