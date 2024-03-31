@@ -614,5 +614,21 @@ namespace SignalRChat.Pages.DB
             }
         }
 
+        public static SqlDataReader GetAllPreviousSpendingAnalysis()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM PreviousSpendingAnalysis";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
     }
 }

@@ -109,6 +109,34 @@
                 </script>
             </tbody>
         </table>
+        <h1>Previous Analysis</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Analysis Name</th>
+                    <th>Analysis Description</th>
+                    <th>Based Off Of</th>
+                    <th>Created Date</th>
+                    <th>Command</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var analysis in Model.PreviousSpendingAnalysisList)
+                {
+                    <tr>
+                        <td>@analysis.SpendingAnalysisName</td>
+                        <td>@analysis.SpendingAnalysisDescription</td>
+                        <td>@analysis.BasedOffOf</td>
+                        <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td> <!-- Modify this line -->
+                        <td>
+                            <!-- Add a button to trigger the view analysis action -->
+                            <button class="btn btn-primary">View Analysis</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
         <br />
         <br />
         <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
