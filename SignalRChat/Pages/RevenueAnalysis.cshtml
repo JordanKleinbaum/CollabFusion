@@ -11,6 +11,8 @@
     </div>
     <select id="xAxisDropdown" class="form-control">
         <!-- Options will be dynamically populated here -->
+        <option selected disabled>Select A Radio Button</option>
+
 
     </select>
     <p>Use value <span id="xAxisValue"></span> for x-axis</p>
@@ -22,14 +24,16 @@
     </div>
     <select id="yAxisDropdown" class="form-control">
         <!-- Options will be dynamically populated here -->
+        <option selected disabled>Select A Radio Button</option>
+
     </select>
     <p>Use value <span id="yAxisValue"></span> for y-axis</p>
 
-    <div class="row">
-        <div class="col-md-4 col-sm-6">
-            <label class="font-weight-bold">Chart Type:</label>
+    <div style="display: flex; flex-direction: column; gap: 0.5em;">
+        <div>
+            <h2>Chart Type:</h2>
         </div>
-        <div class="col-md-4 col-sm-6">
+        <div >
             <select id="ChartType" class="form-control">
                 <option selected disabled>Select Chart Type</option>
                 <option>bar</option>
@@ -38,14 +42,18 @@
                 <option>doughnut</option>
             </select>
         </div>
-        <div class="col-md-4 col-sm-6">
-            <button id="ID" class="btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
+        <div >
+            <button id="ID" class="btn" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
         </div>
     </div>
+    <hr />
 
-    <div id="ChartView" style="margin-top: 20px; text-align: center; max-width: 40em; margin: auto;">
+    <div id="ChartView" style="margin-top: 20px; text-align: center; max-width: 42em; margin: auto;">
         <canvas id="myChart" style="max-width: 100%; margin: 0 auto;"></canvas>
     </div>
+
+    <hr />
+    <h2>Save Analysis</h2>
 
     <form asp-page="RevenueAnalysis" style="margin-top: 20px;">
         <div class="form-group">
