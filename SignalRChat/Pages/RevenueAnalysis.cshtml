@@ -2,15 +2,34 @@
 @model SignalRChat.Pages.RevenueAnalysisModel
 @{
 }
-<br />
-<br />
+<div class="container" style="margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
 
-<div class="container">
+    <h2>X-Axis Selection:</h2>
+    <div>
+        <input type="radio" name="xAxis" value="allColumns" id="xAllColumnsRadio" onchange="populateXDropdown()"> All Columns
+        <input type="radio" name="xAxis" value="allRows" id="xAllRowsRadio" onchange="populateXDropdown()"> All Rows
+    </div>
+    <select id="xAxisDropdown" class="form-control">
+        <!-- Options will be dynamically populated here -->
+
+    </select>
+    <p>Use value <span id="xAxisValue"></span> for x-axis</p>
+
+    <h2>Y-Axis Selection:</h2>
+    <div>
+        <input type="radio" name="yAxis" value="allColumns" id="yAllColumnsRadio" onchange="populateYDropdown()"> All Columns
+        <input type="radio" name="yAxis" value="allRows" id="yAllRowsRadio" onchange="populateYDropdown()"> All Rows
+    </div>
+    <select id="yAxisDropdown" class="form-control">
+        <!-- Options will be dynamically populated here -->
+    </select>
+    <p>Use value <span id="yAxisValue"></span> for y-axis</p>
+
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4 col-sm-6">
             <label class="font-weight-bold">Chart Type:</label>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4 col-sm-6">
             <select id="ChartType" class="form-control">
                 <option selected disabled>Select Chart Type</option>
                 <option>bar</option>
@@ -19,32 +38,31 @@
                 <option>doughnut</option>
             </select>
         </div>
-        <div class="col-md-3">
-            <input id="ID" value="Show Graph" type="button" class="btn" style="background-color: #293A7F; color: white;" />
+        <div class="col-md-4 col-sm-6">
+            <button id="ID" class="btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
         </div>
     </div>
-</div>
 
-
-
-<div id="ChartView" style="max-width: 50%;">
-    <canvas id="myChart"></canvas>
-</div>
-
-<form asp-page="RevenueAnalysis">
-    <div class="form-group">
-        <label class="form-label">Analysis Title</label>
-        <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
-        <span asp-validation-for="AnalysisName" class="text-danger"></span>
+    <div id="ChartView" style="margin-top: 20px; text-align: center; max-width: 40em; margin: auto;">
+        <canvas id="myChart" style="max-width: 100%; margin: 0 auto;"></canvas>
     </div>
 
-    <div class="form-group">
-        <label class="form-label">Analysis Description</label>
-        <textarea asp-for="AnalysisDescription" class="form-control" rows="4" placeholder="Enter Analysis Description"></textarea>
-        <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn" style="background-color: #293A7F; color: white;">Save Analysis</button>
-</form>
+    <form asp-page="RevenueAnalysis" style="margin-top: 20px;">
+        <div class="form-group">
+            <label class="form-label">Analysis Title</label>
+            <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
+            <span asp-validation-for="AnalysisName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Analysis Description</label>
+            <textarea asp-for="AnalysisDescription" class="form-control" rows="4" placeholder="Enter Analysis Description"></textarea>
+            <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
+    </form>
+
+</div>
 
 
 @*ChartJS*@
@@ -100,7 +118,7 @@
         }
 
         // Call the function to create the initial chart on page load
-        createChart('line');
+        // createChart('line');
 
         // Event listener for changing chart type
         $("#ID").click(function () {
@@ -122,5 +140,57 @@
             colors.push(randomColor);
         }
         return colors;
+    }
+
+    function populateXDropdown() {
+        var select = document.getElementById("xAxisDropdown");
+        var xAllColumnsRadio = document.getElementById("xAllColumnsRadio");
+        var xAllRowsRadio = document.getElementById("xAllRowsRadio");
+
+        select.innerHTML = ""; // Clear existing options
+
+        if (xAllColumnsRadio.checked) {
+            var allColumnsOptions = ["Column A", "Column B", "Column C"];
+            allColumnsOptions.forEach(function (item) {
+                var option = document.createElement("option");
+                option.text = item;
+                select.add(option);
+            });
+        } else if (xAllRowsRadio.checked) {
+            var allRowsOptions = ["Row 1", "Row 2", "Row 3"];
+            allRowsOptions.forEach(function (item) {
+                var option = document.createElement("option");
+                option.text = item;
+                select.add(option);
+            });
+        }
+
+        document.getElementById("xAxisValue").innerText = select.value;
+    }
+
+    function populateYDropdown() {
+        var select = document.getElementById("yAxisDropdown");
+        var yAllColumnsRadio = document.getElementById("yAllColumnsRadio");
+        var yAllRowsRadio = document.getElementById("yAllRowsRadio");
+
+        select.innerHTML = ""; // Clear existing options
+
+        if (yAllColumnsRadio.checked) {
+            var allColumnsOptions = ["Column A", "Column B", "Column C"];
+            allColumnsOptions.forEach(function (item) {
+                var option = document.createElement("option");
+                option.text = item;
+                select.add(option);
+            });
+        } else if (yAllRowsRadio.checked) {
+            var allRowsOptions = ["Row 1", "Row 2", "Row 3"];
+            allRowsOptions.forEach(function (item) {
+                var option = document.createElement("option");
+                option.text = item;
+                select.add(option);
+            });
+        }
+
+        document.getElementById("yAxisValue").innerText = select.value;
     }
 </script>
