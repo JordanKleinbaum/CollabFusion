@@ -136,8 +136,10 @@ CREATE TABLE PreviousSpendingAnalysis (
     SpendingAnalysisID INT IDENTITY(1,1) PRIMARY KEY,
     SpendingAnalysisName VARCHAR(255),
     SpendingAnalysisDescription TEXT,
+    BasedOffOf VARCHAR(255),
 	SpendingAnalysisDate DATE
 );
+
 
 INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin)
 VALUES
