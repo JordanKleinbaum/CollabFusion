@@ -598,12 +598,13 @@ namespace SignalRChat.Pages.DB
 
         public static void InsertPreviousSpendingAnalysis(PreviousSpendingAnalysis spendinganalysis)
         {
-            string sqlQuery = "INSERT INTO PreviousSpendingAnalysis (SpendingAnalysisName, SpendingAnalysisDescription, SpendingAnalysisDate) VALUES (@SpendingAnalysisName, @SpendingAnalysisDescription, @SpendingAnalysisDate)";
+            string sqlQuery = "INSERT INTO PreviousSpendingAnalysis (SpendingAnalysisName, SpendingAnalysisDescription, BasedOffOf, SpendingAnalysisDate) VALUES (@SpendingAnalysisName, @SpendingAnalysisDescription, @BasedOffOf, @SpendingAnalysisDate)";
 
             using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
             {
                 cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisName", spendinganalysis.SpendingAnalysisName);
                 cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDescription", spendinganalysis.SpendingAnalysisDescription);
+                cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
                 cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
 
                 CollabFusionDBConnection.Open();

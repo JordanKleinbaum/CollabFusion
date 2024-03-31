@@ -68,7 +68,7 @@ namespace SignalRChat.Pages
             }
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(string fileName)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,8 @@ namespace SignalRChat.Pages
             var spendingAnalysis = new PreviousSpendingAnalysis
             {
                 SpendingAnalysisName = AnalysisName,
-                SpendingAnalysisDescription = AnalysisDescription
+                SpendingAnalysisDescription = AnalysisDescription,
+                BasedOffOf = fileName
             };
 
             // Insert the collaboration into the database

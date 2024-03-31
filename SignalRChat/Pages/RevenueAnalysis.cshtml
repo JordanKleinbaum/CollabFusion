@@ -55,7 +55,7 @@
     <hr />
     <h2>Save Analysis</h2>
 
-    <form asp-page="RevenueAnalysis" style="margin-top: 20px;">
+    <form asp-page="RevenueAnalysis" style="margin-top: 20px;" method="post">
         <div class="form-group">
             <label class="form-label">Analysis Title</label>
             <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
@@ -67,6 +67,9 @@
             <textarea asp-for="AnalysisDescription" class="form-control" rows="4" placeholder="Enter Analysis Description"></textarea>
             <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
         </div>
+
+        <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
+
         <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
     </form>
 
