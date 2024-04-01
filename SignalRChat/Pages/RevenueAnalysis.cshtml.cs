@@ -27,6 +27,9 @@ namespace SignalRChat.Pages
         public string XAxisTitle { get; private set; }
         public string YAxisTitle { get; private set; }
 
+        public List<string> Columns { get; set; }
+
+
         // Insert into DataBase Stuff
         [BindProperty]
         [Required(ErrorMessage = "Analysis Title is required")]
@@ -46,6 +49,13 @@ namespace SignalRChat.Pages
                 var worksheet = package.Workbook.Worksheets.FirstOrDefault();
                 if (worksheet != null)
                 {
+
+                    var columns = Enumerable.Range(1, worksheet.Dimension.End.Column)
+                                           .Select(col => worksheet.Cells[1, col].Value?.ToString())
+                                           .ToList();
+
+                    // Pass the columns to the Razor page
+                    Columns = columns;
                     // Assuming the first row contains headers
                     var xAxisTitle = worksheet.Cells["A1"].Value?.ToString();
                     var yAxisTitle = worksheet.Cells["B1"].Value?.ToString();
@@ -90,6 +100,32 @@ namespace SignalRChat.Pages
             // Redirect to the CollabHub page or any other page as needed
             return RedirectToPage("CollabHub");
         }
+
+        public IActionResult OnGetGetData(string xAxisColumn, string yAxisColumn)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads");
+            string filePath = Path.Combine(uploadsFolder, Request.Query["fileName"]);
+
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                if (worksheet != null)
+                {
+                    var xAxisData = worksheet.Cells[$"{xAxisColumn}2:{xAxisColumn}{worksheet.Dimension.End.Row}"]
+                                               .Select(cell => cell.Value?.ToString())
+                                               .ToList();
+
+                    var yAxisData = worksheet.Cells[$"{yAxisColumn}2:{yAxisColumn}{worksheet.Dimension.End.Row}"]
+                                               .Select(cell => int.Parse(cell.Value?.ToString() ?? "0"))
+                                               .ToList();
+
+                    return new JsonResult(new { xAxisData = xAxisData, yAxisData = yAxisData });
+                }
+            }
+
+            return new JsonResult(null);
+        }
+
 
 
     }

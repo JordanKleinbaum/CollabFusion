@@ -3,37 +3,35 @@
 @{
 }
 <div class="container" style="margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-
-    <h2>X-Axis Selection:</h2>
-    <div>
-        <input type="radio" name="xAxis" value="allColumns" id="xAllColumnsRadio" onchange="populateXDropdown()"> All Columns
-        <input type="radio" name="xAxis" value="allRows" id="xAllRowsRadio" onchange="populateXDropdown()"> All Rows
-    </div>
-    <select id="xAxisDropdown" class="form-control">
-        <!-- Options will be dynamically populated here -->
-        <option selected disabled>Select A Radio Button</option>
-
-
-    </select>
-    <p>Use value <span id="xAxisValue"></span> for x-axis</p>
-
-    <h2>Y-Axis Selection:</h2>
-    <div>
-        <input type="radio" name="yAxis" value="allColumns" id="yAllColumnsRadio" onchange="populateYDropdown()"> All Columns
-        <input type="radio" name="yAxis" value="allRows" id="yAllRowsRadio" onchange="populateYDropdown()"> All Rows
-    </div>
-    <select id="yAxisDropdown" class="form-control">
-        <!-- Options will be dynamically populated here -->
-        <option selected disabled>Select A Radio Button</option>
-
-    </select>
-    <p>Use value <span id="yAxisValue"></span> for y-axis</p>
-
     <div style="display: flex; flex-direction: column; gap: 0.5em;">
+        <div>
+            <h2>X Axis:</h2>
+        </div>
+        <div>
+            <select id="XAxis" class="form-control">
+                <option selected disabled>Select X Axis</option>
+                @foreach (var column in Model.Columns)
+                {
+                    <option>@column</option>
+                }
+            </select>
+        </div>
+        <div>
+            <h2>Y Axis:</h2>
+        </div>
+        <div>
+            <select id="YAxis" class="form-control">
+                <option selected disabled>Select Y Axis</option>
+                @foreach (var column in Model.Columns)
+                {
+                    <option>@column</option>
+                }
+            </select>
+        </div>
         <div>
             <h2>Chart Type:</h2>
         </div>
-        <div >
+        <div>
             <select id="ChartType" class="form-control">
                 <option selected disabled>Select Chart Type</option>
                 <option>bar</option>
@@ -42,8 +40,8 @@
                 <option>doughnut</option>
             </select>
         </div>
-        <div >
-            <button id="ID" class="btn" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
+        <div>
+            <button id="ShowGraph" class="btn" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
         </div>
     </div>
     <hr />
@@ -89,7 +87,7 @@
         // Function to create the initial chart on page load
         function createChart(chartType) {
             const ctx = $('#myChart');
-            new Chart(ctx, {
+            var myChart = new Chart(ctx, {
                 type: chartType,
                 data: {
                     labels: xAxisData,
@@ -98,7 +96,6 @@
                         data: yAxisData,
                         borderWidth: 1,
                         backgroundColor: getRandomColorArray(yAxisData.length),
-                        fill: false, // Prevent area fill below line
                         borderColor: 'rgb(75, 192, 192)', // Line color
                         tension: 0.1 // Adjust curve tension (0 for straight lines)
                     }]
@@ -123,85 +120,54 @@
                             beginAtZero: true
                         }
                     },
-
                 }
             });
         }
 
-        // Call the function to create the initial chart on page load
-        // createChart('line');
-
         // Event listener for changing chart type
-        $("#ID").click(function () {
+        $("#ShowGraph").click(function () {
             var chartType = $("#ChartType").val();
             var chartView = document.getElementById("ChartView");
 
-            chartView.innerHTML = '&nbsp;';
+            // Clear previous chart if exists
+            chartView.innerHTML = '';
+
+            // Append canvas for new chart
             $('#ChartView').append('<canvas id="myChart"></canvas>');
 
+            // Create the chart
             createChart(chartType);
         });
+
+        // Event listener for changing X axis
+        $("#XAxis").change(function () {
+            xAxisTitle = $(this).val();
+            updateChart();
+        });
+
+        // Event listener for changing Y axis
+        $("#YAxis").change(function () {
+            yAxisTitle = $(this).val();
+            updateChart();
+        });
+
+        // Function to update the chart with new data and titles
+        function updateChart() {
+            var chart = $('#myChart').get(0).chart;
+            chart.options.scales.x.title.text = xAxisTitle;
+            chart.options.scales.y.title.text = yAxisTitle;
+            chart.update();
+        }
+
+        // Function to generate an array of random colors
+        function getRandomColorArray(length) {
+            var colors = [];
+            for (var i = 0; i < length; i++) {
+                var randomColor = 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ', 0.7)';
+                colors.push(randomColor);
+            }
+            return colors;
+        }
     });
-
-    // Function to generate an array of random colors
-    function getRandomColorArray(length) {
-        var colors = [];
-        for (var i = 0; i < length; i++) {
-            var randomColor = 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ', 0.7)';
-            colors.push(randomColor);
-        }
-        return colors;
-    }
-
-    function populateXDropdown() {
-        var select = document.getElementById("xAxisDropdown");
-        var xAllColumnsRadio = document.getElementById("xAllColumnsRadio");
-        var xAllRowsRadio = document.getElementById("xAllRowsRadio");
-
-        select.innerHTML = ""; // Clear existing options
-
-        if (xAllColumnsRadio.checked) {
-            var allColumnsOptions = ["Column A", "Column B", "Column C"];
-            allColumnsOptions.forEach(function (item) {
-                var option = document.createElement("option");
-                option.text = item;
-                select.add(option);
-            });
-        } else if (xAllRowsRadio.checked) {
-            var allRowsOptions = ["Row 1", "Row 2", "Row 3"];
-            allRowsOptions.forEach(function (item) {
-                var option = document.createElement("option");
-                option.text = item;
-                select.add(option);
-            });
-        }
-
-        document.getElementById("xAxisValue").innerText = select.value;
-    }
-
-    function populateYDropdown() {
-        var select = document.getElementById("yAxisDropdown");
-        var yAllColumnsRadio = document.getElementById("yAllColumnsRadio");
-        var yAllRowsRadio = document.getElementById("yAllRowsRadio");
-
-        select.innerHTML = ""; // Clear existing options
-
-        if (yAllColumnsRadio.checked) {
-            var allColumnsOptions = ["Column A", "Column B", "Column C"];
-            allColumnsOptions.forEach(function (item) {
-                var option = document.createElement("option");
-                option.text = item;
-                select.add(option);
-            });
-        } else if (yAllRowsRadio.checked) {
-            var allRowsOptions = ["Row 1", "Row 2", "Row 3"];
-            allRowsOptions.forEach(function (item) {
-                var option = document.createElement("option");
-                option.text = item;
-                select.add(option);
-            });
-        }
-
-        document.getElementById("yAxisValue").innerText = select.value;
-    }
 </script>
+
