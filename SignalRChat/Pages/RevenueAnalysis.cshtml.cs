@@ -23,6 +23,8 @@ namespace SignalRChat.Pages
         public List<double> XValues { get; set; }
         public List<double> YValues { get; set; }
         public List<double> Trendline { get; set; }
+        public string XColumnHeader { get; set; }
+        public string YColumnHeader { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Analysis Title is required")]
@@ -60,6 +62,9 @@ namespace SignalRChat.Pages
 
             var xData = new List<double>();
             var yData = new List<double>();
+
+            XColumnHeader = worksheet.Cells[1, 1].GetValue<string>();
+            YColumnHeader = worksheet.Cells[1, 2].GetValue<string>();
 
             for (int row = 2; row <= rowCount; row++)
             {
