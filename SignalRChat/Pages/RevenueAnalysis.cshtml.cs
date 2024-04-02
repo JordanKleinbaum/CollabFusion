@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OfficeOpenXml;
 using MathNet.Numerics;
+using System.ComponentModel.DataAnnotations;
+using SignalRChat.Pages.DataClasses;
+using SignalRChat.Pages.DB;
 
 namespace SignalRChat.Pages
 {
@@ -20,6 +23,14 @@ namespace SignalRChat.Pages
         public List<double> XValues { get; set; }
         public List<double> YValues { get; set; }
         public List<double> Trendline { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Analysis Title is required")]
+        public string AnalysisName { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Analysis Description is required")]
+        public string AnalysisDescription { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string fileName)
         {
@@ -73,6 +84,29 @@ namespace SignalRChat.Pages
 
             // Generate trendline
             Trendline = XValues.Select(x => RegressionAnalysisResult.Intercept + RegressionAnalysisResult.Slope * x).ToList();
+        }
+
+        public IActionResult OnPost(string fileName)
+        {
+            if (!ModelState.IsValid)
+            {
+                // If model state is not valid, return to the page
+                return Page();
+            }
+
+            // Create a new PreviousSpendingAnalysis object
+            var spendingAnalysis = new PreviousSpendingAnalysis
+            {
+                SpendingAnalysisName = AnalysisName,
+                SpendingAnalysisDescription = AnalysisDescription,
+                BasedOffOf = fileName
+            };
+
+            // Insert the collaboration into the database
+            DBClass.InsertPreviousSpendingAnalysis(spendingAnalysis);
+
+            return RedirectToPage("CollabHub");
+
         }
     }
 }
