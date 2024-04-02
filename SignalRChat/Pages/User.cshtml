@@ -61,7 +61,7 @@
             <div style="display: flex;">
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">Country</label>
-                    <select asp-for="NewUser.Country" class="form-control">
+                    <select asp-for="NewUser.Country">
                         <option selected disabled>Choose ...</option>
                         <option>United States of America</option>
                         <option>Canada</option>
@@ -73,7 +73,7 @@
 
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">State (If Applicable)</label>
-                    <select asp-for="NewUser.State" class="form-control">
+                    <select asp-for="NewUser.State">
                         <option selected disabled>Choose...</option>
                         <!-- List of states -->
                         <option value="Alabama">Alabama</option>
@@ -136,7 +136,7 @@
             <div style="display: flex;">
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">City</label>
-                    <select asp-for="NewUser.City" class="form-control">
+                    <select asp-for="NewUser.City" >
                         <option selected disabled>Choose ...</option>
                         <!-- List of cities -->
                         <option>Fairfax Station</option>
@@ -163,7 +163,7 @@
 
                 <div class="form-group" style="flex: 1;">
                     <label class="form-label">Permissions</label>
-                    <select asp-for="NewUser.Admin" class="form-control">
+                    <select asp-for="NewUser.Admin">
                         <option selected disabled>Choose ...</option>
                         <option>Admin</option>
                         <option>General User</option>

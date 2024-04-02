@@ -1,3 +1,73 @@
+:root {
+    --bg-color: #ffffff; /* default background color for light mode */
+    --text-color: #000000; /* default text color for light mode */
+    --border-outline: #d6d4d4;
+}
+
+body, .card, .table {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card {
+    border: 1px solid var(--border-outline);
+}
+
+
+.dark-mode {
+    --bg-color: #1e1e1e; /* background color for dark mode */
+    --text-color: #ffffff; /* text color for dark mode */
+    --border-outline: #858585;
+}
+
+
+/* Form styles */
+
+input[type="text"]::placeholder {
+    color: var(--text-color);
+}
+
+/* Optional: Adjust placeholder color when the input is focused */
+input[type="text"]:focus::placeholder {
+    color: var(--text-color);
+}
+
+input[type="text"], option {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+    input[type="text"]:focus {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+
+select, textarea {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    textarea::placeholder{
+        color: var(--text-color)
+    }
+    select:focus, textarea:focus {
+        color: var(--text-color);
+        background-color: var(--bg-color;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+
 html {
     font-size: 14px;
 }
@@ -26,7 +96,7 @@ body {
         grid-template-columns: 100%;
         place-items: center;
     }
-    
+
 
     .card {
         width: 100%;
@@ -34,7 +104,7 @@ body {
     }
 }
 
-@media (max-width: 767px){
+@media (max-width: 767px) {
     .centerTitlePlease {
         display: flex;
         justify-content: center;
