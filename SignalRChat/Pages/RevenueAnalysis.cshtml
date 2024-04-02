@@ -2,172 +2,51 @@
 @model SignalRChat.Pages.RevenueAnalysisModel
 @{
 }
-<div class="container" style="margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-    <div style="display: flex; flex-direction: column; gap: 0.5em;">
-        <div>
-            <h2>X Axis:</h2>
-        </div>
-        <div>
-            <select id="XAxis" class="form-control">
-                <option selected disabled>Select X Axis</option>
-                @foreach (var column in Model.Columns)
-                {
-                    <option>@column</option>
-                }
-            </select>
-        </div>
-        <div>
-            <h2>Y Axis:</h2>
-        </div>
-        <div>
-            <select id="YAxis" class="form-control">
-                <option selected disabled>Select Y Axis</option>
-                @foreach (var column in Model.Columns)
-                {
-                    <option>@column</option>
-                }
-            </select>
-        </div>
-        <div>
-            <h2>Chart Type:</h2>
-        </div>
-        <div>
-            <select id="ChartType" class="form-control">
-                <option selected disabled>Select Chart Type</option>
-                <option>bar</option>
-                <option>line</option>
-                <option>pie</option>
-                <option>doughnut</option>
-            </select>
-        </div>
-        <div>
-            <button id="ShowGraph" class="btn" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Show Graph</button>
-        </div>
-    </div>
-    <hr />
 
-    <div id="ChartView" style="margin-top: 20px; text-align: center; max-width: 42em; margin: auto;">
-        <canvas id="myChart" style="max-width: 100%; margin: 0 auto;"></canvas>
-    </div>
+@if (Model.RegressionAnalysisResult != null)
+{
+    <h2>Regression Analysis Result:</h2>
+    <p>Intercept: @Model.RegressionAnalysisResult.Intercept</p>
+    <p>Slope: @Model.RegressionAnalysisResult.Slope</p>
+    <p>R-Squared: @Model.RegressionAnalysisResult.RSquared</p>
 
-    <hr />
-    <h2>Save Analysis</h2>
+    <div id="scatterPlot"></div>
+}
 
-    <form asp-page="RevenueAnalysis" style="margin-top: 20px;" method="post">
-        <div class="form-group">
-            <label class="form-label">Analysis Title</label>
-            <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
-            <span asp-validation-for="AnalysisName" class="text-danger"></span>
-        </div>
+@section Scripts {
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var xValues = @Html.Raw(Json.Serialize(Model.XValues));
+        var yValues = @Html.Raw(Json.Serialize(Model.YValues));
+        var trendline = @Html.Raw(Json.Serialize(Model.Trendline));
 
-        <div class="form-group">
-            <label class="form-label">Analysis Description</label>
-            <textarea asp-for="AnalysisDescription" class="form-control" rows="4" placeholder="Enter Analysis Description"></textarea>
-            <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
-        </div>
+        var trace1 = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers',
+            type: 'scatter'
+        };
 
-        <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
+        var trace2 = {
+            x: xValues,
+            y: trendline,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'Trendline'
+        };
 
-        <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
-    </form>
+        var data = [trace1, trace2];
 
-</div>
-
-
-@*ChartJS*@
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var xAxisData = @Html.Raw(Json.Serialize(Model.XAxisData));
-        var yAxisData = @Html.Raw(Json.Serialize(Model.YAxisData));
-        var xAxisTitle = "@Model.XAxisTitle";
-        var yAxisTitle = "@Model.YAxisTitle";
-
-        // Function to create the initial chart on page load
-        function createChart(chartType) {
-            const ctx = $('#myChart');
-            var myChart = new Chart(ctx, {
-                type: chartType,
-                data: {
-                    labels: xAxisData,
-                    datasets: [{
-                        label: yAxisTitle,
-                        data: yAxisData,
-                        borderWidth: 1,
-                        backgroundColor: getRandomColorArray(yAxisData.length),
-                        borderColor: 'rgb(75, 192, 192)', // Line color
-                        tension: 0.1 // Adjust curve tension (0 for straight lines)
-                    }]
-                },
-                options: {
-                    animation: {
-                        // Add animation delay in milliseconds
-                        delay: 500,
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: xAxisTitle
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: yAxisTitle
-                            },
-                            beginAtZero: true
-                        }
-                    },
-                }
-            });
-        }
-
-        // Event listener for changing chart type
-        $("#ShowGraph").click(function () {
-            var chartType = $("#ChartType").val();
-            var chartView = document.getElementById("ChartView");
-
-            // Clear previous chart if exists
-            chartView.innerHTML = '';
-
-            // Append canvas for new chart
-            $('#ChartView').append('<canvas id="myChart"></canvas>');
-
-            // Create the chart
-            createChart(chartType);
-        });
-
-        // Event listener for changing X axis
-        $("#XAxis").change(function () {
-            xAxisTitle = $(this).val();
-            updateChart();
-        });
-
-        // Event listener for changing Y axis
-        $("#YAxis").change(function () {
-            yAxisTitle = $(this).val();
-            updateChart();
-        });
-
-        // Function to update the chart with new data and titles
-        function updateChart() {
-            var chart = $('#myChart').get(0).chart;
-            chart.options.scales.x.title.text = xAxisTitle;
-            chart.options.scales.y.title.text = yAxisTitle;
-            chart.update();
-        }
-
-        // Function to generate an array of random colors
-        function getRandomColorArray(length) {
-            var colors = [];
-            for (var i = 0; i < length; i++) {
-                var randomColor = 'rgba(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ', 0.7)';
-                colors.push(randomColor);
+        var layout = {
+            title: 'Revenue Analysis',
+            xaxis: {
+                title: 'X Axis'
+            },
+            yaxis: {
+                title: 'Y Axis'
             }
-            return colors;
-        }
-    });
-</script>
+        };
 
+        Plotly.newPlot('scatterPlot', data, layout);
+    </script>
+}
