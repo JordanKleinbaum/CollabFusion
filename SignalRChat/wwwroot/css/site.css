@@ -23,21 +23,21 @@ body, .card, .table {
 
 /* Form styles */
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder, input[type="password"]::placeholder {
     color: var(--text-color);
 }
 
 /* Optional: Adjust placeholder color when the input is focused */
-input[type="text"]:focus::placeholder {
+input[type="text"]:focus::placeholder, input[type="password"]:focus::placeholder {
     color: var(--text-color);
 }
 
-input[type="text"], option {
+input[type="text"], option, input[type="password"] {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
 
-    input[type="text"]:focus {
+    input[type="text"]:focus, input[type="password"]:focus {
         background-color: var(--bg-color);
         color: var(--text-color);
     }
