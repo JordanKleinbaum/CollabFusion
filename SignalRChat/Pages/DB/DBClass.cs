@@ -612,7 +612,7 @@ namespace SignalRChat.Pages.DB
 
             }
 
-            string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@BasedOffOf, CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
+            string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES ('Regression Analysis For: " + spendinganalysis.BasedOffOf + "', CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
             using (SqlCommand cmdDocInsert = new SqlCommand(anotherSqlQuery, CollabFusionDBConnection))
             {
                 cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
