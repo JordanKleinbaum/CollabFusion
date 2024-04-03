@@ -13,12 +13,10 @@ namespace SignalRChat.Pages.DB
         public static SqlConnection CollabFusionDBConnection = new SqlConnection();
 
         // Connection String - How to find and connect to DB
-        private static readonly string CollabFusionDBConnString =
-            "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
-
+        private static readonly string CollabFusionDBConnString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
         public static SqlConnection AuthDBConnection = new SqlConnection();
 
-        private static readonly String? AuthConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=AUTH;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True;";
+        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True"; // Added this for AUTH DB
 
 
 
@@ -612,6 +610,17 @@ namespace SignalRChat.Pages.DB
                 cmdDocInsert.ExecuteNonQuery();
                 CollabFusionDBConnection.Close();
 
+            }
+
+            string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@BasedOffOf, CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
+            using (SqlCommand cmdDocInsert = new SqlCommand(anotherSqlQuery, CollabFusionDBConnection))
+            {
+                cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
+                cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
+
+                CollabFusionDBConnection.Open();
+                cmdDocInsert.ExecuteNonQuery();
+                CollabFusionDBConnection.Close();
             }
         }
 
