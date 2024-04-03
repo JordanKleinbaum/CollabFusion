@@ -23,8 +23,11 @@
 
                 <!-- Navbar Links -->
                 <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
-                    <ul class="navbar-nav" style="display: flex; align-items: center;">
+                    <ul class="navbar-nav" style="display: flex; align-items: center; justify-content: space-evenly;">
 
+                        <li class="nav-item">
+                            <a id="theme-toggle" class="theme-toggle" style="cursor: pointer; text-decoration: none; user-select: none; font-size: 1.7em;" ></a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/CollabHub">Collaboration Hub</a>
                         </li>
@@ -35,11 +38,9 @@
                             <a class="nav-link" asp-page="/HelpButton">Help</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-secondary" style="color: white;" asp-page="/Index" asp-route-logout="true">Logout: @ViewData["username"]</a>
+                            <a class="nav-link" asp-page="/Index" asp-route-logout="true">Sign-out <i class="fa-solid fa-right-from-bracket"></i></a>
                         </li>
-                        <li class="nav-item">
-                            <a id="theme-toggle" class="theme-toggle" style="font-size: 1.7em; cursor: pointer; text-decoration: none; user-select: none;" ></a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
