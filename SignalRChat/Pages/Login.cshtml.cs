@@ -23,7 +23,10 @@ namespace SignalRChat.Pages
 
         public IActionResult OnGet(String logout)
         {
-            if (logout == "true")
+            //if (HttpContext.Session.GetString("username") != null)
+            //{
+            
+                if (logout == "true")
             {
                 HttpContext.Session.Clear();
                 ViewData["LoginMessage"] = "Successfully Logged Out!";
@@ -35,6 +38,12 @@ namespace SignalRChat.Pages
             }
 
             return Page();
+            //}
+            //else
+            //{
+            //    HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+            //    return RedirectToPage("Index");
+            //}
         }
 
         public IActionResult OnPost()

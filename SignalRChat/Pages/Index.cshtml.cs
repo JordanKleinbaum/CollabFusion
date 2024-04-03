@@ -19,8 +19,9 @@ namespace SignalRChat.Pages
 
         public IActionResult OnGet()
         {
-                // Populate UsersList with user data from the database
-                SqlDataReader userReader = DBClass.GetAllUsers();
+            HttpContext.Session.Clear();
+            // Populate UsersList with user data from the database
+            SqlDataReader userReader = DBClass.GetAllUsers();
                 while (userReader.Read())
                 {
                     UsersList.Add(new Users
