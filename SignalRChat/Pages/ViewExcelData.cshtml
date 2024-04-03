@@ -2,33 +2,52 @@
 @model SignalRChat.Pages.ViewExcelDataModel
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
-
 }
-<br />
+<style>
+    .table-container {
+        width: 100%;
+        max-height: 45.5em; 
+        overflow: auto;
+        border: 1px solid #ccc;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid gray;
+        padding: 8px;
+        text-align: left;
+    }
+</style>
 <h3>@Model.FileName</h3>
 
 @if (Model.ExcelData != null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                @foreach (var header in Model.ExcelData.FirstOrDefault())
-                {
-                    <th>@header</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var row in Model.ExcelData.Skip(1))
-            {
+    <div class="table-container">
+        <table class="table">
+            <thead>
                 <tr>
-                    @foreach (var cell in row)
+                    @foreach (var header in Model.ExcelData.FirstOrDefault())
                     {
-                        <td>@cell</td>
+                        <th>@header</th>
                     }
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.ExcelData.Skip(1))
+                {
+                    <tr>
+                        @foreach (var cell in row)
+                        {
+                            <td>@cell</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/DataSets">&#8592; Back</a>
