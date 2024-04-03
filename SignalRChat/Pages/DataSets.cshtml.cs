@@ -20,6 +20,12 @@ namespace SignalRChat.Pages
         public bool UploadSuccessful { get; private set; }
         public string ErrorFileName { get; private set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int PageIndex { get; set; } = 1;
+
+        public int TotalPages { get; private set; }
+        public int PageSize { get; private set; } = 6; // Number of items per page
+
         // SQL Server connection string
         private readonly string _connectionString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
 
@@ -239,12 +245,14 @@ namespace SignalRChat.Pages
             return RedirectToPage();
         }
 
-
-
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
             {
+                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+                var filesCount = new DirectoryInfo(uploadDirectory).GetFiles().Length;
+                TotalPages = (int)Math.Ceiling((double)filesCount / PageSize);
+
                 return Page();
             }
             else
@@ -255,3 +263,4 @@ namespace SignalRChat.Pages
         }
     }
 }
+
