@@ -26,7 +26,7 @@
                     <ul class="navbar-nav" style="display: flex; align-items: center; justify-content: space-evenly;">
 
                         <li class="nav-item">
-                            <a id="theme-toggle" class="theme-toggle" style="cursor: pointer; text-decoration: none; user-select: none; font-size: 1.7em;"></a>
+                            <a id="theme-toggle" class="theme-toggle" style="cursor: pointer; text-decoration: none; user-select: none; font-size: 1.7em;" data-toggle="tooltip" data-placement="bottom" title="Theme Toggle"></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/CollabHub">Collaboration Hub</a>
@@ -35,18 +35,11 @@
                             <a class="nav-link" asp-page="/KnowledgeLibrary">Document Repository</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/HelpButton"> <i class="fa-solid fa-circle-info" title="Tooltip on bottom" data-toggle="tooltip" data-placement="bottom"></i>Help</a>
+                            <a class="nav-link" asp-page="/HelpButton">Help</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Index" asp-route-logout="true">Sign-out <i class="fa-solid fa-right-from-bracket"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary" type="button" asp-page="/Index" asp-route-logout="true" style="color: white; background: #354CA6; width: 100%;">
-                                <!-- Added width: 100% -->
-                                <i class="fa-solid fa-user"></i>
-                                My Profile
-                            </a>
-                        </li>
+                            <a class="nav-link" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
+                        </li
 
                     </ul>
                 </div>
