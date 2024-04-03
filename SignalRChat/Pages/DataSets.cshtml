@@ -4,6 +4,13 @@
     ViewData["username"] = HttpContext.Session.GetString("username");
 }
 
+<div id="loadingSpinner" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <div>Loading...</div>
+</div>
+
 @if (Model.UploadSuccessful)
 {
     <div class="alert alert-success" role="alert">
@@ -26,7 +33,7 @@
 @if (Model.ModelState.IsValid)
 {
     <div style="max-width: 500px; margin: 0 auto; border-radius: 8px; padding: 20px; border: 1px solid gray;">
-        <form method="post" enctype="multipart/form-data">
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
             <div style="margin-bottom: 20px;">
                 <h2 style="margin-top: 0; text-align: center;">Upload Excel Files</h2>
                 <br />
@@ -97,7 +104,20 @@ else
         </nav>
     }
 </div>
+<script>
+    function showLoadingSpinner() {
+        document.getElementById("loadingSpinner").style.display = "block";
+    }
 
+    function hideLoadingSpinner() {
+        document.getElementById("loadingSpinner").style.display = "none";
+    }
+
+    // Attach event listener to form submission
+    document.getElementById("uploadForm").addEventListener("submit", function (event) {
+        showLoadingSpinner(); // Show loading spinner when form is submitted
+    });
+</script>
 
 
 
