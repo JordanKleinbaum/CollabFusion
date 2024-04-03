@@ -14,11 +14,12 @@ namespace SignalRChat.Pages.DB
 
         // Connection String - How to find and connect to DB
         private static readonly string CollabFusionDBConnString =
-            "Server=localhost;Database=Lab3;Trusted_Connection=True;";
+            "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
         public static SqlConnection AuthDBConnection = new SqlConnection();
 
-        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True"; // Added this for AUTH DB
+        private static readonly String? AuthConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=AUTH;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True;";
+
 
 
         // Connection Methods:
