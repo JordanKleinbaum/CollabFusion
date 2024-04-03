@@ -4,9 +4,24 @@
     Layout = "~/Pages/Shared/_LayoutLoggedOut.cshtml";
 }
 
+<style>
+    .password-toggle-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+        .password-toggle-icon i {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+</style>
 
 @{
-    if(ViewData["LoginMessage"] != null)
+    if (ViewData["LoginMessage"] != null)
     {
         <br />
         if (ViewData["LoginMessage"] == "Successfully Logged Out!")
@@ -17,7 +32,6 @@
         {
             <h3 class="text-danger">@ViewData["LoginMessage"]</h3>
         }
-        
     }
 
     if (ViewData["LoginMessage"] == null)
@@ -27,12 +41,12 @@
 }
 
 @{
-    if(HttpContext.Session.GetString("username") != null)
+    if (HttpContext.Session.GetString("username") != null)
     {
         <h3>Already Logged In As: @HttpContext.Session.GetString("username")</h3>
         // Log out here
         <form asp-page="Index" asp-page-handler="LogoutHandler">
-        <input type="submit" class="btn btn-danger" value="Logout"/>
+            <input type="submit" class="btn btn-danger" value="Logout" />
         </form>
     }
 
@@ -40,72 +54,98 @@
     {
         <p class="text-danger">@HttpContext.Session.GetString("LoginError")</p>
 
-
-        // Let the user try login again.
+                // Let the user try login again.
         <br />
         <br />
         <br />
-        <section style="display: flex; align-items: center;">
-            <div style="flex: 1;">
-                <img src="./images/InOffice.svg" style="max-width: 100%;" />
+        <div class="row align-items-center">
+            <div class="col-md-12 col-lg-6">
+                <img src="./images/InOffice.svg" class="img-fluid" />
             </div>
-            <div style="flex: 1;">
-                <br />
+            <div class="col-md-12 col-lg-6">
                 <form asp-page="Index">
                     <label>Username:</label>
                     <input asp-for="Username" class="form-control" placeholder="Enter Username" required />
                     <br />
                     <label>Password:</label>
-                    <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+                    <div class="password-wrapper">
+                        <input id="myInput" asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+                    </div>
                     <br />
                     <input type="submit" class="btn" style="color: white; width: 100%; background-color: #293A7F;" value="Login" asp-route-admin="@Model.Admin" />
                 </form>
                 <br />
-                @*
-        <div style="display: flex; align-items: center;">
-        <hr style="flex: 1; margin: 0;">
-        <p style="margin: 0 10px;">or</p>
-        <hr style="flex: 1; margin: 0;">
-        </div>
-        <label>Don't have an account?</label>
-        <a class="btn" style="width: 100%; border: 1px solid #293A7F" asp-page="/User">Create an Account</a>
-        *@
+                @* Additional code here if needed *@
             </div>
-        </section>
-    }
+        </div>
 
+        @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const passwordInput = document.getElementById('myInput');
+                const togglePasswordButtons = document.querySelectorAll('.password-wrapper .toggle-password');
+
+                togglePasswordButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        togglePasswordButtons.forEach(function (btn) {
+                            btn.classList.toggle('show-password');
+                            btn.classList.toggle('hide-password');
+                        });
+                    });
+                });
+            });
+        </script>
+        }
+    }
     else
     {
-        // First time loading the page
+                // First time loading the page
         <br />
         <br />
         <br />
-        <section style="display: flex; align-items: center;">
-            <div style="flex: 1;">
-                <img src="./images/InOffice.svg" style="max-width: 100%;" />
+        <div class="row align-items-center">
+            <div class="col-md-12 col-lg-6">
+                <img src="./images/InOffice.svg" class="img-fluid" />
             </div>
-            <div style="flex: 1;">
-            <br />
+            <div class="col-md-12 col-lg-6">
                 <form asp-page="Index">
                     <label>Username:</label>
                     <input asp-for="Username" class="form-control" placeholder="Enter Username" required />
                     <br />
                     <label>Password:</label>
-                    <input asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+                    <div class="password-wrapper user-box" style="position: relative;">
+                        <input id="password" asp-for="Password" class="form-control" type="password" placeholder="Enter Password" required />
+                        <span class="password-toggle-icon"><i class="fas fa-eye-slash"></i></span>
+                    </div>
                     <br />
                     <input type="submit" class="btn" style="color: white; width: 100%; background-color: #293A7F;" value="Login" asp-route-admin="@Model.Admin" />
                 </form>
                 <br />
-                @*
-                <div style="display: flex; align-items: center;">
-                    <hr style="flex: 1; margin: 0;">
-                    <p style="margin: 0 10px;">or</p>
-                    <hr style="flex: 1; margin: 0;">
-                </div>
-                <label>Don't have an account?</label>
-                <a class="btn" style="width: 100%; border: 1px solid #293A7F" asp-page="/User">Create an Account</a>
-                *@
+                @* Additional code here if needed *@
             </div>
-        </section>
+        </div>
+
+        @section Scripts {
+        <script>
+            const passwordField = document.getElementById("password");
+            const togglePassword = document.querySelector(".password-toggle-icon i");
+
+            togglePassword.addEventListener("click", function () {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    togglePassword.classList.remove("fa-eye-slash");
+                    togglePassword.classList.add("fa-eye");
+                } else {
+                    passwordField.type = "password";
+                    togglePassword.classList.remove("fa-eye");
+                    togglePassword.classList.add("fa-eye-slash");
+                }
+            });
+        </script>
+        }
     }
 }
+
+

@@ -592,7 +592,42 @@ namespace SignalRChat.Pages.DB
 
                 CollabFusionDBConnection.Open();
                 cmdDocInsert.ExecuteNonQuery();
+                CollabFusionDBConnection.Close();
             }
+        }
+
+        public static void InsertPreviousSpendingAnalysis(PreviousSpendingAnalysis spendinganalysis)
+        {
+            string sqlQuery = "INSERT INTO PreviousSpendingAnalysis (SpendingAnalysisName, SpendingAnalysisDescription, BasedOffOf, SpendingAnalysisDate) VALUES (@SpendingAnalysisName, @SpendingAnalysisDescription, @BasedOffOf, @SpendingAnalysisDate)";
+
+            using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisName", spendinganalysis.SpendingAnalysisName);
+                cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDescription", spendinganalysis.SpendingAnalysisDescription);
+                cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
+                cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
+
+                CollabFusionDBConnection.Open();
+                cmdDocInsert.ExecuteNonQuery();
+                CollabFusionDBConnection.Close();
+
+            }
+        }
+
+        public static SqlDataReader GetAllPreviousSpendingAnalysis()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM PreviousSpendingAnalysis";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
         }
 
     }

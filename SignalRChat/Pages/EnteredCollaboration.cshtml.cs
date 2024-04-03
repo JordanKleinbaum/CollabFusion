@@ -43,7 +43,9 @@ namespace SignalRChat.Pages
 
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
-       
+
+        public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
+
 
 
         public IActionResult OnGet(int collaborationid)
@@ -77,7 +79,7 @@ namespace SignalRChat.Pages
                 //Close your connection in DBClass
                 DBClass.CollabFusionDBConnection.Close();
 
-   
+
 
                 //Document LOGIC START
                 SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
@@ -97,7 +99,23 @@ namespace SignalRChat.Pages
                 reader.Close();
                 DBClass.CollabFusionDBConnection.Close();
 
-                
+
+                SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
+                while (previousAnalysisReader.Read())
+                {
+                    PreviousSpendingAnalysisList.Add(new PreviousSpendingAnalysis
+                    {
+                        SpendingAnalysisID = Convert.ToInt32(previousAnalysisReader["SpendingAnalysisID"]),
+                        SpendingAnalysisName = previousAnalysisReader["SpendingAnalysisName"].ToString(),
+                        SpendingAnalysisDescription = previousAnalysisReader["SpendingAnalysisDescription"].ToString(),
+                        BasedOffOf = previousAnalysisReader["BasedOffOf"].ToString(),
+                        SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date
+
+                    });
+                }
+                DBClass.CollabFusionDBConnection.Close();
+
+
 
                 return Page();
             }
@@ -129,7 +147,7 @@ namespace SignalRChat.Pages
 
         public IActionResult OnPost()
         {
-            
+
             return Page();
         }
 

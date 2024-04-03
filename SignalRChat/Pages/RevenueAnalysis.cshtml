@@ -1,37 +1,75 @@
 ﻿@page
 @model SignalRChat.Pages.RevenueAnalysisModel
 @{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+
 }
 <br />
-<h1>Revenue Analysis</h1>
-<form asp-page="RevenueAnalysis">
-    <div style="display: flex;">
-        
+@if (Model.RegressionAnalysisResult != null)
+{
+    <h2>Regression Analysis Result:</h2>
+    <p>Intercept: @Model.RegressionAnalysisResult.Intercept</p>
+    <p>Slope: @Model.RegressionAnalysisResult.Slope</p>
+    <p>R-Squared: @Model.RegressionAnalysisResult.RSquared</p>
+
+    <div id="scatterPlot" style="display: flex; justify-content: center;"></div>
+}
+
+<hr />
+<h2>Save Analysis</h2>
+
+<form asp-page="RevenueAnalysis" style="margin-top: 20px;" method="post">
+    <div class="form-group">
+        <label class="form-label">Analysis Title</label>
+        <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
+        <span asp-validation-for="AnalysisName" class="text-danger"></span>
     </div>
-    <br />
-    <div style="display: flex; gap: 2em;">
-        <div style="flex: 1;">
-            <img style="max-width: 645px;" src="https://www.health.state.mn.us/communities/practice/resources/phqitoolbox/images/scatter_ex_atlanticcities.jpg" />
-            <button class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Analysis</button>
-        </div>
-        <div style="flex: 1;">
-            <div class="form-group" style="flex: 1;">
-                <label class="form-label">Title</label>
-                <input class="form-control" placeholder="Enter Title">
-            </div>
-            <div class="form-group" style="flex: 1;">
-                <label class="form-label">Description</label>
-                <input class="form-control" placeholder="Enter Description">
-            </div>
-            <label class="form-label">Inflation</label>
-            <input type="number" class="form-control" placeholder="Enter Inflation" value="0" oninput="this.value = this.value">
-            <label class="form-label">Interest</label>
-            <input type="number" class="form-control" placeholder="Enter Interest" value="0" oninput="this.value = this.value">
-            <br />
-            <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Analyze</button>
-            <h3 style="text-align: center;">Projection: 5% increase in 3 years</h3>
-        </div>
+
+    <div class="form-group">
+        <label class="form-label">Analysis Description</label>
+        <textarea asp-for="AnalysisDescription" rows="4" placeholder="Enter Analysis Description"></textarea>
+        <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
     </div>
+
+    <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
+
+    <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
 </form>
-<br />
-<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/DataSets">&#8592; Back</a>
+
+@section Scripts {
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var xValues = @Html.Raw(Json.Serialize(Model.XValues));
+        var yValues = @Html.Raw(Json.Serialize(Model.YValues));
+        var trendline = @Html.Raw(Json.Serialize(Model.Trendline));
+
+        var trace1 = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers',
+            type: 'scatter'
+        };
+
+        var trace2 = {
+            x: xValues,
+            y: trendline,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'Trendline'
+        };
+
+        var data = [trace1, trace2];
+
+        var layout = {
+            title: 'Revenue Analysis',
+            xaxis: {
+                title: '@Model.XColumnHeader'
+            },
+            yaxis: {
+                title: '@Model.YColumnHeader'
+            }
+        };
+
+        Plotly.newPlot('scatterPlot', data, layout);
+    </script>
+}
