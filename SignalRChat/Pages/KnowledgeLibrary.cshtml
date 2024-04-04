@@ -28,7 +28,9 @@
             <tr>
                 <th>File Name</th>
                 <th>Date Uploaded</th>
-                <th>Command</th>
+                <th style="text-align: right;">Command</th>
+                <th></th>
+
             </tr>
         </thead>
         <tbody>
@@ -37,12 +39,10 @@
                 <tr>
                     <td>@document.FileName</td>
                     <td>@document.DateAdded.ToShortDateString()</td>
-                    <td>
+                    <td style="text-align: right; display: flex; justify-content: flex-end;" >
                         <!-- Add a button to trigger the download -->
                         <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
-                    </td>
-
-                    <td>
+                    
                         <form method="post" asp-page-handler="Push" asp-route-id="@document.Id">
                             <button type="submit" class="btn btn-secondary">Push</button>
                         </form>
@@ -77,5 +77,12 @@
 @*  <a asp-page="KnowledgeItem" class="btn btn-primary spaceBtn">Add Knowledge Item</a>  *@
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
 
+<!-- Display success message if it exists in TempData -->
+    @if (TempData["UploadSuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["UploadSuccessMessage"]
+        </div>
+    }
 
 </html>

@@ -609,6 +609,7 @@ namespace SignalRChat.Pages.DB
             return SearchedDocument;
         }
 
+
         public static void InsertDocument(Document d)
         {
             string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
