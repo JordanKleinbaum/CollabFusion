@@ -44,4 +44,69 @@
     </tbody>
 </table>
 
+<h2>Change My Information</h2>
+<form asp-page="MyProfile" method="post">
+    <div class="form-group">
+        <label class="form-label">Username</label>
+        <input asp-for="ChangeUser.Username" class="form-control" placeholder="Enter new username">
+        <span asp-validation-for="ChangeUser.Username" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input asp-for="ChangeUser.FirstName" class="form-control" placeholder="Enter new first name">
+        <span asp-validation-for="ChangeUser.FirstName" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">LastName</label>
+        <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName">
+        <span asp-validation-for="ChangeUser.LastName" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email">
+        <span asp-validation-for="ChangeUser.Email" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone">
+        <span asp-validation-for="ChangeUser.Phone" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">Street</label>
+        <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street">
+        <span asp-validation-for="ChangeUser.Street" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">City</label>
+        <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City">
+        <span asp-validation-for="ChangeUser.City" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">State</label>
+        <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State">
+        <span asp-validation-for="ChangeUser.State" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">Country</label>
+        <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country">
+        <span asp-validation-for="ChangeUser.Country" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="form-label">ZipCode</label>
+        <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode">
+        <span asp-validation-for="ChangeUser.ZipCode" class="text-danger"></span>
+
+    </div>
+    <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Changes</button>
+</form>
+
 <a class="nav-link" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>

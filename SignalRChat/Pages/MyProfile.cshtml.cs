@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SignalRChat.Pages.DataClasses;
 using SignalRChat.Pages.DB;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SignalRChat.Pages
 {
@@ -17,7 +18,11 @@ namespace SignalRChat.Pages
         }
 
         public string UserFirstName { get; set; }
-        public Users User { get; set; } = new Users(); // Only one user
+        public Users User { get; set; } = new Users();
+
+        [BindProperty]
+        [Required]
+        public Users ChangeUser { get; set; }
 
         public IActionResult OnGet()
         {
@@ -25,17 +30,16 @@ namespace SignalRChat.Pages
 
             if (userId.HasValue)
             {
-                // Fetch user information based on userID
-                User = DBClass.UserInfoBasedOnID(_httpContextAccessor); // Call the correct method
+                User = DBClass.UserInfoBasedOnID(_httpContextAccessor);
 
                 if (User != null)
                 {
-                    UserFirstName = User.FirstName; // Set user's first name
+                    UserFirstName = User.FirstName;
+                    DBClass.CollabFusionDBConnection.Close();
                     return Page();
                 }
                 else
                 {
-                    // Handle the case where user info is not found
                     HttpContext.Session.SetString("ErrorMessage", "User information not found.");
                     return RedirectToPage("/Index");
                 }
@@ -44,5 +48,25 @@ namespace SignalRChat.Pages
             HttpContext.Session.SetString("LoginError", "You must log in to access that page!");
             return RedirectToPage("/Index");
         }
+
+        public IActionResult OnPost()
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    DBClass.UpdateUser(ChangeUser, _httpContextAccessor);
+                    return RedirectToPage("CollabHub");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it appropriately
+                    ModelState.AddModelError("", "An error occurred while updating user information.");
+                    return Page();
+                }
+            }
+            return Page(); // Return the same page if model state is not valid
+        }
     }
+
 }

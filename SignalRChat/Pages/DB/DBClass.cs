@@ -89,11 +89,9 @@ namespace SignalRChat.Pages.DB
             }
 
             reader.Close();
+
             return user;
         }
-
-
-
 
         // Insert into Users table
         // Users table changes -> Deleted Password insert statement, and correspomding sqlQuery appending
@@ -118,10 +116,49 @@ namespace SignalRChat.Pages.DB
             cmdUserRead.Connection.ConnectionString = CollabFusionDBConnString;
             cmdUserRead.CommandText = sqlQuery;
             cmdUserRead.Connection.Open();
-
             cmdUserRead.ExecuteNonQuery();
-
+            cmdUserRead.Connection.Close();
         }
+
+        public static void UpdateUser(Users u, IHttpContextAccessor httpContextAccessor)
+        {
+            int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
+
+            if (!userId.HasValue)
+            {
+                throw new Exception("User ID not found in session.");
+            }
+
+            // Construct the SQL query with parameterized values to prevent SQL injection
+            string sqlQuery = $"UPDATE Users SET Username = @Username, FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, Street = @Street, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE UserID = {userId}";
+
+            // Create a new SqlCommand
+            using (SqlCommand cmdUserUpdate = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                // Set command parameters
+                cmdUserUpdate.Parameters.AddWithValue("@Username", u.Username);
+                cmdUserUpdate.Parameters.AddWithValue("@FirstName", u.FirstName);
+                cmdUserUpdate.Parameters.AddWithValue("@LastName", u.LastName);
+                cmdUserUpdate.Parameters.AddWithValue("@Email", u.Email);
+                cmdUserUpdate.Parameters.AddWithValue("@Phone", u.Phone);
+                cmdUserUpdate.Parameters.AddWithValue("@Street", u.Street);
+                cmdUserUpdate.Parameters.AddWithValue("@City", u.City);
+                cmdUserUpdate.Parameters.AddWithValue("@State", u.State);
+                cmdUserUpdate.Parameters.AddWithValue("@Country", u.Country);
+                cmdUserUpdate.Parameters.AddWithValue("@ZipCode", u.ZipCode);
+
+                // Set the connection string
+                cmdUserUpdate.Connection.ConnectionString = CollabFusionDBConnString;
+
+                // Open connection and execute the command
+                cmdUserUpdate.Connection.Open();
+                cmdUserUpdate.ExecuteNonQuery();
+                cmdUserUpdate.Connection.Close();
+            } // The using block ensures proper disposal of resources, including closing the connection
+        }
+
+
+
 
         // Read all Knowledge Items
         public static SqlDataReader GetAllKnowledgeItems()
@@ -161,6 +198,7 @@ namespace SignalRChat.Pages.DB
             cmdRead.Connection.Open();
 
             cmdRead.ExecuteNonQuery();
+            cmdRead.Connection.Close();
 
         }
 
