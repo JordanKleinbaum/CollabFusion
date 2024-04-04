@@ -15,12 +15,20 @@
         </div>
     }
 
+    <!-- Display error message if it exists in TempData -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-warning" role="alert">
+            @Html.Raw(TempData["ErrorMessage"])
+        </div>
+    }
+
     <form method="post" enctype="multipart/form-data">
         <div class="form-group" style="margin-bottom: 20px;">
             <input style="text-align: center; padding: 10px; border: 1px solid #ccc; border-radius: 4px; width: 100%; box-sizing: border-box;" type="file" class="form-control-file" id="file" name="file" accept=".docx,.doc">
         </div>
         <div class="form-group">
-            <label for="analysisType">Document Property:</label>
+            <label for="analysisType">Send this file to...</label>
             <select id="analysisType" name="AnalysisType" asp-for="AnalysisType">
                 <option disabled selected value="">Choose...</option>
                 <option value="Revenue Projection">Revenue Project</option>
@@ -33,7 +41,7 @@
                 <option value="Tax Assesment">Tax Assesment</option>
                 <option value="Economic Development SWOT Analysis">Economic Development SWOT Analysis</option>
                 <option value="Economic Development PEST Analysis">Economic Development PEST Analysis</option>
-                <option value="Help Document">Help Document</option>
+                <option value="Help Document">Help Documents</option>
             </select>
         </div>
         <button style="padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 100%;" type="submit" class="btn btn-primary mt-3">Upload</button>

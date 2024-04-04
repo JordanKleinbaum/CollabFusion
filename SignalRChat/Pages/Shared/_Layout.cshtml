@@ -24,12 +24,15 @@
                 <!-- Navbar Links -->
                 <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
                     <ul class="navbar-nav" style="display: flex; align-items: center; justify-content: space-evenly;">
-
                         <li class="nav-item">
                             <a id="theme-toggle" class="theme-toggle" style="cursor: pointer; text-decoration: none; user-select: none; font-size: 1.7em;" data-toggle="tooltip" data-placement="bottom" title="Theme Toggle"></a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/CollabHub">Collaboration Hub</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/UploadFile">Upload Documents</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/KnowledgeLibrary">Document Repository</a>
@@ -39,7 +42,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
-                        </li
+                        </li>
 
                     </ul>
                 </div>
