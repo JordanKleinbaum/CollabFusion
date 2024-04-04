@@ -11,71 +11,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="./css/carousel.css" />
+    <style>
+        .accordion {
+            background-color: #293A7F;
+            color: #fff;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: background-color 0.4s;
+        }
+
+            .accordion:hover {
+                background-color: #1d2959;
+            }
+
+        .panel {
+            padding: 0 18px;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            max-height: 0;
+        }
+
+            .panel.active {
+                max-height: 500px; /* Adjust this value according to your content height */
+            }
+
+    </style>
 </head>
 <body>
     <br />
-    <br />
-    <form method="post" asp-page-handler="Search">
-        <label for="SearchTerm" style="display: block;">Search Documents:</label>
-        <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" style="border-style: solid;" class="form-control" />
-        <button type="submit" class="btn btn-primary">Search</button>
-        <br />
-    </form>
-
-    <br />
-    <h2>Uploaded Documents</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Date Uploaded</th>
-                <th>Command</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var document in Model.Doc)
-            {
-                <tr>
-                    <td>@document.FileName</td>
-                    <td>@document.DateAdded.ToShortDateString()</td>
-                    <td>
-                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h2>Previous Regression Analysis</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Analysis Name</th>
-                <th>Analysis Description</th>
-                <th>Based Off Of</th>
-                <th>Created Date</th>
-                <th>Command</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var analysis in Model.PreviousSpendingAnalysisList)
-            {
-                <tr>
-                    <td>@analysis.SpendingAnalysisName</td>
-                    <td>@analysis.SpendingAnalysisDescription</td>
-                    <td>@analysis.BasedOffOf</td>
-                    <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td>
-                    <td>
-                        <a asp-page="/ViewRevenueAnalysis" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" class="btn" style="background-color: #293A7F; color: white;">View Analysis</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
     <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
+    <br />
+    <br />
+    <button class="accordion">Uploaded Documents</button>
+    <div class="panel">
+        <br />
+        <form method="post" asp-page-handler="Search">
+            <label for="SearchTerm" style="display: block;">Search Documents:</label>
+            <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" style="border-style: solid;" class="form-control" />
+            <br />
+            <button type="submit" class="btn" style="background: #293A7F; color: white;">Search</button>
+            <a asp-page="KnowledgeLibrary" class="btn btn-secondary">Clear</a>
+        </form>
+        <br />
+        <!-- Add table-responsive class here -->
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Date Uploaded</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var document in Model.Doc)
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
+    <button class="accordion">Previous Regression Analysis</button>
+    <div class="panel">
+        <!-- Add table-responsive class here -->
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Analysis Name</th>
+                        <th>Analysis Description</th>
+                        <th>Based Off Of</th>
+                        <th>Created Date</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var analysis in Model.PreviousSpendingAnalysisList)
+                    {
+                        <tr>
+                            <td>@analysis.SpendingAnalysisName</td>
+                            <td>@analysis.SpendingAnalysisDescription</td>
+                            <td>@analysis.BasedOffOf</td>
+                            <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td>
+                            <td>
+                                <a asp-page="/ViewRevenueAnalysis" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" class="btn" style="background-color: #293A7F; color: white;">View Analysis</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+   
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            // Function to toggle accordion panels
+            function togglePanel(panel) {
+                var isActive = panel.classList.toggle("active");
+                var content = panel.nextElementSibling;
+                if (isActive) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    content.style.maxHeight = null;
+                }
+            }
+
+            // Add click event listeners to accordion buttons
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    togglePanel(this);
+                });
+            }
+
+            // Open the first accordion on page load
+            if (acc.length > 0) {
+                togglePanel(acc[0]);
+            }
+        });
+
         function downloadDocument(fileName, fileData) {
             if (fileData !== null) {
                 // Create a blob from the base64 encoded file data
