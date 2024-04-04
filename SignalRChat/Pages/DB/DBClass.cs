@@ -314,6 +314,26 @@ namespace SignalRChat.Pages.DB
             return firstName;
         }
 
+        public static int GetIdByUsername(string username)
+        {
+            int id = 0;
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                string sqlQuery = "SELECT UserID FROM Users WHERE Username = @Username";
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.AddWithValue("@Username", username);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        id = Convert.ToInt32(reader["UserID"]);
+                    }
+                }
+            }
+            return id;
+        }
+
         public static string GetAdminByUsername(string username)
         {
             string adminYesOrNo = "";
@@ -333,6 +353,8 @@ namespace SignalRChat.Pages.DB
             }
             return adminYesOrNo;
         }
+
+
 
 
 

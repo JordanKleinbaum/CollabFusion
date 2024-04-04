@@ -3,8 +3,8 @@
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
     ViewData["adminStatus"] = HttpContext.Session.GetString("_Admin");
+    ViewData["userID"] = HttpContext.Session.GetInt32("_userid");
     string adminStatus = ViewData["adminStatus"] as string;
-
 }
 
 <!DOCTYPE html>
@@ -30,6 +30,7 @@
                 <a asp-page="/CollabSpace" class="btn" style="background-color: #293A7F; color: white;">Create New Collaboration</a>
             </div>
         }
+        
     </div>
 
 

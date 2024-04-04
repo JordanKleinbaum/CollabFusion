@@ -23,6 +23,8 @@ namespace SignalRChat.Pages
         // Session 
         public string Admin { get; set; }
 
+        public int userID { get; set; }
+
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
@@ -36,6 +38,10 @@ namespace SignalRChat.Pages
                 // Retrieve admin status from the database and store it in the session
                 Admin = DBClass.GetAdminByUsername(username);
                 HttpContext.Session.SetString("_Admin", Admin);
+
+                userID = DBClass.GetIdByUsername(username);
+                HttpContext.Session.SetInt32("_userid", userID);
+
 
 
                 return Page();
