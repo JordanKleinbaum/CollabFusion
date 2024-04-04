@@ -2,6 +2,8 @@
 @model SignalRChat.Pages.HelpButtonModel
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["adminStatus"] = HttpContext.Session.GetString("_Admin");
+    string adminStatus = ViewData["adminStatus"] as string;
     }
  @{
    
@@ -25,9 +27,11 @@
                             <td>@document.FileName</td>
                             <td>@document.DateAdded.ToShortDateString()</td>
                             <td>
+                           
                                 <!-- Add a button to trigger the download -->
                                 <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
-                            </td>
+                            
+                                </td>
                         </tr>
                     }
                 }
@@ -54,8 +58,10 @@
                 </script>
             </tbody>
         </table>
-    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Help Document</a>
-
+    @if (adminStatus == "Admin")
+    {
+        <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/UploadFile">Upload Help Document</a>
+    }
 
 
 
