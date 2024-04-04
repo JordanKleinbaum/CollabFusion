@@ -677,5 +677,21 @@ namespace SignalRChat.Pages.DB
             return tempReader;
         }
 
+        // Insert into TableDocument table
+        public static void InsertTableDocument(DocumentTable t)
+        {
+            string sqlQuery = "INSERT INTO DocumentTable (CollabID) Values ('";
+            sqlQuery += t.CollabID + "')";
+
+            SqlCommand cmdPlanRead = new SqlCommand();
+            cmdPlanRead.Connection = CollabFusionDBConnection;
+            cmdPlanRead.Connection.ConnectionString = CollabFusionDBConnString;
+            cmdPlanRead.CommandText = sqlQuery;
+            cmdPlanRead.Connection.Open();
+
+            cmdPlanRead.ExecuteNonQuery();
+
+        }
+
     }
 }

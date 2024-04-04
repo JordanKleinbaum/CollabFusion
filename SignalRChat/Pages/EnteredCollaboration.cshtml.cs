@@ -44,6 +44,9 @@ namespace SignalRChat.Pages
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
 
+        public List<DocumentTable> Table { get; set; }
+        public DocumentTable NewTable { get; set; }
+
         public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
 
 
@@ -82,22 +85,38 @@ namespace SignalRChat.Pages
 
 
                 //Document LOGIC START
-                SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
+                SqlDataReader DocReader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
 
-                // Populate PESTDocuments list with data from the database
-                while (reader.Read())
+                // Populate Documents list with data from the database
+                while (DocReader.Read())
                 {
                     Doc.Add(new Document
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        FileName = reader["FileName"].ToString(),
-                        FileData = (byte[])reader["FileData"],
-                        DateAdded = Convert.ToDateTime(reader["DateAdded"]),
-                        AnalysisType = reader["AnalysisType"].ToString()
+                        Id = Convert.ToInt32(DocReader["Id"]),
+                        FileName = DocReader["FileName"].ToString(),
+                        FileData = (byte[])DocReader["FileData"],
+                        DateAdded = Convert.ToDateTime(DocReader["DateAdded"]),
+                        AnalysisType = DocReader["AnalysisType"].ToString()
                     });
                 }
-                reader.Close();
+                DocReader.Close();
                 DBClass.CollabFusionDBConnection.Close();
+
+                //TableDocument Logic Start
+                SqlDataReader TableReader = DBClass.GeneralReaderQuery($"SELECT * FROM DocumentTable WHERE CollabID = {collabid}");
+
+             
+                while (TableReader.Read())
+                {
+                    Table.Add(new DocumentTable
+                    {
+                        DocumentTableID = Convert.ToInt32(TableReader["DocumentTableID"]),
+                        CollabID = Convert.ToInt32(TableReader["CollabID"])
+                    });
+                }
+                TableReader.Close();
+                DBClass.CollabFusionDBConnection.Close();
+                //TableDocument Logic Ends
 
 
                 SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
@@ -145,8 +164,18 @@ namespace SignalRChat.Pages
             DBClass.CollabFusionDBConnection.Close();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(string tableName)
         {
+            int collabId = HttpContext.Session.GetInt32("collabid") ?? 0;
+            DocumentTable newTable = new DocumentTable
+            {
+                CollabID = collabId
+            };
+
+            DBClass.InsertTableDocument(newTable);
+            DBClass.CollabFusionDBConnection.Close();
+
+
 
             return Page();
         }
