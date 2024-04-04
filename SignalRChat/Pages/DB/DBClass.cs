@@ -579,10 +579,56 @@ namespace SignalRChat.Pages.DB
             }
             return SearchedDocument;
         }
+        public static List<PublicDocument> SearchPublicKnowledge(string SearchTerm)
+        {
+            List<PublicDocument> SearchedDocument = new List<PublicDocument>();
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+                string sqlQuery = "SELECT * FROM PublicDocument WHERE FileName LIKE @SearchTerm";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@SearchTerm", "%" + SearchTerm + "%");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PublicDocument knowledge = new PublicDocument
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                FileName = reader["FileName"].ToString(),
+                                FileData = (byte[])reader["FileData"],
+                                DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                                AnalysisType = reader["AnalysisType"].ToString()
+                            };
+                            SearchedDocument.Add(knowledge);
+                        }
+                    }
+                }
+            }
+            return SearchedDocument;
+        }
+
 
         public static void InsertDocument(Document d)
         {
             string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
+
+            using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                cmdDocInsert.Parameters.AddWithValue("@FileName", d.FileName);
+                cmdDocInsert.Parameters.AddWithValue("@FileData", d.FileData);
+                cmdDocInsert.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmdDocInsert.Parameters.AddWithValue("@AnalysisType", d.AnalysisType);
+
+                CollabFusionDBConnection.Open();
+                cmdDocInsert.ExecuteNonQuery();
+                CollabFusionDBConnection.Close();
+            }
+        }
+        public static void InsertPublicDocument(PublicDocument d)
+        {
+            string sqlQuery = "INSERT INTO PublicDocument (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
 
             using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
             {

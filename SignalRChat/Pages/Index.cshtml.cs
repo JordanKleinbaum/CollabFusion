@@ -1,67 +1,80 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SignalRChat.Pages.DataClasses;
 using SignalRChat.Pages.DB;
+using System.Data.SqlClient;
 
 namespace SignalRChat.Pages
 {
     public class IndexModel : PageModel
     {
-        // I DONT KNOW WHAT THIS DOES BUT IT WAS HERE BY DEFAULT ON INDEX PAGE
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
         [BindProperty]
-        public string Username { get; set; }
-        [BindProperty]
-        public string Password { get; set; }
-        [BindProperty]
-        public string Admin { get; set; }
+        public KnowledgeItem NewKnowledgeItem { get; set; }
+        public List<KnowledgeItem> KnowledgeItemList { get; set; } = new List<KnowledgeItem>();
 
-        public IActionResult OnGet(String logout)
-        {
-            if (logout == "true")
-            {
-                HttpContext.Session.Clear();
-                ViewData["LoginMessage"] = "Successfully Logged Out!";
-            }
+        public List<Users> UsersList { get; set; } = new List<Users>();
 
-            if (HttpContext.Session.GetString("username") != null)
-            {
-                return RedirectToPage("CollabHub");
-            }
+        public string SearchTerm { get; set; }
+        public List<PublicDocument> Doc { get; set; } = new List<PublicDocument>();
 
-            return Page();
-        }
-
-        public IActionResult OnPost()
-        {
-
-            if (DBClass.sp_Lab3Login(Username, Password))
-            {
-                HttpContext.Session.SetString("username", Username);
-                DBClass.CollabFusionDBConnection.Close();
-                DBClass.AuthDBConnection.Close();
-                return RedirectToPage("CollabHub");
-            }
-
-            else
-            {
-                ViewData["LoginMessage"] = "Username and/or Password Incorrect";
-                DBClass.CollabFusionDBConnection.Close();
-                DBClass.AuthDBConnection.Close();
-
-                return Page();
-            }
-        }
-
-        public IActionResult OnPostLogoutHandler()
+        public IActionResult OnGet()
         {
             HttpContext.Session.Clear();
+            // Populate UsersList with user data from the database
+            SqlDataReader userReader = DBClass.GetAllUsers();
+                while (userReader.Read())
+                {
+                    UsersList.Add(new Users
+                    {
+                        UserID = Convert.ToInt32(userReader["UserID"]),
+                        Username = userReader["Username"].ToString()
+                    });
+                }
+                userReader.Close();
+                DBClass.CollabFusionDBConnection.Close();
+
+                LoadAllKnowledge();
+                // Close your connection in DBClass
+                DBClass.CollabFusionDBConnection.Close();
+                return Page();
+
+        }
+
+
+        public IActionResult OnPostSearch(String SearchTerm)
+        {
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                Doc = DB.DBClass.SearchPublicKnowledge(SearchTerm);
+
+            }
+            else
+            {
+                LoadAllKnowledge();
+                //DBClass.CollabFusionDBConnection.Close();
+
+            }
             return Page();
+        }
+        private void LoadAllKnowledge()
+        {
+         
+            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM PublicDocument Order By DateAdded Desc");
+
+            while (reader.Read())
+            {
+                Doc.Add(new PublicDocument
+                {
+                    Id = Convert.ToInt32(reader["Id"]),
+                    FileName = reader["FileName"].ToString(),
+                    FileData = (byte[])reader["FileData"],
+                    DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                    AnalysisType = reader["AnalysisType"].ToString()
+                });
+            }
+            reader.Close();
+            DB.DBClass.CollabFusionDBConnection.Close();
+
         }
     }
 }
