@@ -130,13 +130,12 @@ namespace SignalRChat.Pages.DB
             }
 
             // Construct the SQL query with parameterized values to prevent SQL injection
-            string sqlQuery = $"UPDATE Users SET Username = @Username, FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, Street = @Street, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE UserID = {userId}";
+            string sqlQuery = $"UPDATE Users SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, Street = @Street, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE UserID = {userId}";
 
             // Create a new SqlCommand
             using (SqlCommand cmdUserUpdate = new SqlCommand(sqlQuery, CollabFusionDBConnection))
             {
                 // Set command parameters
-                cmdUserUpdate.Parameters.AddWithValue("@Username", u.Username);
                 cmdUserUpdate.Parameters.AddWithValue("@FirstName", u.FirstName);
                 cmdUserUpdate.Parameters.AddWithValue("@LastName", u.LastName);
                 cmdUserUpdate.Parameters.AddWithValue("@Email", u.Email);

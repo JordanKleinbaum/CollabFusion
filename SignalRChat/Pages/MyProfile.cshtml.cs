@@ -26,46 +26,26 @@ namespace SignalRChat.Pages
 
         public IActionResult OnGet()
         {
-            int? userId = HttpContext.Session.GetInt32("_userid");
-
-            if (userId.HasValue)
+            if (HttpContext.Session.GetString("username") != null)
             {
                 User = DBClass.UserInfoBasedOnID(_httpContextAccessor);
-
-                if (User != null)
-                {
-                    UserFirstName = User.FirstName;
-                    DBClass.CollabFusionDBConnection.Close();
-                    return Page();
-                }
-                else
-                {
-                    HttpContext.Session.SetString("ErrorMessage", "User information not found.");
-                    return RedirectToPage("/Index");
-                }
+                var username = HttpContext.Session.GetString("username");
+                UserFirstName = DBClass.GetFirstNameByUsername(username);
+                DBClass.CollabFusionDBConnection.Close();
+                return Page();
             }
-
-            HttpContext.Session.SetString("LoginError", "You must log in to access that page!");
-            return RedirectToPage("/Index");
+            else
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("Index");
+            }
         }
 
         public IActionResult OnPost()
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    DBClass.UpdateUser(ChangeUser, _httpContextAccessor);
-                    return RedirectToPage("CollabHub");
-                }
-                catch (Exception ex)
-                {
-                    // Log the exception or handle it appropriately
-                    ModelState.AddModelError("", "An error occurred while updating user information.");
-                    return Page();
-                }
-            }
-            return Page(); // Return the same page if model state is not valid
+            DBClass.UpdateUser(ChangeUser, _httpContextAccessor);
+            return RedirectToPage("CollabHub");
+
         }
     }
 
