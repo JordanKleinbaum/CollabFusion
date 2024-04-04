@@ -6,7 +6,7 @@
     ViewData["userID"] = HttpContext.Session.GetInt32("_userid");
     string adminStatus = ViewData["adminStatus"] as string;
 }
-
+<br />
 <h1>@Model.UserFirstName's Profile</h1>
 
 <table class="table">
@@ -44,63 +44,67 @@
     </tbody>
 </table>
 
+<div style="display: flex; justify-content: end;">
+    <a class="btn btn-danger" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i> Sign-out</a>
+</div>
+
+<hr />
+
 <h2>Change My Information</h2>
 <form asp-page="MyProfile" method="post">
     <div class="form-group">
         <label class="form-label">First Name</label>
-        <input asp-for="ChangeUser.FirstName" class="form-control" placeholder="Enter new first name">
+        <input asp-for="ChangeUser.FirstName" class="form-control" placeholder="Enter new first name" required>
         <span asp-validation-for="ChangeUser.FirstName" class="text-danger"></span>
-
     </div>
     <div class="form-group">
         <label class="form-label">LastName</label>
-        <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName">
+        <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName" required>
         <span asp-validation-for="ChangeUser.LastName" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">Email</label>
-        <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email">
+        <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email" required>
         <span asp-validation-for="ChangeUser.Email" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">Phone</label>
-        <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone">
+        <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone" required>
         <span asp-validation-for="ChangeUser.Phone" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">Street</label>
-        <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street">
+        <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street" required>
         <span asp-validation-for="ChangeUser.Street" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">City</label>
-        <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City">
+        <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City" required>
         <span asp-validation-for="ChangeUser.City" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">State</label>
-        <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State">
+        <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State" required>
         <span asp-validation-for="ChangeUser.State" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">Country</label>
-        <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country">
+        <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country" required>
         <span asp-validation-for="ChangeUser.Country" class="text-danger"></span>
 
     </div>
     <div class="form-group">
         <label class="form-label">ZipCode</label>
-        <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode">
+        <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode" required>
         <span asp-validation-for="ChangeUser.ZipCode" class="text-danger"></span>
 
     </div>
     <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Changes</button>
 </form>
 
-<a class="nav-link" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
