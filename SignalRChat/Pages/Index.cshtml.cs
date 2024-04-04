@@ -15,7 +15,7 @@ namespace SignalRChat.Pages
         public List<Users> UsersList { get; set; } = new List<Users>();
 
         public string SearchTerm { get; set; }
-        public List<Document> Doc { get; set; } = new List<Document>();
+        public List<PublicDocument> Doc { get; set; } = new List<PublicDocument>();
 
         public IActionResult OnGet()
         {
@@ -45,7 +45,7 @@ namespace SignalRChat.Pages
         {
             if (!string.IsNullOrEmpty(SearchTerm))
             {
-                Doc = DB.DBClass.SearchKnowledge(SearchTerm);
+                Doc = DB.DBClass.SearchPublicKnowledge(SearchTerm);
 
             }
             else
@@ -58,13 +58,12 @@ namespace SignalRChat.Pages
         }
         private void LoadAllKnowledge()
         {
-            //Document LOGIC START
-            //Document LOGIC START
-            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document Order By DateAdded Desc");
+         
+            SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM PublicDocument Order By DateAdded Desc");
 
             while (reader.Read())
             {
-                Doc.Add(new Document
+                Doc.Add(new PublicDocument
                 {
                     Id = Convert.ToInt32(reader["Id"]),
                     FileName = reader["FileName"].ToString(),

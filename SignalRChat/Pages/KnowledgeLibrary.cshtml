@@ -41,6 +41,12 @@
                         <!-- Add a button to trigger the download -->
                         <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                     </td>
+
+                    <td>
+                        <form method="post" asp-page-handler="Push" asp-route-id="@document.Id">
+                            <button type="submit" class="btn btn-secondary">Push</button>
+                        </form>
+                    </td>
                 </tr>
             }
 

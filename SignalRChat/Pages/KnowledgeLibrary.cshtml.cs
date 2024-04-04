@@ -84,5 +84,28 @@ namespace SignalRChat.Pages
             DB.DBClass.CollabFusionDBConnection.Close();
 
         }
+
+        public IActionResult OnPostPush(int id)
+        {
+            Document documentToPush = Doc.Find(doc => doc.Id == id);
+            if (documentToPush != null)
+            {
+                // Insert the document into the PublicDocument table
+                PublicDocument publicDocument = new PublicDocument
+                {
+
+                    FileName = documentToPush.FileName,
+                    FileData = documentToPush.FileData,
+                    DateAdded = DateTime.Now,
+                    AnalysisType = documentToPush.AnalysisType
+                };
+
+                DB.DBClass.InsertPublicDocument(publicDocument);
+            
+            }
+
+            // Redirect back to the page
+            return RedirectToPage();
+        }
     }
 }
