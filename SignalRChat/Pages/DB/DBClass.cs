@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Pages.DB;
 using SignalRChat.Pages.DataClasses;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace SignalRChat.Pages.DB
 {
@@ -18,7 +19,12 @@ namespace SignalRChat.Pages.DB
 
         private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True"; // Added this for AUTH DB
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public DBClass(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         // Connection Methods:
 
@@ -38,6 +44,56 @@ namespace SignalRChat.Pages.DB
 
             return tempReader;
         }
+
+        public static Users UserInfoBasedOnID(IHttpContextAccessor httpContextAccessor)
+        {
+            int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
+
+            if (!userId.HasValue)
+            {
+                throw new Exception("User ID not found in session.");
+            }
+
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM Users WHERE UserID = @userId";
+            cmdRead.Parameters.AddWithValue("@userId", userId);
+
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader reader = cmdRead.ExecuteReader();
+
+            Users user = null;
+
+            if (reader.Read())
+            {
+                user = new Users
+                {
+                    UserID = Convert.ToInt32(reader["UserID"]),
+                    Username = reader["Username"].ToString(),
+                    FirstName = reader["FirstName"].ToString(),
+                    LastName = reader["LastName"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    Phone = reader["Phone"].ToString(),
+                    Street = reader["Street"].ToString(),
+                    City = reader["City"].ToString(),
+                    State = reader["State"].ToString(),
+                    Country = reader["Country"].ToString(),
+                    ZipCode = reader["ZipCode"].ToString(),
+                    Admin = reader["Admin"].ToString()
+                };
+            }
+
+            reader.Close();
+            return user;
+        }
+
+
+
 
         // Insert into Users table
         // Users table changes -> Deleted Password insert statement, and correspomding sqlQuery appending

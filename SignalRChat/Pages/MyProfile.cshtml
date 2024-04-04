@@ -1,0 +1,47 @@
+﻿@page
+@model SignalRChat.Pages.MyProfileModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["adminStatus"] = HttpContext.Session.GetString("_Admin");
+    ViewData["userID"] = HttpContext.Session.GetInt32("_userid");
+    string adminStatus = ViewData["adminStatus"] as string;
+}
+
+<h1>@Model.UserFirstName's Profile</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Zip Code</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.User.UserID</td>
+            <td>@Model.User.Username</td>
+            <td>@Model.User.FirstName</td>
+            <td>@Model.User.LastName</td>
+            <td>@Model.User.Email</td>
+            <td>@Model.User.Phone</td>
+            <td>@Model.User.Street</td>
+            <td>@Model.User.City</td>
+            <td>@Model.User.State</td>
+            <td>@Model.User.Country</td>
+            <td>@Model.User.ZipCode</td>
+            <td>@Model.User.Admin</td>
+        </tr>
+    </tbody>
+</table>
+
+<a class="nav-link" asp-page="/Index" asp-route-logout="true"><i class="fa-solid fa-right-from-bracket" style="font-size: 1.2em;" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
