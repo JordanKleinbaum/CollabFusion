@@ -2,6 +2,7 @@
 @model SignalRChat.Pages.KnowledgeLibraryModel
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
 }
 <!DOCTYPE html>
 <html>
@@ -11,9 +12,8 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="./css/carousel.css" />
 </head>
- <body>
+<body>
     <br />
-    <h1>Document Repository</h1>
     <br />
     <form method="post" asp-page-handler="Search">
         <label for="SearchTerm" style="display: block;">Search Documents:</label>
@@ -23,6 +23,7 @@
     </form>
 
     <br />
+    <h2>Uploaded Documents</h2>
     <table class="table">
         <thead>
             <tr>
@@ -38,38 +39,65 @@
                     <td>@document.FileName</td>
                     <td>@document.DateAdded.ToShortDateString()</td>
                     <td>
-                        <!-- Add a button to trigger the download -->
-                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
                     </td>
                 </tr>
             }
-
-            <script>
-                function downloadDocument(fileName, fileData) {
-                    // Create a blob from the base64 encoded file data
-                    var byteCharacters = atob(fileData);
-                    var byteNumbers = new Array(byteCharacters.length);
-                    for (var i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    var byteArray = new Uint8Array(byteNumbers);
-                    var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-                    // Create a link element and trigger a download
-                    var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = fileName;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            </script>
         </tbody>
     </table>
-    </body>
-<br />
-@*  <a asp-page="KnowledgeItem" class="btn btn-primary spaceBtn">Add Knowledge Item</a>  *@
-<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
 
+    <h2>Previous Regression Analysis</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Analysis Name</th>
+                <th>Analysis Description</th>
+                <th>Based Off Of</th>
+                <th>Created Date</th>
+                <th>Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analysis in Model.PreviousSpendingAnalysisList)
+            {
+                <tr>
+                    <td>@analysis.SpendingAnalysisName</td>
+                    <td>@analysis.SpendingAnalysisDescription</td>
+                    <td>@analysis.BasedOffOf</td>
+                    <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-page="/ViewRevenueAnalysis" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" class="btn" style="background-color: #293A7F; color: white;">View Analysis</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+    <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
+
+    <script>
+        function downloadDocument(fileName, fileData) {
+            if (fileData !== null) {
+                // Create a blob from the base64 encoded file data
+                var byteCharacters = atob(fileData);
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+                // Create a link element and trigger a download
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("File not available for download.");
+            }
+        }
+    </script>
+</body>
 </html>

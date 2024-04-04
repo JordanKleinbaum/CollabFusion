@@ -127,7 +127,7 @@
                         <td>@analysis.SpendingAnalysisName</td>
                         <td>@analysis.SpendingAnalysisDescription</td>
                         <td>@analysis.BasedOffOf</td>
-                        <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td> <!-- Modify this line -->
+                        <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td> 
                         <td>
                             <a asp-page="/ViewRevenueAnalysis" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" class="btn" style="background-color: #293A7F; color: white;">View Analysis</a>
                         </td>

@@ -612,16 +612,16 @@ namespace SignalRChat.Pages.DB
 
             }
 
-            string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES ('Regression Analysis For: " + spendinganalysis.BasedOffOf + "', CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
-            using (SqlCommand cmdDocInsert = new SqlCommand(anotherSqlQuery, CollabFusionDBConnection))
-            {
-                cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
-                cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
+            //string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES ('Regression Analysis For: " + spendinganalysis.BasedOffOf + "', CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
+            //using (SqlCommand cmdDocInsert = new SqlCommand(anotherSqlQuery, CollabFusionDBConnection))
+            //{
+            //    cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
+            //    cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
 
-                CollabFusionDBConnection.Open();
-                cmdDocInsert.ExecuteNonQuery();
-                CollabFusionDBConnection.Close();
-            }
+            //    CollabFusionDBConnection.Open();
+            //    cmdDocInsert.ExecuteNonQuery();
+            //    CollabFusionDBConnection.Close();
+            //}
         }
 
         public static SqlDataReader GetAllPreviousSpendingAnalysis()
