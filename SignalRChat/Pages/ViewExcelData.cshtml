@@ -22,7 +22,22 @@
         text-align: left;
     }
 </style>
-<h3>@Model.FileName</h3>
+<br />
+<h3 style="
+    /* Prevent text from overflowing its container */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    /* Ensure long words break and wrap onto the next line */
+    word-break: break-all;
+    /* Optional: Set a maximum width for the container */
+    max-width: 100%;
+
+">
+    @Model.FileName
+</h3>
+<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/DataSets">&#8592; Back</a>
+<br />
+<br />
 
 @if (Model.ExcelData != null)
 {
@@ -50,4 +65,3 @@
         </table>
     </div>
 }
-<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/DataSets">&#8592; Back</a>
