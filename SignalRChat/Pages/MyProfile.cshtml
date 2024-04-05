@@ -16,7 +16,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -31,7 +30,6 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Model.User.Username</td>
             <td>@Model.User.FirstName</td>
             <td>@Model.User.LastName</td>
             <td>@Model.User.Email</td>
@@ -57,8 +55,8 @@
                 <span asp-validation-for="ChangeUser.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group" style="flex: 1;">
-                <label class="form-label">LastName</label>
-                <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName" required>
+                <label class="form-label">Last Name</label>
+                <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new last name" required>
                 <span asp-validation-for="ChangeUser.LastName" class="text-danger"></span>
 
             </div>
@@ -66,13 +64,13 @@
         <div style="display: flex">
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">Email</label>
-                <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email" required>
+                <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new email" required>
                 <span asp-validation-for="ChangeUser.Email" class="text-danger"></span>
 
             </div>
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">Phone</label>
-                <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone" required>
+                <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new phone #" required>
                 <span asp-validation-for="ChangeUser.Phone" class="text-danger"></span>
 
             </div>
@@ -80,13 +78,13 @@
         <div style="display: flex">
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">Street</label>
-                <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street" required>
+                <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new street" required>
                 <span asp-validation-for="ChangeUser.Street" class="text-danger"></span>
 
             </div>
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">City</label>
-                <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City" required>
+                <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new city" required>
                 <span asp-validation-for="ChangeUser.City" class="text-danger"></span>
 
             </div>
@@ -94,19 +92,19 @@
         <div style="display: flex">
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">State</label>
-                <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State" required>
+                <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new state" required>
                 <span asp-validation-for="ChangeUser.State" class="text-danger"></span>
 
             </div>
             <div class="form-group" style="flex: 1;">
                 <label class="form-label">Country</label>
-                <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country" required>
+                <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new country" required>
                 <span asp-validation-for="ChangeUser.Country" class="text-danger"></span>
 
             </div>
             <div class="form-group" style="flex: 1;">
-                <label class="form-label">ZipCode</label>
-                <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode" required>
+                <label class="form-label">Zip Code</label>
+                <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new zip code" required>
                 <span asp-validation-for="ChangeUser.ZipCode" class="text-danger"></span>
 
             </div>

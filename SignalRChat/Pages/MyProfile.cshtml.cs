@@ -32,6 +32,21 @@ namespace SignalRChat.Pages
                 var username = HttpContext.Session.GetString("username");
                 UserFirstName = DBClass.GetFirstNameByUsername(username);
                 DBClass.CollabFusionDBConnection.Close();
+
+                // Set ChangeUser properties to current user's values
+                //ChangeUser = new Users
+                //{
+                //    FirstName = User.FirstName,
+                //    LastName = User.LastName,
+                //    Email = User.Email,
+                //    Phone = User.Phone,
+                //    Street = User.Street,
+                //    City = User.City,
+                //    State = User.State,
+                //    Country = User.Country,
+                //    ZipCode = User.ZipCode
+                //};
+
                 return Page();
             }
             else
@@ -44,9 +59,7 @@ namespace SignalRChat.Pages
         public IActionResult OnPost()
         {
             DBClass.UpdateUser(ChangeUser, _httpContextAccessor);
-            return RedirectToPage("CollabHub");
-
+            return RedirectToPage("MyProfile");
         }
     }
-
 }
