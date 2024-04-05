@@ -20,20 +20,8 @@
 
 </style>
 
-@{
-    if (ViewData["LoginMessage"] != null)
-    {
-        <br />
-        if (ViewData["LoginMessage"] == "Successfully Logged Out!")
-        {
-            <h3 class="text-success">@ViewData["LoginMessage"]</h3>
-        }
-        if (ViewData["LoginMessage"] == "Username and/or Password Incorrect")
-        {
-            <h3 class="text-danger">@ViewData["LoginMessage"]</h3>
-        }
-    }
 
+@{
     if (ViewData["LoginMessage"] == null)
     {
         <br />
@@ -63,6 +51,20 @@
                 <img src="./images/InOffice.svg" class="img-fluid" />
             </div>
             <div class="col-md-12 col-lg-6">
+                @{
+                    if (ViewData["LoginMessage"] != null)
+                    {
+                        <br />
+                        if (ViewData["LoginMessage"] == "Successfully Logged Out!")
+                        {
+                            <h4 class="text-success">@ViewData["LoginMessage"]</h4>
+                        }
+                        if (ViewData["LoginMessage"] == "Username and/or Password Incorrect")
+                        {
+                            <h4 class="text-danger">@ViewData["LoginMessage"]</h4>
+                        }
+                    }
+                }
                 <form asp-page="Index">
                     <label>Username:</label>
                     <input asp-for="Username" class="form-control" placeholder="Enter Username" required />
@@ -74,6 +76,7 @@
                     <br />
                     <input type="submit" class="btn" style="color: white; width: 100%; background-color: #293A7F;" value="Login" asp-route-admin="@Model.Admin" />
                 </form>
+                
                 <br />
                 @* Additional code here if needed *@
             </div>
@@ -110,6 +113,20 @@
                 <img src="./images/InOffice.svg" class="img-fluid" />
             </div>
             <div class="col-md-12 col-lg-6">
+                @{
+                    if (ViewData["LoginMessage"] != null)
+                    {
+                        <br />
+                        if (ViewData["LoginMessage"] == "Successfully Logged Out!")
+                        {
+                            <h4 class="text-success">@ViewData["LoginMessage"]</h4>
+                        }
+                        if (ViewData["LoginMessage"] == "Username and/or Password Incorrect")
+                        {
+                            <h4 class="text-danger">@ViewData["LoginMessage"]</h4>
+                        }
+                    }
+                }
                 <form asp-page="Index">
                     <label>Username:</label>
                     <input asp-for="Username" class="form-control" placeholder="Enter Username" required />
@@ -122,6 +139,7 @@
                     <br />
                     <input type="submit" class="btn" style="color: white; width: 100%; background-color: #293A7F;" value="Login" asp-route-admin="@Model.Admin" />
                 </form>
+                
                 <br />
                 @* Additional code here if needed *@
             </div>
