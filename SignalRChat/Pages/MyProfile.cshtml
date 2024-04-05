@@ -7,13 +7,15 @@
     string adminStatus = ViewData["adminStatus"] as string;
 }
 <br />
+<div style="display: flex; justify-content: space-between; align-items: center;">
 <h1>@Model.UserFirstName's Profile</h1>
+    <a class="btn btn-danger" asp-page="/Index" asp-route-logout="true">Sign-out <i class="fa-solid fa-right-from-bracket" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
+</div>
 <div class="table-responsive">
 
 <table class="table">
     <thead>
         <tr>
-            <th>UserID</th>
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -24,12 +26,11 @@
             <th>State</th>
             <th>Country</th>
             <th>Zip Code</th>
-            <th>Admin</th>
+            <th>Role Permission</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>@Model.User.UserID</td>
             <td>@Model.User.Username</td>
             <td>@Model.User.FirstName</td>
             <td>@Model.User.LastName</td>
@@ -45,68 +46,75 @@
     </tbody>
 </table>
 </div>
+<br />
+<h2>Change My Information</h2>
+<div>
+    <form asp-page="MyProfile" method="post">
+        <div style="display: flex">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">First Name</label>
+                <input asp-for="ChangeUser.FirstName" class="form-control" placeholder="Enter new first name" required>
+                <span asp-validation-for="ChangeUser.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">LastName</label>
+                <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName" required>
+                <span asp-validation-for="ChangeUser.LastName" class="text-danger"></span>
 
-<div style="display: flex; justify-content: end; align-items: center;">
-    <a class="btn btn-danger" asp-page="/Index" asp-route-logout="true">Sign-out <i class="fa-solid fa-right-from-bracket" data-toggle="tooltip" data-placement="bottom" title="Sign-out"></i></a>
+            </div>
+        </div>
+        <div style="display: flex">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Email</label>
+                <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email" required>
+                <span asp-validation-for="ChangeUser.Email" class="text-danger"></span>
+
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Phone</label>
+                <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone" required>
+                <span asp-validation-for="ChangeUser.Phone" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div style="display: flex">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Street</label>
+                <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street" required>
+                <span asp-validation-for="ChangeUser.Street" class="text-danger"></span>
+
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">City</label>
+                <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City" required>
+                <span asp-validation-for="ChangeUser.City" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div style="display: flex">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">State</label>
+                <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State" required>
+                <span asp-validation-for="ChangeUser.State" class="text-danger"></span>
+
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Country</label>
+                <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country" required>
+                <span asp-validation-for="ChangeUser.Country" class="text-danger"></span>
+
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">ZipCode</label>
+                <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode" required>
+                <span asp-validation-for="ChangeUser.ZipCode" class="text-danger"></span>
+
+            </div>
+        </div>
+<br />
+        <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Changes</button>
+    </form>
+    
 </div>
 
-<hr />
-
-<h2>Change My Information</h2>
-<form asp-page="MyProfile" method="post">
-    <div class="form-group">
-        <label class="form-label">First Name</label>
-        <input asp-for="ChangeUser.FirstName" class="form-control" placeholder="Enter new first name" required>
-        <span asp-validation-for="ChangeUser.FirstName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label class="form-label">LastName</label>
-        <input asp-for="ChangeUser.LastName" class="form-control" placeholder="Enter new LastName" required>
-        <span asp-validation-for="ChangeUser.LastName" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">Email</label>
-        <input asp-for="ChangeUser.Email" class="form-control" placeholder="Enter new Email" required>
-        <span asp-validation-for="ChangeUser.Email" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">Phone</label>
-        <input asp-for="ChangeUser.Phone" class="form-control" placeholder="Enter new Phone" required>
-        <span asp-validation-for="ChangeUser.Phone" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">Street</label>
-        <input asp-for="ChangeUser.Street" class="form-control" placeholder="Enter new Street" required>
-        <span asp-validation-for="ChangeUser.Street" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">City</label>
-        <input asp-for="ChangeUser.City" class="form-control" placeholder="Enter new City" required>
-        <span asp-validation-for="ChangeUser.City" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">State</label>
-        <input asp-for="ChangeUser.State" class="form-control" placeholder="Enter new State" required>
-        <span asp-validation-for="ChangeUser.State" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">Country</label>
-        <input asp-for="ChangeUser.Country" class="form-control" placeholder="Enter new Country" required>
-        <span asp-validation-for="ChangeUser.Country" class="text-danger"></span>
-
-    </div>
-    <div class="form-group">
-        <label class="form-label">ZipCode</label>
-        <input asp-for="ChangeUser.ZipCode" class="form-control" placeholder="Enter new ZipCode" required>
-        <span asp-validation-for="ChangeUser.ZipCode" class="text-danger"></span>
-
-    </div>
-    <button type="submit" class="btn" style="color:white; background-color: #293A7F; display: block; width: 100%; margin-bottom: 1em;">Save Changes</button>
-</form>
 
