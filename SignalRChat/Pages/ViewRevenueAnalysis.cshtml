@@ -1,5 +1,7 @@
 ﻿@page
-@model SignalRChat.Pages.RevenueAnalysisModel
+@model SignalRChat.Pages.ViewRevenueAnalysisModel
+@{
+}
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
 
@@ -15,9 +17,9 @@
     <div id="scatterPlot" style="display: flex; justify-content: center;"></div>
 }
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
-
+@* 
 <hr />
-<h2>Save Analysis</h2>
+<h2>Re-Save Analysis</h2>
 
 <form asp-page="RevenueAnalysis" style="margin-top: 20px;" method="post">
     <div class="form-group">
@@ -34,9 +36,8 @@
 
     <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
 
-    <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
-</form>
-
+    <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Re-Save Analysis</button>
+</form> *@
 @section Scripts {
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>

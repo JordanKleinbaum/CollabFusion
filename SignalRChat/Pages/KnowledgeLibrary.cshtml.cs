@@ -18,24 +18,7 @@ namespace SignalRChat.Pages
         public string SearchTerm { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
 
-        [BindProperty]
-        public IFormFile File { get; set; }
 
-        [BindProperty]
-        public string AnalysisType { get; set; }
-        public string FileName { get; set; }
-
-        public string FileData { get; set; }
-
-        public string DateAdded { get; set; }
-
-        public string AnalysesType { get; set; }
-        // Connection Object at Data Field Level
-        public static SqlConnection CollabFusionDBConnection = new SqlConnection();
-
-        // Connection String - How to find and connect to DB
-        private static readonly string CollabFusionDBConnString =
-            "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
         public IActionResult OnGet()
         {
@@ -56,6 +39,21 @@ namespace SignalRChat.Pages
 
                 LoadAllKnowledge();
                 // Close your connection in DBClass
+                DBClass.CollabFusionDBConnection.Close();
+
+                SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
+                while (previousAnalysisReader.Read())
+                {
+                    PreviousSpendingAnalysisList.Add(new PreviousSpendingAnalysis
+                    {
+                        SpendingAnalysisID = Convert.ToInt32(previousAnalysisReader["SpendingAnalysisID"]),
+                        SpendingAnalysisName = previousAnalysisReader["SpendingAnalysisName"].ToString(),
+                        SpendingAnalysisDescription = previousAnalysisReader["SpendingAnalysisDescription"].ToString(),
+                        BasedOffOf = previousAnalysisReader["BasedOffOf"].ToString(),
+                        SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date
+
+                    });
+                }
                 DBClass.CollabFusionDBConnection.Close();
                 return Page();
             }
