@@ -15,28 +15,31 @@
 </form>
 
 <br />
-<table class="table">
-    <thead>
-        <tr>
-            <th>File Name</th>
-            <th>Date Uploaded</th>
-            <th>Command</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var document in Model.Doc)
-        {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@document.FileName</td>
-                <td>@document.DateAdded.ToShortDateString()</td>
-                <td>
-                    <!-- Add a button to trigger the download -->
-                    <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
-                </td>
+                <th>File Name</th>
+                <th>Date Uploaded</th>
+                <th>Command</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Doc)
+            {
+                <tr>
+                    <td>@document.FileName</td>
+                    <td>@document.DateAdded.ToShortDateString()</td>
+                    <td>
+                        <!-- Add a button to trigger the download -->
+                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
 <br />
 <script>
     function downloadDocument(fileName, fileData) {
