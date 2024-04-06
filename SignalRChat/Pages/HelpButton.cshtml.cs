@@ -11,14 +11,18 @@ namespace SignalRChat.Pages
     public class HelpButtonModel : PageModel
     {
         public List<Document> Doc { get; set; } = new List<Document>();
-
+        public string Admin { get; set; }
+        public string UserFirstName { get; set; }
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("username") != null)
             {
-                
+                var username = HttpContext.Session.GetString("username");
+                UserFirstName = DBClass.GetFirstNameByUsername(username);
+                Admin = DBClass.GetAdminByUsername(username);
+                HttpContext.Session.SetString("_Admin", Admin);
                 SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
-
+        
                 // Populate PESTDocuments list with data from the database
                 while (reader.Read())
                 {
