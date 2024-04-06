@@ -132,6 +132,15 @@ CREATE TABLE [Document]
     AnalysisType NVARCHAR(50) -- Assuming analysis type names are up to 50 characters
 );
 
+CREATE TABLE PublicDocument
+(
+    Id INT PRIMARY KEY IDENTITY,
+    FileName NVARCHAR(255), -- Assuming file names are up to 255 characters
+    FileData VARBINARY(MAX) NOT NULL,
+    DateAdded DATETIME,
+    AnalysisType NVARCHAR(50) -- Assuming analysis type names are up to 50 characters
+);
+
 CREATE TABLE PreviousSpendingAnalysis (
     SpendingAnalysisID INT IDENTITY(1,1) PRIMARY KEY,
     SpendingAnalysisName VARCHAR(255),

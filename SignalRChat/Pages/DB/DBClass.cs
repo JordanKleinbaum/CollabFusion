@@ -14,10 +14,11 @@ namespace SignalRChat.Pages.DB
         public static SqlConnection CollabFusionDBConnection = new SqlConnection();
 
         // Connection String - How to find and connect to DB
-        private static readonly string CollabFusionDBConnString =
-                    "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True"; public static SqlConnection AuthDBConnection = new SqlConnection();
+        private static readonly string CollabFusionDBConnString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
 
-        private static readonly String? AuthConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=AUTH;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True;";
+        public static SqlConnection AuthDBConnection = new SqlConnection();
+
+        private static readonly String? AuthConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True"; // Added this for AUTH DB
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DBClass(IHttpContextAccessor httpContextAccessor)
@@ -341,8 +342,7 @@ namespace SignalRChat.Pages.DB
         {
             SqlCommand cmdProductRead = new SqlCommand();
             cmdProductRead.Connection = CollabFusionDBConnection;
-            cmdProductRead.Connection.ConnectionString =
-            CollabFusionDBConnString;
+            cmdProductRead.Connection.ConnectionString = CollabFusionDBConnString;
             cmdProductRead.CommandText = sqlQuery;
             cmdProductRead.Connection.Open();
             SqlDataReader tempReader = cmdProductRead.ExecuteReader();

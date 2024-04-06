@@ -4,6 +4,7 @@
     ViewData["username"] = HttpContext.Session.GetString("username");
     ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +39,6 @@
             .panel.active {
                 max-height: 500px; /* Adjust this value according to your content height */
             }
-
     </style>
 </head>
 <body>
@@ -46,11 +46,49 @@
     <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
     <br />
     <br />
-
+    <button class="accordion">Uploaded Documents</button>
+    <div class="panel">
+        <br />
+        <form method="post" asp-page-handler="Search">
+            <label asp-for="SearchTerm" style="display: block;">Search Documents:</label>
+            <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" style="border-style: solid;" class="form-control" />
+            <br />
+            <button type="submit" class="btn" style="background: #293A7F; color: white;">Search</button>
+            <a asp-page="KnowledgeLibrary" class="btn btn-secondary">Clear</a>
+        </form>
+        <br />
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Date Uploaded</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var document in Model.Doc)
+                    {
+                        <tr>
+                            <td>@document.FileName</td>
+                            <td>@document.DateAdded.ToShortDateString()</td>
+                            <td>
+                                
+                                <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
+                                <form method="post" asp-page-handler="Push" asp-route-id="@document.Id">
+                                    <button type="submit" class="btn btn-secondary">Push</button>
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <button class="accordion">Previous Regression Analysis</button>
     <div class="panel">
-        <!-- Add table-responsive class here -->
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -80,11 +118,10 @@
         </div>
     </div>
 
-   
+    <!-- JavaScript section -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var acc = document.getElementsByClassName("accordion");
-            var i;
 
             // Function to toggle accordion panels
             function togglePanel(panel) {
@@ -98,13 +135,17 @@
             }
 
             // Add click event listeners to accordion buttons
-            for (i = 0; i < acc.length; i++) {
+            for (var i = 0; i < acc.length; i++) {
                 acc[i].addEventListener("click", function () {
                     togglePanel(this);
                 });
             }
 
-
+            // Open the first accordion on page load
+            if (acc.length > 0) {
+                togglePanel(acc[0]);
+            }
+        });
 
         function downloadDocument(fileName, fileData) {
             if (fileData !== null) {
@@ -129,5 +170,13 @@
             }
         }
     </script>
+
+    <!-- Display success message if it exists in TempData -->
+    @if (TempData["UploadSuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["UploadSuccessMessage"]
+        </div>
+    }
 </body>
 </html>

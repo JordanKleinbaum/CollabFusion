@@ -4,28 +4,57 @@
     // ViewData["username"] = HttpContext.Session.GetString("username");
     Layout = "~/Pages/Shared/_LayoutPublicDocuments.cshtml";
 }
-
-
-            <script>
-                function downloadDocument(fileName, fileData) {
-                    // Create a blob from the base64 encoded file data
-                    var byteCharacters = atob(fileData);
-                    var byteNumbers = new Array(byteCharacters.length);
-                    for (var i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    var byteArray = new Uint8Array(byteNumbers);
-                    var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-
-
-                }
-            </script>
-        </tbody>
-    </table>
-    </body>
 <br />
+<h1>Welcome Madison County Citizens</h1>
+<br />
+<form method="post" asp-page-handler="Search">
+    <label asp-for="SearchTerm" style="display: block;">Search Documents:</label>
+    <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" style="border-style: solid;" class="form-control" />
+    <button type="submit" class="btn btn-primary">Search</button>
+    <br />
+</form>
 
-@* <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a> *@
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Date Uploaded</th>
+            <th>Command</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var document in Model.Doc)
+        {
+            <tr>
+                <td>@document.FileName</td>
+                <td>@document.DateAdded.ToShortDateString()</td>
+                <td>
+                    <!-- Add a button to trigger the download -->
+                    <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<script>
+    function downloadDocument(fileName, fileData) {
+        // Create a blob from the base64 encoded file data
+        var byteCharacters = atob(fileData);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
 
-
-</html>
+        // Create a link element and trigger the download
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>

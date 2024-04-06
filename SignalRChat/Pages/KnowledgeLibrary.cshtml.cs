@@ -17,8 +17,27 @@ namespace SignalRChat.Pages
 
         public string SearchTerm { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
+        //
 
+        public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
 
+        [BindProperty]
+        public IFormFile File { get; set; }
+
+        [BindProperty]
+        public string AnalysisType { get; set; }
+        public string FileName { get; set; }
+
+        public string FileData { get; set; }
+
+        public string DateAdded { get; set; }
+
+        public string AnalysesType { get; set; }
+        // Connection Object at Data Field Level
+        public static SqlConnection CollabFusionDBConnection = new SqlConnection();
+
+        // Connection String - How to find and connect to DB
+        private static readonly string CollabFusionDBConnString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
 
         public IActionResult OnGet()
         {
