@@ -73,11 +73,12 @@
                             <td>@document.FileName</td>
                             <td>@document.DateAdded.ToShortDateString()</td>
                             <td>
-                                
-                                <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
-                                <form method="post" asp-page-handler="Push" asp-route-id="@document.Id">
-                                    <button type="submit" class="btn btn-secondary">Push</button>
-                                </form>
+                                <div style="display: flex; gap: 1em;">
+                                    <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@(document.FileData != null ? Convert.ToBase64String(document.FileData) : null)')">Download</button>
+                                    <form method="post" asp-page-handler="Push" asp-route-id="@document.Id">
+                                        <button type="submit" class="btn btn-secondary">Push</button>
+                                    </form>
+                                </div>
                             </td>
                             
                         </tr>

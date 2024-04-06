@@ -10,7 +10,9 @@
 <form method="post" asp-page-handler="Search">
     <label asp-for="SearchTerm" style="display: block;">Search Documents:</label>
     <input placeholder="Enter File Name" type="text" asp-for="SearchTerm" style="border-style: solid;" class="form-control" />
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn" style="background: #293A7F; color: white;">Search</button>
+    <a asp-page="Index" class="btn btn-secondary">Clear</a>
+
     <br />
 </form>
 
