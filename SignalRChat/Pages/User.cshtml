@@ -184,10 +184,11 @@
                         @foreach (var collab in Model.CollabList)
                         {
                             <div class="dropdown-item">
-                                <input type="checkbox" id="collab-@collab.CollabID" class="collab-checkbox" value="@collab.CollabID">
-                                <label for="collab-@collab.CollabID">@collab.CollaborationName</label>
+                                <input type="checkbox" name="SelectedCollabs" class="collab-checkbox" value="@collab.CollabID">
+                                <label>@collab.CollaborationName</label>
                             </div>
                         }
+
                     </div>
                 </div>
             </div>
