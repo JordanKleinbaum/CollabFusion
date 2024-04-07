@@ -1,0 +1,19 @@
+﻿@page
+@model SignalRChat.Pages.ColumnsModel
+@{
+    ViewData["Title"] = "Enter Column Values";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <label>Column 1:</label>
+    <input type="number" name="column1" required />
+
+    <label>Column 2:</label>
+    <input type="number" name="column2" required />
+
+    <input type="hidden" name="fileName" value="@Model.FileName" />
+
+    <input type="submit" value="Submit" />
+</form>

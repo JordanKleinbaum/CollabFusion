@@ -16,13 +16,24 @@ namespace SignalRChat.Pages
 
         public void OnGet()
         {
-            
+
         }
 
         public IActionResult OnPost()
         {
             if (File != null && File.Length > 0)
             {
+                // Get the file extension
+                string extension = Path.GetExtension(File.FileName).ToLower();
+
+                // Check if the file extension is .xlsx or .csv
+                if (extension == ".xlsx" || extension == ".csv")
+                {
+                    // Redirect with error message
+                    TempData["ErrorMessage"] = "Excel Files Cannot Be Uploaded Here. <br /><br />To Upload Excel Files...<br /> Go to \"Spending Levels and Projections\" Collaboration <br /> And then \"View Excel Data\" Button";
+                    return RedirectToPage("/UploadFile");
+                }
+
                 using (var memoryStream = new MemoryStream())
                 {
                     File.CopyTo(memoryStream);
@@ -42,9 +53,7 @@ namespace SignalRChat.Pages
                     // Set success message in TempData
                     TempData["UploadSuccessMessage"] = "File uploaded successfully.";
 
-
                     return RedirectToPage("/UploadFile");
-                    //return RedirectToPage("/EnteredCollaboration", new { collaborationid = HttpContext.Session.GetInt32("collabid") });
                 }
             }
             return Page();

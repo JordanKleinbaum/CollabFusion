@@ -9,24 +9,32 @@
     <link rel="stylesheet" href="~/CollabFusion.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container-xxl">
-            <img src="https://www.madisonco.virginia.gov/ImageRepository/Document?documentId=79" style="width: 3.5em;" />
-                      @*Toggle Button for Smaller Screens*@
-            @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button> *@
+    <div id="navbarContainer">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-xxl">
+                <img src="https://www.madisonco.virginia.gov/ImageRepository/Document?documentId=79" style="width: 2.5em;" />
 
-            @*Navbar Links*@
-            <div class="justify-content-end align-center" id="main-nav">
-                <ul class="navbar-nav">              
-                    <li class="nav-item">
-                        <a id="theme-toggle" class="theme-toggle" style="font-size: 1.7em; cursor: pointer; text-decoration: none; user-select: none;"></a>
-                    </li>
-                </ul>
+                <!-- Toggle Button for Smaller Screens -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+                    <ul class="navbar-nav" style="display: flex; align-items: center; justify-content: space-evenly;">
+
+                        <li class="nav-item">
+                            <a id="theme-toggle" class="theme-toggle" style="cursor: pointer; text-decoration: none; user-select: none; font-size: 1.7em;"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Index">Public Page</a>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
     <div class="container">
         <main role="main" class="pb-3">

@@ -8,14 +8,9 @@ using SignalRChat.Pages.DB;
 
 namespace SignalRChat.Pages
 {
-    public class RegressionAnalysisResult
-    {
-        public double Intercept { get; set; }
-        public double Slope { get; set; }
-        public double RSquared { get; set; }
-    }
 
-    public class RevenueAnalysisModel : PageModel
+
+    public class ViewRevenueAnalysisModel : PageModel
     {
         private readonly string _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
@@ -33,12 +28,8 @@ namespace SignalRChat.Pages
         [BindProperty]
         [Required(ErrorMessage = "Analysis Description is required")]
         public string AnalysisDescription { get; set; }
-        public int column1 { get; set; }
-        public int column2 { get; set; }
 
-        private bool ColumnsSelected { get; set; } = false;
-
-        public IActionResult OnGet(string fileName, int column1, int column2)
+        public async Task<IActionResult> OnGetAsync(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 return RedirectToPage("/CollabHub");
@@ -48,17 +39,12 @@ namespace SignalRChat.Pages
             if (!System.IO.File.Exists(filePath))
                 return RedirectToPage("/CollabHub");
 
-            // Don't perform analysis if columns are not selected
-            if (column1 != null && column2 != null)
-            {
-                ColumnsSelected = true;
-                PerformAnalysis(filePath, column1, column2);
-            }
+            await PerformAnalysisAsync(filePath);
 
             return Page();
         }
 
-        private void PerformAnalysis(string filePath, int column1, int column2)
+        private async Task PerformAnalysisAsync(string filePath)
         {
             using var package = new ExcelPackage(new FileInfo(filePath));
             var worksheet = package.Workbook.Worksheets.FirstOrDefault();
@@ -67,18 +53,18 @@ namespace SignalRChat.Pages
                 return;
 
             var rowCount = worksheet.Dimension.Rows;
+            var colCount = worksheet.Dimension.Columns;
 
             var xData = new List<double>();
             var yData = new List<double>();
 
-            // Fetch data based on selected columns
-            XColumnHeader = worksheet.Cells[1, column1].GetValue<string>();
-            YColumnHeader = worksheet.Cells[1, column2].GetValue<string>();
+            XColumnHeader = worksheet.Cells[1, 1].GetValue<string>();
+            YColumnHeader = worksheet.Cells[1, 2].GetValue<string>();
 
             for (int row = 2; row <= rowCount; row++)
             {
-                var xValue = worksheet.Cells[row, column1].GetValue<double>();
-                var yValue = worksheet.Cells[row, column2].GetValue<double>();
+                var xValue = worksheet.Cells[row, 1].GetValue<double>();
+                var yValue = worksheet.Cells[row, 2].GetValue<double>();
 
                 xData.Add(xValue);
                 yData.Add(yValue);
@@ -87,21 +73,17 @@ namespace SignalRChat.Pages
             XValues = xData;
             YValues = yData;
 
-            // Perform linear regression only if columns are selected
-            if (ColumnsSelected)
+            // Perform linear regression
+            var regression = Fit.Line(XValues.ToArray(), YValues.ToArray());
+            RegressionAnalysisResult = new RegressionAnalysisResult
             {
-                // Perform linear regression
-                var regression = Fit.Line(XValues.ToArray(), YValues.ToArray());
-                RegressionAnalysisResult = new RegressionAnalysisResult
-                {
-                    Intercept = regression.Item1,
-                    Slope = regression.Item2,
-                    RSquared = GoodnessOfFit.RSquared(YValues, XValues.Select(x => regression.Item1 + regression.Item2 * x))
-                };
+                Intercept = regression.Item1,
+                Slope = regression.Item2,
+                RSquared = GoodnessOfFit.RSquared(YValues, XValues.Select(x => regression.Item1 + regression.Item2 * x))
+            };
 
-                // Generate trendline
-                Trendline = XValues.Select(x => RegressionAnalysisResult.Intercept + RegressionAnalysisResult.Slope * x).ToList();
-            }
+            // Generate trendline
+            Trendline = XValues.Select(x => RegressionAnalysisResult.Intercept + RegressionAnalysisResult.Slope * x).ToList();
         }
 
         public IActionResult OnPost(string fileName)

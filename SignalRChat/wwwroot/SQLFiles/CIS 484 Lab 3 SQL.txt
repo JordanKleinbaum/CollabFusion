@@ -132,6 +132,15 @@ CREATE TABLE [Document]
     AnalysisType NVARCHAR(50) -- Assuming analysis type names are up to 50 characters
 );
 
+CREATE TABLE PublicDocument
+(
+    Id INT PRIMARY KEY IDENTITY,
+    FileName NVARCHAR(255), -- Assuming file names are up to 255 characters
+    FileData VARBINARY(MAX) NOT NULL,
+    DateAdded DATETIME,
+    AnalysisType NVARCHAR(50) -- Assuming analysis type names are up to 50 characters
+);
+
 CREATE TABLE PreviousSpendingAnalysis (
     SpendingAnalysisID INT IDENTITY(1,1) PRIMARY KEY,
     SpendingAnalysisName VARCHAR(255),
@@ -146,7 +155,6 @@ VALUES
 ('ben.eidelkind', 'Ben', 'Eidelkind', 'ben.eidel@gmail.com', '123-456-7890', '123 Main St', 'Fairfax', 'VA', 'USA', '22039', 'General User'),
 ('jeremy.ezell', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'General User'),
 ('admin', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'Admin');
-
 
 -- Insert sample collaboration
 INSERT INTO Collaboration (CollaborationName, NotesAndInformation)

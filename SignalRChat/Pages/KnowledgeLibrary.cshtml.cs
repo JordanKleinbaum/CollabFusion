@@ -17,6 +17,9 @@ namespace SignalRChat.Pages
 
         public string SearchTerm { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
+        //
+
+        public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
 
         [BindProperty]
         public IFormFile File { get; set; }
@@ -34,8 +37,7 @@ namespace SignalRChat.Pages
         public static SqlConnection CollabFusionDBConnection = new SqlConnection();
 
         // Connection String - How to find and connect to DB
-        private static readonly string CollabFusionDBConnString =
-            "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
+        private static readonly string CollabFusionDBConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
         public IActionResult OnGet()
         {
@@ -56,6 +58,21 @@ namespace SignalRChat.Pages
 
                 LoadAllKnowledge();
                 // Close your connection in DBClass
+                DBClass.CollabFusionDBConnection.Close();
+
+                SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
+                while (previousAnalysisReader.Read())
+                {
+                    PreviousSpendingAnalysisList.Add(new PreviousSpendingAnalysis
+                    {
+                        SpendingAnalysisID = Convert.ToInt32(previousAnalysisReader["SpendingAnalysisID"]),
+                        SpendingAnalysisName = previousAnalysisReader["SpendingAnalysisName"].ToString(),
+                        SpendingAnalysisDescription = previousAnalysisReader["SpendingAnalysisDescription"].ToString(),
+                        BasedOffOf = previousAnalysisReader["BasedOffOf"].ToString(),
+                        SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date
+
+                    });
+                }
                 DBClass.CollabFusionDBConnection.Close();
                 return Page();
             }
