@@ -10,14 +10,35 @@
 <br />
 
 <h1>@Model.CollaborationName</h1>
+<form method="post">
+    <div>
+        <label for="tableNameInput">Enter Table Name:</label>
+        <input asp-for="NewTable.TableName" id="tableNameInput" name="tableName" />
+        <button type="submit" class="btn btn-primary">Create Table</button>
+    </div>
+</form>
+
+<br />
+<br />
+<div id="tableContainer"></div>
 
 
 
 @foreach (var table in Model.Table)
 {
     <h2>@table.TableName</h2>
-    
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Date Added</th>
+                <th>Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Doc.Where(doc => doc.DocumentTableID == table.DocumentTableID))
+            {
                 <tr>
                     <td>@document.FileName</td>
                     <td>@document.DateAdded.ToString("yyyy-MM-dd")</td>
@@ -25,15 +46,15 @@
                         <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                     </td>
                 </tr>
+            }
 
 
-            
+
         </tbody>
     </table>
 
     <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white;">Upload Document</a>
     <hr />
-
 
 }
 
@@ -41,7 +62,9 @@
 <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Upload Document</a>
 <br />
 <br />
-@*<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>*@
+<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
+<br />
+<br />
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
 <script>
     function downloadDocument(fileName, fileData) {
