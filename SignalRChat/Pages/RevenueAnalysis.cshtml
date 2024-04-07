@@ -4,6 +4,19 @@
     ViewData["username"] = HttpContext.Session.GetString("username");
 
 }
+
+@* <form asp-page="RevenueAnalysis">
+    <label>Column 1:</label>
+    <input asp-for="column1" class="form-control" placeholder="Column 1" required />
+    <br />
+    <label>Column 2:</label>
+    <div class="password-wrapper">
+        <input asp-for="column2" class="form-control" placeholder="Column 2" required />
+    </div>
+    <br />
+    <input type="submit" class="btn" style="color: white; width: 100%; background-color: #293A7F;" value="Columns" />
+</form> *@
+
 <br />
 @if (Model.RegressionAnalysisResult != null)
 {
