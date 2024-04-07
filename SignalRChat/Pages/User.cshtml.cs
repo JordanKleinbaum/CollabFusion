@@ -7,8 +7,10 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+
 namespace SignalRChat.Pages
 {
+
     public class UserModel : PageModel
     {
         [BindProperty]
@@ -16,6 +18,7 @@ namespace SignalRChat.Pages
         public Users NewUser { get; set; }
 
         public List<Users> UserList { get; set; } = new List<Users>();
+        public List<Collaboration> CollabList { get; set; } = new List<Collaboration>();
 
         /*POPULATE AND CLEAR METHODS*/
         public IActionResult OnPostPopulateButton()
@@ -89,6 +92,27 @@ namespace SignalRChat.Pages
                     Admin = userReader["Admin"].ToString()
                 });
             }
+            userReader.Close();
+
+
+
+
+            // Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+            DBClass.AuthDBConnection.Close();
+
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
 
             // Close your connection in DBClass
             DBClass.CollabFusionDBConnection.Close();
