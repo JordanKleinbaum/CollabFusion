@@ -85,7 +85,7 @@ else
                     <td style="text-align: right;">
                         <div class="btn-group" role="group" aria-label="File actions">
                             <a class="btn" style="background-color: #293A7F; color: white; margin-left: 0.5em;" asp-page="/ViewExcelData" asp-route-fileName="@file.Name">View</a>
-                            <a class="btn " style="background-color: #293A7F; color: white; margin-left: 0.5em;" asp-page="/RevenueAnalysis" asp-route-fileName="@file.Name">Revenue Analysis</a>
+                            <a class="btn " style="background-color: #293A7F; color: white; margin-left: 0.5em;" asp-page="/Columns" asp-route-fileName="@file.Name">Revenue Analysis</a>
                             <a href="/Uploads/@file.Name" target="_blank" class="btn" style="background-color: #293A7F; color: white; margin-left: 0.5em;">Download</a>
                             <form method="post" onsubmit="return confirm('Are you sure you want to delete this file?');">
                                 <button type="submit" asp-page-handler="DeleteFile" asp-route-fileName="@file.Name" class="btn btn-danger" style="margin-left: 0.5em;">Delete</button>
