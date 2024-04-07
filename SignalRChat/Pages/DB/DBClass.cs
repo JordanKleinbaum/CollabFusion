@@ -680,8 +680,9 @@ namespace SignalRChat.Pages.DB
         // Insert into TableDocument table
         public static void InsertTableDocument(DocumentTable t)
         {
-            string sqlQuery = "INSERT INTO DocumentTable (CollabID) Values ('";
-            sqlQuery += t.CollabID + "')";
+            string sqlQuery = "INSERT INTO DocumentTable (CollabID, TableName) Values (";
+            sqlQuery += t.CollabID + ", '";
+            sqlQuery += t.TableName + "');";
 
             SqlCommand cmdPlanRead = new SqlCommand();
             cmdPlanRead.Connection = CollabFusionDBConnection;

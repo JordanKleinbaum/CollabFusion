@@ -10,7 +10,7 @@
 <br />
 
 <h1>@Model.CollaborationName</h1>
-<form method="post" asp-page="CreateTable">
+<form method="post">
     <div>
         <label for="tableNameInput">Enter Table Name:</label>
         <input asp-for="NewTable.TableName" id="tableNameInput" name="tableName" /> 
@@ -26,6 +26,8 @@
 
 @foreach (var table in Model.Table)
 {
+    <h2>@table.TableName</h2>
+    
     <table class="table">
         <thead>
             <tr>
@@ -35,18 +37,25 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var document in Model.Doc)
+            @foreach (var document in Model.Doc.Where(doc => doc.DocumentTableID == table.DocumentTableID))
             {
                 <tr>
                     <td>@document.FileName</td>
                     <td>@document.DateAdded.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a href="DownloadFile?documentId=@document.Id" class="btn btn-primary">Download</a>
+                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                     </td>
                 </tr>
             }
+
+
+            
         </tbody>
     </table>
+
+    <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white;">Upload Document</a>
+    <hr />
+
 }
 
 <br />
@@ -57,3 +66,23 @@
 <br />
 <br />
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
+<script>
+    function downloadDocument(fileName, fileData) {
+        // Create a blob from the base64 encoded file data
+        var byteCharacters = atob(fileData);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+        // Create a link element and trigger a download
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
