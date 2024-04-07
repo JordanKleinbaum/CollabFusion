@@ -44,6 +44,9 @@ namespace SignalRChat.Pages
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
 
+        public List<DocumentTable> Table { get; set; } = new List<DocumentTable>();
+        public DocumentTable NewTable { get; set; }
+
         public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
 
 
@@ -82,22 +85,40 @@ namespace SignalRChat.Pages
 
 
                 //Document LOGIC START
-                SqlDataReader reader = DBClass.GeneralReaderQuery("SELECT * FROM Document");
+                SqlDataReader DocReader = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE DocumentTableID IS NOT NULL");
 
-                // Populate PESTDocuments list with data from the database
-                while (reader.Read())
+                // Populate Documents list with data from the database
+                while (DocReader.Read())
                 {
                     Doc.Add(new Document
                     {
-                        Id = Convert.ToInt32(reader["Id"]),
-                        FileName = reader["FileName"].ToString(),
-                        FileData = (byte[])reader["FileData"],
-                        DateAdded = Convert.ToDateTime(reader["DateAdded"]),
-                        AnalysisType = reader["AnalysisType"].ToString()
+                        Id = Convert.ToInt32(DocReader["Id"]),
+                        FileName = DocReader["FileName"].ToString(),
+                        FileData = (byte[])DocReader["FileData"],
+                        DateAdded = Convert.ToDateTime(DocReader["DateAdded"]),
+                        AnalysisType = DocReader["AnalysisType"].ToString(),
+                        DocumentTableID = Convert.ToInt32(DocReader["DocumentTableID"])
                     });
                 }
-                reader.Close();
+                DocReader.Close();
                 DBClass.CollabFusionDBConnection.Close();
+
+                //TableDocument Logic Start
+                SqlDataReader TableReader = DBClass.GeneralReaderQuery($"SELECT * FROM DocumentTable WHERE CollabID = {collabid}");
+
+             
+                while (TableReader.Read())
+                {
+                    Table.Add(new DocumentTable
+                    {
+                        DocumentTableID = Convert.ToInt32(TableReader["DocumentTableID"]),
+                        CollabID = Convert.ToInt32(TableReader["CollabID"]),
+                        TableName = TableReader["TableName"].ToString()
+                    }) ;
+                }
+                TableReader.Close();
+                DBClass.CollabFusionDBConnection.Close();
+                //TableDocument Logic Ends
 
 
                 SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
@@ -145,8 +166,95 @@ namespace SignalRChat.Pages
             DBClass.CollabFusionDBConnection.Close();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(string tableName)
         {
+            int collabId = HttpContext.Session.GetInt32("collabid") ?? 0;
+            DocumentTable newTable = new DocumentTable
+            {
+                CollabID = collabId,
+                TableName = tableName
+            };
+
+            DBClass.InsertTableDocument(newTable);
+            DBClass.CollabFusionDBConnection.Close();
+
+            SqlDataReader CollaborationNameReader = DBClass.GeneralReaderQuery($"SELECT CollaborationName FROM Collaboration WHERE CollabID = {collabId}");
+            if (CollaborationNameReader.Read())
+            {
+                CollaborationName = CollaborationNameReader["CollaborationName"].ToString();
+            }
+            CollaborationNameReader.Close();
+            DBClass.CollabFusionDBConnection.Close();
+            // End of getting the CollabName
+
+            // Populate UsersList with user data from the database
+            SqlDataReader userReader = DBClass.GetAllUsers();
+            while (userReader.Read())
+            {
+                UsersList.Add(new Users
+                {
+                    UserID = Convert.ToInt32(userReader["UserID"]),
+                    Username = userReader["Username"].ToString()
+                });
+            }
+            userReader.Close();
+
+            //Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+
+
+
+            //Document LOGIC START
+            SqlDataReader DocReader = DBClass.GeneralReaderQuery("SELECT * FROM Document WHERE DocumentTableID IS NOT NULL");
+
+            // Populate Documents list with data from the database
+            while (DocReader.Read())
+            {
+                Doc.Add(new Document
+                {
+                    Id = Convert.ToInt32(DocReader["Id"]),
+                    FileName = DocReader["FileName"].ToString(),
+                    FileData = (byte[])DocReader["FileData"],
+                    DateAdded = Convert.ToDateTime(DocReader["DateAdded"]),
+                    AnalysisType = DocReader["AnalysisType"].ToString(),
+                    DocumentTableID = Convert.ToInt32(DocReader["DocumentTableID"])
+                });
+            }
+            DocReader.Close();
+            DBClass.CollabFusionDBConnection.Close();
+
+            //TableDocument Logic Start
+            SqlDataReader TableReader = DBClass.GeneralReaderQuery($"SELECT * FROM DocumentTable WHERE CollabID = {collabId}");
+
+
+            while (TableReader.Read())
+            {
+                Table.Add(new DocumentTable
+                {
+                    DocumentTableID = Convert.ToInt32(TableReader["DocumentTableID"]),
+                    CollabID = Convert.ToInt32(TableReader["CollabID"]),
+                    TableName = TableReader["TableName"].ToString()
+                });
+            }
+            TableReader.Close();
+            DBClass.CollabFusionDBConnection.Close();
+            //TableDocument Logic Ends
+
+
+            SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
+            while (previousAnalysisReader.Read())
+            {
+                PreviousSpendingAnalysisList.Add(new PreviousSpendingAnalysis
+                {
+                    SpendingAnalysisID = Convert.ToInt32(previousAnalysisReader["SpendingAnalysisID"]),
+                    SpendingAnalysisName = previousAnalysisReader["SpendingAnalysisName"].ToString(),
+                    SpendingAnalysisDescription = previousAnalysisReader["SpendingAnalysisDescription"].ToString(),
+                    BasedOffOf = previousAnalysisReader["BasedOffOf"].ToString(),
+                    SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date
+
+                });
+            }
+            DBClass.CollabFusionDBConnection.Close();
 
             return Page();
         }
