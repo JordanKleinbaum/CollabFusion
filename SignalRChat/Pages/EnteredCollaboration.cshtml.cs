@@ -44,7 +44,7 @@ namespace SignalRChat.Pages
         public string CollaborationName { get; set; }
         public List<Document> Doc { get; set; } = new List<Document>();
 
-        public List<DocumentTable> Table { get; set; }
+        public List<DocumentTable> Table { get; set; } = new List<DocumentTable>();
         public DocumentTable NewTable { get; set; }
 
         public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
@@ -111,8 +111,9 @@ namespace SignalRChat.Pages
                     Table.Add(new DocumentTable
                     {
                         DocumentTableID = Convert.ToInt32(TableReader["DocumentTableID"]),
-                        CollabID = Convert.ToInt32(TableReader["CollabID"])
-                    });
+                        CollabID = Convert.ToInt32(TableReader["CollabID"]),
+                        TableName = TableReader["TableName"].ToString()
+                    }) ;
                 }
                 TableReader.Close();
                 DBClass.CollabFusionDBConnection.Close();
@@ -164,12 +165,13 @@ namespace SignalRChat.Pages
             DBClass.CollabFusionDBConnection.Close();
         }
 
-        public IActionResult OnPost(string tableName)
+        public IActionResult OnPostCreateTable(string tableName)
         {
             int collabId = HttpContext.Session.GetInt32("collabid") ?? 0;
             DocumentTable newTable = new DocumentTable
             {
-                CollabID = collabId
+                CollabID = collabId,
+                TableName = tableName
             };
 
             DBClass.InsertTableDocument(newTable);
@@ -177,7 +179,7 @@ namespace SignalRChat.Pages
 
 
 
-            return Page();
+            return RedirectToPage();
         }
 
     }

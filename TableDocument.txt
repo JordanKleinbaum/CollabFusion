@@ -1,0 +1,5 @@
+CREATE TABLE DocumentTable (
+	DocumentTableID INT IDENTITY(1,1) PRIMARY KEY,
+	FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID)
+	
+);

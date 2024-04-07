@@ -7,5 +7,6 @@
         public byte[] FileData { get; set; }
         public DateTime DateAdded { get; set; }
         public string AnalysisType { get; set; }
+        public int DocumentTableID { get; set; }
     }
 }

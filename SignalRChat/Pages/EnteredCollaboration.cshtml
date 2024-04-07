@@ -10,11 +10,11 @@
 <br />
 
 <h1>@Model.CollaborationName</h1>
-<form method="post">
+<form method="post" asp-page="CreateTable">
     <div>
         <label for="tableNameInput">Enter Table Name:</label>
-        <input type="text" id="tableNameInput" />
-        <button type="submit" class="btn btn-primary" onclick="createTable()">Create Table</button>
+        <input asp-for="NewTable.TableName" id="tableNameInput" name="tableName" /> 
+        <button type="submit" class="btn btn-primary">Create Table</button> 
     </div>
 </form>
 
@@ -22,38 +22,33 @@
 <br />
 <div id="tableContainer"></div>
 
-<script>
-    function createTable() {
-        var tableName = document.getElementById('tableNameInput').value;
-        var tableContainer = document.getElementById('tableContainer');
-        var table = document.createElement('table');
-        table.className = 'table';
 
-        var thead = document.createElement('thead');
-        var tr = document.createElement('tr');
-        var thFileName = document.createElement('th');
-        thFileName.textContent = 'File Name';
-        var thDateAdded = document.createElement('th');
-        thDateAdded.textContent = 'Date Added';
-        var thCommand = document.createElement('th');
-        thCommand.textContent = 'Command';
-        tr.appendChild(thFileName);
-        tr.appendChild(thDateAdded);
-        tr.appendChild(thCommand);
-        thead.appendChild(tr);
-        table.appendChild(thead);
 
-        var tbody = document.createElement('tbody');
-        // You can add rows dynamically here if needed
-        table.appendChild(tbody);
+@foreach (var table in Model.Table)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Date Added</th>
+                <th>Command</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Doc)
+            {
+                <tr>
+                    <td>@document.FileName</td>
+                    <td>@document.DateAdded.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a href="DownloadFile?documentId=@document.Id" class="btn btn-primary">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
-        tableContainer.innerHTML = ''; // Clear previous table
-        var tableNameHeader = document.createElement('h2');
-        tableNameHeader.textContent = tableName;
-        tableContainer.appendChild(tableNameHeader);
-        tableContainer.appendChild(table);
-    }
-</script>
 <br />
 <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Upload Document</a>
 <br />
