@@ -72,6 +72,7 @@ namespace SignalRChat.Pages
                 return RedirectToPage("CollabHub");
             }
 
+
             SqlDataReader userReader = DBClass.GetAllUsers();
             while (userReader.Read())
             {
@@ -93,13 +94,11 @@ namespace SignalRChat.Pages
                 });
             }
             userReader.Close();
-
-
-
-
             // Close your connection in DBClass
             DBClass.CollabFusionDBConnection.Close();
             DBClass.AuthDBConnection.Close();
+
+
 
             SqlDataReader collabReader = DBClass.GetAllCollabs();
             while (collabReader.Read())
@@ -113,7 +112,6 @@ namespace SignalRChat.Pages
             }
 
             collabReader.Close();
-
             // Close your connection in DBClass
             DBClass.CollabFusionDBConnection.Close();
             DBClass.AuthDBConnection.Close();
