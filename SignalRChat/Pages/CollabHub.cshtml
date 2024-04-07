@@ -41,18 +41,23 @@
     </h6>
     <br />
 
-    <!-- Display existing collaborations -->
+    <!-- Display existing collaborations when the user has a matching ID to the Collab -->
     <section class="allCards" style="display: grid; grid-gap: 2em; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        @foreach (var collab in Model.Collaborations)
+        @foreach (var collabUser in Model.Collab_UserList.Where(cu => cu.UserID == Model.userID))
         {
-            <div class="card">
-                <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h6 class="card-title">@collab.CollaborationName</h6>
-                    <p class="card-text">@collab.NotesAndInformation</p>
-                    <a asp-page="/EnteredCollaboration" asp-route-collaborationId="@collab.CollabID" class="btn" style="background-color: #293A7F; color: white;">Enter Collaboration</a>
+            var collab = Model.Collaborations.FirstOrDefault(c => c.CollabID == collabUser.CollabID);
+            if (collab != null)
+            {
+                <div class="card">
+                    <div class="card-body" style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                        <h6 class="card-title">@collab.CollaborationName</h6>
+                        <p class="card-text">@collab.NotesAndInformation</p>
+                        <a asp-page="/EnteredCollaboration" asp-route-collaborationId="@collab.CollabID" class="btn" style="background-color: #293A7F; color: white;">Enter Collaboration</a>
+                    </div>
                 </div>
-            </div>
+            }
         }
     </section>
+
 </body>
 </html>

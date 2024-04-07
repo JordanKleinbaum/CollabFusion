@@ -62,6 +62,22 @@ namespace SignalRChat.Pages.DB
             return tempReader;
         }
 
+        public static SqlDataReader GetAllCollab_User()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM Collab_User";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
         public static Users UserInfoBasedOnID(IHttpContextAccessor httpContextAccessor)
         {
             int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
