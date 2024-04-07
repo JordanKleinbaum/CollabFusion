@@ -31,6 +31,7 @@ namespace SignalRChat.Pages
 
 
         // OnPost, Upload the files to the Uploads Folder in wwwroot
+        // OnPost, Upload the files to the Uploads Folder in wwwroot
         public IActionResult OnPost()
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -46,10 +47,13 @@ namespace SignalRChat.Pages
                     if (formFile != null && formFile.Length > 0)
                     {
                         var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
-                        var filePath = Path.Combine(uploadDirectory, formFile.FileName);
+
+                        // Replace spaces with underscores in the file name
+                        var sanitizedFileName = formFile.FileName.Replace(" ", "_");
+                        var filePath = Path.Combine(uploadDirectory, sanitizedFileName);
 
                         // Check if filename already exists in the database
-                        string fileName = Path.GetFileNameWithoutExtension(formFile.FileName);
+                        string fileName = Path.GetFileNameWithoutExtension(sanitizedFileName);
                         string checkIfExistsQuery = $"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{fileName}'";
                         SqlCommand checkIfExistsCommand = new SqlCommand(checkIfExistsQuery, connection);
                         int existingCount = (int)checkIfExistsCommand.ExecuteScalar();
@@ -57,7 +61,7 @@ namespace SignalRChat.Pages
                         if (existingCount > 0)
                         {
                             UploadSuccessful = false;
-                            ErrorFileName = formFile.FileName;
+                            ErrorFileName = sanitizedFileName;
                             return Page();
                         }
 
@@ -68,11 +72,11 @@ namespace SignalRChat.Pages
 
                         List<List<object>> fileData;
 
-                        if (Path.GetExtension(formFile.FileName).ToLower() == ".csv")
+                        if (Path.GetExtension(sanitizedFileName).ToLower() == ".csv")
                         {
                             fileData = ReadCsv(filePath);
                         }
-                        else if (Path.GetExtension(formFile.FileName).ToLower() == ".xlsx")
+                        else if (Path.GetExtension(sanitizedFileName).ToLower() == ".xlsx")
                         {
                             fileData = ReadExcel(filePath);
                         }
@@ -80,14 +84,14 @@ namespace SignalRChat.Pages
                         {
                             // Unsupported file format
                             UploadSuccessful = false;
-                            ErrorFileName = formFile.FileName;
+                            ErrorFileName = sanitizedFileName;
                             return Page();
                         }
 
-                        ExcelDataDict.Add(formFile.FileName, fileData);
+                        ExcelDataDict.Add(sanitizedFileName, fileData);
 
                         // Upload data to SQL Server
-                        UploadToSqlServer(formFile.FileName, fileData);
+                        UploadToSqlServer(sanitizedFileName, fileData);
 
                         UploadSuccessful = true;
                     }
@@ -96,6 +100,7 @@ namespace SignalRChat.Pages
 
             return Page();
         }
+
 
         // Method to read CSV file
         // Method to read CSV file without treating the first row as headers

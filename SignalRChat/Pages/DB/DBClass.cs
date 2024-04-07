@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Pages.DB;
 using SignalRChat.Pages.DataClasses;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
 
 namespace SignalRChat.Pages.DB
 {
@@ -13,14 +14,18 @@ namespace SignalRChat.Pages.DB
         public static SqlConnection CollabFusionDBConnection = new SqlConnection();
 
         // Connection String - How to find and connect to DB
-        private static readonly string CollabFusionDBConnString =
-            "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
+        private static readonly string CollabFusionDBConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
         public static SqlConnection AuthDBConnection = new SqlConnection();
 
         private static readonly String? AuthConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=AUTH;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True;";
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public DBClass(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         // Connection Methods:
 
@@ -39,6 +44,54 @@ namespace SignalRChat.Pages.DB
             SqlDataReader tempReader = cmdRead.ExecuteReader();
 
             return tempReader;
+        }
+
+        public static Users UserInfoBasedOnID(IHttpContextAccessor httpContextAccessor)
+        {
+            int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
+
+            if (!userId.HasValue)
+            {
+                throw new Exception("User ID not found in session.");
+            }
+
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM Users WHERE UserID = @userId";
+            cmdRead.Parameters.AddWithValue("@userId", userId);
+
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader reader = cmdRead.ExecuteReader();
+
+            Users user = null;
+
+            if (reader.Read())
+            {
+                user = new Users
+                {
+                    UserID = Convert.ToInt32(reader["UserID"]),
+                    Username = reader["Username"].ToString(),
+                    FirstName = reader["FirstName"].ToString(),
+                    LastName = reader["LastName"].ToString(),
+                    Email = reader["Email"].ToString(),
+                    Phone = reader["Phone"].ToString(),
+                    Street = reader["Street"].ToString(),
+                    City = reader["City"].ToString(),
+                    State = reader["State"].ToString(),
+                    Country = reader["Country"].ToString(),
+                    ZipCode = reader["ZipCode"].ToString(),
+                    Admin = reader["Admin"].ToString()
+                };
+            }
+
+            reader.Close();
+
+            return user;
         }
 
         // Insert into Users table
@@ -64,10 +117,48 @@ namespace SignalRChat.Pages.DB
             cmdUserRead.Connection.ConnectionString = CollabFusionDBConnString;
             cmdUserRead.CommandText = sqlQuery;
             cmdUserRead.Connection.Open();
-
             cmdUserRead.ExecuteNonQuery();
-
+            cmdUserRead.Connection.Close();
         }
+
+        public static void UpdateUser(Users u, IHttpContextAccessor httpContextAccessor)
+        {
+            int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
+
+            if (!userId.HasValue)
+            {
+                throw new Exception("User ID not found in session.");
+            }
+
+            // Construct the SQL query with parameterized values to prevent SQL injection
+            string sqlQuery = $"UPDATE Users SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone, Street = @Street, City = @City, State = @State, Country = @Country, ZipCode = @ZipCode WHERE UserID = {userId}";
+
+            // Create a new SqlCommand
+            using (SqlCommand cmdUserUpdate = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                // Set command parameters
+                cmdUserUpdate.Parameters.AddWithValue("@FirstName", u.FirstName);
+                cmdUserUpdate.Parameters.AddWithValue("@LastName", u.LastName);
+                cmdUserUpdate.Parameters.AddWithValue("@Email", u.Email);
+                cmdUserUpdate.Parameters.AddWithValue("@Phone", u.Phone);
+                cmdUserUpdate.Parameters.AddWithValue("@Street", u.Street);
+                cmdUserUpdate.Parameters.AddWithValue("@City", u.City);
+                cmdUserUpdate.Parameters.AddWithValue("@State", u.State);
+                cmdUserUpdate.Parameters.AddWithValue("@Country", u.Country);
+                cmdUserUpdate.Parameters.AddWithValue("@ZipCode", u.ZipCode);
+
+                // Set the connection string
+                cmdUserUpdate.Connection.ConnectionString = CollabFusionDBConnString;
+
+                // Open connection and execute the command
+                cmdUserUpdate.Connection.Open();
+                cmdUserUpdate.ExecuteNonQuery();
+                cmdUserUpdate.Connection.Close();
+            } // The using block ensures proper disposal of resources, including closing the connection
+        }
+
+
+
 
         // Read all Knowledge Items
         public static SqlDataReader GetAllKnowledgeItems()
@@ -107,6 +198,7 @@ namespace SignalRChat.Pages.DB
             cmdRead.Connection.Open();
 
             cmdRead.ExecuteNonQuery();
+            cmdRead.Connection.Close();
 
         }
 
@@ -251,8 +343,7 @@ namespace SignalRChat.Pages.DB
         {
             SqlCommand cmdProductRead = new SqlCommand();
             cmdProductRead.Connection = CollabFusionDBConnection;
-            cmdProductRead.Connection.ConnectionString =
-            CollabFusionDBConnString;
+            cmdProductRead.Connection.ConnectionString = CollabFusionDBConnString;
             cmdProductRead.CommandText = sqlQuery;
             cmdProductRead.Connection.Open();
             SqlDataReader tempReader = cmdProductRead.ExecuteReader();
@@ -316,6 +407,26 @@ namespace SignalRChat.Pages.DB
             return firstName;
         }
 
+        public static int GetIdByUsername(string username)
+        {
+            int id = 0;
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                string sqlQuery = "SELECT UserID FROM Users WHERE Username = @Username";
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.AddWithValue("@Username", username);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        id = Convert.ToInt32(reader["UserID"]);
+                    }
+                }
+            }
+            return id;
+        }
+
         public static string GetAdminByUsername(string username)
         {
             string adminYesOrNo = "";
@@ -335,6 +446,8 @@ namespace SignalRChat.Pages.DB
             }
             return adminYesOrNo;
         }
+
+
 
 
 
@@ -579,10 +692,56 @@ namespace SignalRChat.Pages.DB
             }
             return SearchedDocument;
         }
+        public static List<PublicDocument> SearchPublicKnowledge(string SearchTerm)
+        {
+            List<PublicDocument> SearchedDocument = new List<PublicDocument>();
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+                string sqlQuery = "SELECT * FROM PublicDocument WHERE FileName LIKE @SearchTerm";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@SearchTerm", "%" + SearchTerm + "%");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PublicDocument knowledge = new PublicDocument
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                FileName = reader["FileName"].ToString(),
+                                FileData = (byte[])reader["FileData"],
+                                DateAdded = Convert.ToDateTime(reader["DateAdded"]),
+                                AnalysisType = reader["AnalysisType"].ToString()
+                            };
+                            SearchedDocument.Add(knowledge);
+                        }
+                    }
+                }
+            }
+            return SearchedDocument;
+        }
+
 
         public static void InsertDocument(Document d)
         {
             string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
+
+            using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
+            {
+                cmdDocInsert.Parameters.AddWithValue("@FileName", d.FileName);
+                cmdDocInsert.Parameters.AddWithValue("@FileData", d.FileData);
+                cmdDocInsert.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmdDocInsert.Parameters.AddWithValue("@AnalysisType", d.AnalysisType);
+
+                CollabFusionDBConnection.Open();
+                cmdDocInsert.ExecuteNonQuery();
+                CollabFusionDBConnection.Close();
+            }
+        }
+        public static void InsertPublicDocument(PublicDocument d)
+        {
+            string sqlQuery = "INSERT INTO PublicDocument (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
 
             using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
             {
@@ -613,6 +772,17 @@ namespace SignalRChat.Pages.DB
                 CollabFusionDBConnection.Close();
 
             }
+
+            //string anotherSqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES ('Regression Analysis For: " + spendinganalysis.BasedOffOf + "', CONVERT(varbinary(max), '0x50'), @SpendingAnalysisDate, 'Regression Analysis')";
+            //using (SqlCommand cmdDocInsert = new SqlCommand(anotherSqlQuery, CollabFusionDBConnection))
+            //{
+            //    cmdDocInsert.Parameters.AddWithValue("@BasedOffOf", spendinganalysis.BasedOffOf);
+            //    cmdDocInsert.Parameters.AddWithValue("@SpendingAnalysisDate", DateTime.Now);
+
+            //    CollabFusionDBConnection.Open();
+            //    cmdDocInsert.ExecuteNonQuery();
+            //    CollabFusionDBConnection.Close();
+            //}
         }
 
         public static SqlDataReader GetAllPreviousSpendingAnalysis()
