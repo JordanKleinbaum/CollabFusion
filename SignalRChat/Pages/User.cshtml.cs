@@ -6,9 +6,12 @@ using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Collections.Generic;
+
 
 namespace SignalRChat.Pages
 {
+
     public class UserModel : PageModel
     {
         [BindProperty]
@@ -16,6 +19,11 @@ namespace SignalRChat.Pages
         public Users NewUser { get; set; }
 
         public List<Users> UserList { get; set; } = new List<Users>();
+        public List<Collaboration> CollabList { get; set; } = new List<Collaboration>();
+
+        [BindProperty]
+        [Required]
+        public List<Collaboration> SelectedCollaborations { get; set; } = new List<Collaboration>();
 
         /*POPULATE AND CLEAR METHODS*/
         public IActionResult OnPostPopulateButton()
@@ -69,6 +77,7 @@ namespace SignalRChat.Pages
                 return RedirectToPage("CollabHub");
             }
 
+
             SqlDataReader userReader = DBClass.GetAllUsers();
             while (userReader.Read())
             {
@@ -89,7 +98,24 @@ namespace SignalRChat.Pages
                     Admin = userReader["Admin"].ToString()
                 });
             }
+            userReader.Close();
+            // Close your connection in DBClass
 
+
+
+
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
             // Close your connection in DBClass
             DBClass.CollabFusionDBConnection.Close();
             DBClass.AuthDBConnection.Close();
@@ -101,15 +127,29 @@ namespace SignalRChat.Pages
 
         public IActionResult OnPost()
         {
-            // Use parameterized query for insertion
-            DBClass.ParameterizedCreateUser(NewUser);
+            // Retrieve selected collaboration IDs from form
+            var selectedCollabIds = HttpContext.Request.Form["SelectedCollabs"];
+
+            // Populate selectedIds with Collaboration IDs
+            List<int> selectedIds = new List<int>();
+            foreach (var collabId in selectedCollabIds)
+            {
+                if (int.TryParse(collabId, out int id))
+                {
+                    selectedIds.Add(id);
+                }
+            }
+
+
             DBClass.CreateHashedUser(NewUser.Username, NewUser.Password);
 
-            DBClass.AuthDBConnection.Close();
+            // Create new user and insert into bridge table
+            DBClass.CreateUserAndInsertCollabUserBridgeTable(NewUser, selectedIds);
 
-            DBClass.CollabFusionDBConnection.Close();
-
-            return RedirectToPage("CollabHub");
+            return RedirectToPage("/User");
         }
+
+
+
     }
 }

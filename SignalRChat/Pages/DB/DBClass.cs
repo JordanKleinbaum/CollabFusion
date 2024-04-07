@@ -46,6 +46,38 @@ namespace SignalRChat.Pages.DB
             return tempReader;
         }
 
+        public static SqlDataReader GetAllCollabs()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM Collaboration";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+        public static SqlDataReader GetAllCollab_User()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM Collab_User";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
         public static Users UserInfoBasedOnID(IHttpContextAccessor httpContextAccessor)
         {
             int? userId = httpContextAccessor.HttpContext.Session.GetInt32("_userid");
@@ -636,31 +668,69 @@ namespace SignalRChat.Pages.DB
 
         // PARAMETERIZED QUERIES (PQ)
 
-        // PQ -> USER.CSHTML.CS
-        public static void ParameterizedCreateUser(Users newUser)
+        public static void CreateUserAndInsertCollabUserBridgeTable(Users newUser, List<int> collabIds)
         {
-            string insertQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin) VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode, @Admin)";
-            SqlCommand cmdInsert = new SqlCommand();
-            cmdInsert.Connection = CollabFusionDBConnection;
-            cmdInsert.Connection.ConnectionString = CollabFusionDBConnString;
+            string insertUserQuery = "INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin) " +
+                                     "VALUES (@Username, @FirstName, @LastName, @Email, @Phone, @Street, @City, @State, @Country, @ZipCode, @Admin);" +
+                                     "SELECT SCOPE_IDENTITY();"; // This retrieves the automatically generated UserID
 
-            cmdInsert.CommandText = insertQuery;
-            cmdInsert.Parameters.AddWithValue("@Username", newUser.Username);
-            cmdInsert.Parameters.AddWithValue("@FirstName", newUser.FirstName);
-            cmdInsert.Parameters.AddWithValue("@LastName", newUser.LastName);
-            cmdInsert.Parameters.AddWithValue("@Email", newUser.Email);
-            cmdInsert.Parameters.AddWithValue("@Phone", newUser.Phone);
-            cmdInsert.Parameters.AddWithValue("@Street", newUser.Street);
-            cmdInsert.Parameters.AddWithValue("@City", newUser.City);
-            cmdInsert.Parameters.AddWithValue("@State", newUser.State);
-            cmdInsert.Parameters.AddWithValue("@Country", newUser.Country);
-            cmdInsert.Parameters.AddWithValue("@ZipCode", newUser.ZipCode);
-            cmdInsert.Parameters.AddWithValue("@Admin", newUser.Admin);
+            string insertBridgeQuery = "INSERT INTO Collab_User (CollabID, UserID) VALUES (@CollabID, @UserID)";
 
-            cmdInsert.Connection.Open();
-            cmdInsert.ExecuteNonQuery();
-            cmdInsert.Connection.Close();
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+
+                try
+                {
+                    // Insert new user and retrieve the generated UserID
+                    using (SqlCommand cmdInsertUser = new SqlCommand(insertUserQuery, connection, transaction))
+                    {
+                        cmdInsertUser.Parameters.AddWithValue("@Username", newUser.Username);
+                        cmdInsertUser.Parameters.AddWithValue("@FirstName", newUser.FirstName);
+                        cmdInsertUser.Parameters.AddWithValue("@LastName", newUser.LastName);
+                        cmdInsertUser.Parameters.AddWithValue("@Email", newUser.Email);
+                        cmdInsertUser.Parameters.AddWithValue("@Phone", newUser.Phone);
+                        cmdInsertUser.Parameters.AddWithValue("@Street", newUser.Street);
+                        cmdInsertUser.Parameters.AddWithValue("@City", newUser.City);
+                        cmdInsertUser.Parameters.AddWithValue("@State", newUser.State);
+                        cmdInsertUser.Parameters.AddWithValue("@Country", newUser.Country);
+                        cmdInsertUser.Parameters.AddWithValue("@ZipCode", newUser.ZipCode);
+                        cmdInsertUser.Parameters.AddWithValue("@Admin", newUser.Admin);
+
+                        // Execute the user insert command and retrieve the generated UserID
+                        newUser.UserID = Convert.ToInt32(cmdInsertUser.ExecuteScalar());
+                    }
+
+                    // Insert records into Collab_User bridge table using the retrieved UserID
+                    foreach (int collabId in collabIds)
+                    {
+                        using (SqlCommand cmdInsertBridge = new SqlCommand(insertBridgeQuery, connection, transaction))
+                        {
+                            cmdInsertBridge.Parameters.AddWithValue("@CollabID", collabId);
+                            cmdInsertBridge.Parameters.AddWithValue("@UserID", newUser.UserID);
+                            cmdInsertBridge.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Commit the transaction
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    // Rollback the transaction if an error occurs
+                    transaction.Rollback();
+                    throw new Exception("Error creating user and inserting bridge table records.", ex);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
         }
+
+
+
 
 
         public static List<Document> SearchKnowledge(string SearchTerm)

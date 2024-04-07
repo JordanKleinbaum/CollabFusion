@@ -20,6 +20,9 @@ namespace SignalRChat.Pages
         [BindProperty]
         public int CollabID { get; set; }
 
+        public List<Collab_User> Collab_UserList { get; set; } = new List<Collab_User>();
+
+
         // Session 
         public string Admin { get; set; }
 
@@ -43,6 +46,19 @@ namespace SignalRChat.Pages
                 HttpContext.Session.SetInt32("_userid", userID);
 
 
+                // Getting all CollabUsers
+                SqlDataReader collabUserReader = DBClass.GetAllCollab_User();
+                while (collabUserReader.Read())
+                {
+                    Collab_UserList.Add(new Collab_User
+                    {
+                        CollabUserID = Convert.ToInt32(collabUserReader["CollabUserID"]),
+                        CollabID = Convert.ToInt32(collabUserReader["CollabID"]),
+                        UserID = Convert.ToInt32(collabUserReader["UserID"]),
+                    });
+                }
+                collabUserReader.Close();
+                DBClass.CollabFusionDBConnection.Close();
 
                 return Page();
             }
@@ -51,6 +67,8 @@ namespace SignalRChat.Pages
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
                 return RedirectToPage("Index");
             }
+
+
         }
 
 

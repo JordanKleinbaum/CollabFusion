@@ -156,7 +156,6 @@ VALUES
 ('jeremy.ezell', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'General User'),
 ('admin', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'Admin');
 
-
 -- Insert sample collaboration
 INSERT INTO Collaboration (CollaborationName, NotesAndInformation)
 VALUES
