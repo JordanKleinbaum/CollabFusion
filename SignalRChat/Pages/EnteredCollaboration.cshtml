@@ -65,7 +65,10 @@
 }
 
 <br />
-<a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Upload Document</a>
+@if (collabid == 1)
+{
+    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
+}
 <br />
 <br />
 
