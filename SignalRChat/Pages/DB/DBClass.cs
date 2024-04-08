@@ -16,6 +16,7 @@ namespace SignalRChat.Pages.DB
         // Connection String - How to find and connect to DB
         private static readonly string CollabFusionDBConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
+
         public static SqlConnection AuthDBConnection = new SqlConnection();
 
         private static readonly String? AuthConnString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=AUTH;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True;";
@@ -46,6 +47,22 @@ namespace SignalRChat.Pages.DB
             return tempReader;
         }
 
+        public static SqlDataReader GetAllTableNames()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT TableName FROM DocumentTable";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
         public static SqlDataReader GetAllCollabs()
         {
             SqlCommand cmdRead = new SqlCommand();
@@ -61,6 +78,24 @@ namespace SignalRChat.Pages.DB
 
             return tempReader;
         }
+
+        public static SqlDataReader GetAllDocumentTables()
+        {
+            SqlCommand cmdRead = new SqlCommand();
+            cmdRead.Connection = CollabFusionDBConnection;
+            cmdRead.CommandText = "SELECT * FROM DocumentTable";
+            if (cmdRead.Connection.State != System.Data.ConnectionState.Open)
+            {
+                cmdRead.Connection.ConnectionString = CollabFusionDBConnString;
+                cmdRead.Connection.Open(); // Open connection here, close in calling method
+            }
+
+            SqlDataReader tempReader = cmdRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+
 
         public static SqlDataReader GetAllCollab_User()
         {
@@ -795,20 +830,66 @@ namespace SignalRChat.Pages.DB
 
         public static void InsertDocument(Document d)
         {
-            string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
+            string documentTableSelectStatement = $"SELECT DocumentTableID FROM DocumentTable WHERE TableName = @AnalysisType"; // Use parameterized query for safety
+
+            // Construct the SQL query with proper parameter placeholders
+            string sqlQuery = "INSERT INTO Document (FileName, FileData, DateAdded, AnalysisType, DocumentTableID) " +
+                              $"VALUES (@FileName, @FileData, @DateAdded, @AnalysisType, ({documentTableSelectStatement}))";
 
             using (SqlCommand cmdDocInsert = new SqlCommand(sqlQuery, CollabFusionDBConnection))
             {
+                // Set the parameter values
                 cmdDocInsert.Parameters.AddWithValue("@FileName", d.FileName);
                 cmdDocInsert.Parameters.AddWithValue("@FileData", d.FileData);
                 cmdDocInsert.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                 cmdDocInsert.Parameters.AddWithValue("@AnalysisType", d.AnalysisType);
 
+                // Open the database connection
                 CollabFusionDBConnection.Open();
-                cmdDocInsert.ExecuteNonQuery();
+
+                // Execute the query
+                // First, execute the SELECT statement to get DocumentTableID
+                object documentTableId = cmdDocInsert.ExecuteScalar(); // ExecuteScalar to retrieve a single value
+
+                // Check if DocumentTableID is retrieved successfully
+                if (documentTableId != null && documentTableId != DBNull.Value)
+                {
+                    // Set the retrieved DocumentTableID as a parameter for the INSERT query
+                    cmdDocInsert.Parameters.AddWithValue("@DocumentTableID", documentTableId);
+
+                    // Now execute the INSERT statement with all parameters set
+                    cmdDocInsert.ExecuteNonQuery();
+                }
+                else
+                {
+                    // Handle the case where DocumentTableID is not found (optional)
+                    Console.WriteLine("DocumentTableID not found for the specified AnalysisType.");
+                    // You can throw an exception or handle this scenario based on your requirements
+                }
+
+                // Close the database connection
                 CollabFusionDBConnection.Close();
             }
         }
+
+
+        // Insert into TableDocument table
+        public static void InsertTableDocument(DocumentTable t)
+        {
+            string sqlQuery = $"INSERT INTO DocumentTable (CollabID, TableName) VALUES ({t.CollabID}, '{t.TableName}')";
+
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.ExecuteNonQuery();
+            } // SqlConnection is automatically closed and disposed after exiting the using block
+        }
+
+
+
+
         public static void InsertPublicDocument(PublicDocument d)
         {
             string sqlQuery = "INSERT INTO PublicDocument (FileName, FileData, DateAdded, AnalysisType) VALUES (@FileName, @FileData, @DateAdded, @AnalysisType)";
@@ -871,22 +952,7 @@ namespace SignalRChat.Pages.DB
             return tempReader;
         }
 
-        // Insert into TableDocument table
-        public static void InsertTableDocument(DocumentTable t)
-        {
-            string sqlQuery = "INSERT INTO DocumentTable (CollabID, TableName) Values (";
-            sqlQuery += t.CollabID + ", '";
-            sqlQuery += t.TableName + "');";
 
-            SqlCommand cmdPlanRead = new SqlCommand();
-            cmdPlanRead.Connection = CollabFusionDBConnection;
-            cmdPlanRead.Connection.ConnectionString = CollabFusionDBConnString;
-            cmdPlanRead.CommandText = sqlQuery;
-            cmdPlanRead.Connection.Open();
-
-            cmdPlanRead.ExecuteNonQuery();
-
-        }
 
     }
 }

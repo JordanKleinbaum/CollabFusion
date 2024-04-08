@@ -30,6 +30,7 @@ namespace SignalRChat.Pages
         private readonly string _connectionString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
 
 
+
         // OnPost, Upload the files to the Uploads Folder in wwwroot
         // OnPost, Upload the files to the Uploads Folder in wwwroot
         public IActionResult OnPost()

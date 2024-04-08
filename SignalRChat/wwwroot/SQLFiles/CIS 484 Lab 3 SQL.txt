@@ -123,13 +123,6 @@ CREATE TABLE Login (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-CREATE TABLE DocumentTable
-(
-    DocumentTableID INT PRIMARY KEY IDENTITY,
-    CollabID INT,
-    TableName varchar(100),
-    FOREIGN KEY (CollabID) REFERENCES Collaboration(CollabID)
-);
 
 CREATE TABLE [Document]
 (
@@ -141,6 +134,10 @@ CREATE TABLE [Document]
     DocumentTableID INT,
     FOREIGN KEY (DocumentTableID) REFERENCES DocumentTable(DocumentTableID)
 );
+
+
+
+
 
 CREATE TABLE PublicDocument
 (
@@ -159,12 +156,12 @@ CREATE TABLE PreviousSpendingAnalysis (
 	SpendingAnalysisDate DATE
 );
 
-
 INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin)
 VALUES
 ('ben.eidelkind', 'Ben', 'Eidelkind', 'ben.eidel@gmail.com', '123-456-7890', '123 Main St', 'Fairfax', 'VA', 'USA', '22039', 'General User'),
 ('jeremy.ezell', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'General User'),
 ('admin', 'Jeremy', 'Ezell', 'jeremy.ezell@gmail.com', '321-654-7891', '456 Java St', 'Harrisonburg', 'VA', 'USA', '22801', 'Admin');
+
 
 -- Insert sample collaboration
 INSERT INTO Collaboration (CollaborationName, NotesAndInformation)
@@ -233,5 +230,7 @@ VALUES ('This is the first chat message for Beta.', '2024-02-19 12:34:56', 2, 1)
 
 INSERT INTO Chat (ChatText, TimeStamp, CollabID, UserID)
 VALUES ('This is the second chat message for Beta.', '2024-02-19 12:35:56', 2, 2);
+
+
 
 

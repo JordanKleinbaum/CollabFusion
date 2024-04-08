@@ -5,6 +5,8 @@
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
     ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+    int? collabid = HttpContext.Session.GetInt32("collabid");
+
 }
 
 <br />
@@ -15,6 +17,12 @@
         <label for="tableNameInput">Enter Table Name:</label>
         <input asp-for="NewTable.TableName" id="tableNameInput" name="tableName" />
         <button type="submit" class="btn btn-primary">Create Table</button>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+
+
     </div>
 </form>
 
@@ -48,8 +56,6 @@
                 </tr>
             }
 
-
-
         </tbody>
     </table>
 
@@ -62,10 +68,7 @@
 <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Upload Document</a>
 <br />
 <br />
-<a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
-<br />
-<br />
-<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
+
 <br />
 <br />
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
