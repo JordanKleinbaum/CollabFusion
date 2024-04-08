@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SignalRChat.Pages.DB;
 using SignalRChat.Pages.DataClasses;
+using System.Data.SqlClient;
 
 namespace SignalRChat.Pages
 {
@@ -14,9 +15,36 @@ namespace SignalRChat.Pages
         [BindProperty]
         public string AnalysisType { get; set; }
 
-        public void OnGet()
-        {
+        public List<DocumentTable> DocumentTableList { get; set; } = new List<DocumentTable>();
 
+
+        public IActionResult OnGet()
+        {
+            if (HttpContext.Session.GetString("username") != null)
+            {
+
+                SqlDataReader documentTableReader = DBClass.GetAllDocumentTables();
+                while (documentTableReader.Read())
+                {
+                    DocumentTableList.Add(new DocumentTable
+                    {
+                        DocumentTableID = Convert.ToInt32(documentTableReader["DocumentTableID"]),
+                        CollabID = Convert.ToInt32(documentTableReader["CollabID"]),
+                        TableName = documentTableReader["TableName"].ToString(),
+                    });
+                }
+                documentTableReader.Close();
+                // Close your connection in DBClass
+                DBClass.CollabFusionDBConnection.Close();
+                DBClass.AuthDBConnection.Close();
+
+                return Page();
+            }
+            else
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("Index");
+            }
         }
 
         public IActionResult OnPost()

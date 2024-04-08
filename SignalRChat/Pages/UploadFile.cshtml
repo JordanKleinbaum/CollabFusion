@@ -31,17 +31,10 @@
             <label for="analysisType">Send this file to...</label>
             <select id="analysisType" name="AnalysisType" asp-for="AnalysisType">
                 <option disabled selected value="">Choose...</option>
-                <option value="Revenue Projection">Revenue Project</option>
-                <option value="Spending Growth Projections">Spending Growth Projections</option>
-                <option value="Benchmarking Analysis">Benchmarking Analysis</option>
-                <option value="Best Practices">Best Practices</option>
-                <option value="Benchmark SWOT Analysis">Benchmark SWOT Analysis</option>
-                <option value="Legal Requirement">Legal Requirement</option>
-                <option value="Management Practice">Management Practice</option>
-                <option value="Tax Assesment">Tax Assesment</option>
-                <option value="Economic Development SWOT Analysis">Economic Development SWOT Analysis</option>
-                <option value="Economic Development PEST Analysis">Economic Development PEST Analysis</option>
-                <option value="Help Document">Help Documents</option>
+                @foreach(var documentTable in Model.DocumentTableList)
+                {
+                    <option value="@documentTable.DocumentTableID">@documentTable.TableName</option>
+                }
             </select>
         </div>
         <button style="padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 100%;" type="submit" class="btn btn-primary mt-3">Upload</button>
