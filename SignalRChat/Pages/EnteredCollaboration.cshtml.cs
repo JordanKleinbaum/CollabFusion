@@ -49,6 +49,7 @@ namespace SignalRChat.Pages
 
         public List<PreviousSpendingAnalysis> PreviousSpendingAnalysisList { get; set; } = new List<PreviousSpendingAnalysis>();
 
+        public string ErrorMessage { get; set; }
 
 
         public IActionResult OnGet(int collaborationid)
@@ -106,7 +107,7 @@ namespace SignalRChat.Pages
                 //TableDocument Logic Start
                 SqlDataReader TableReader = DBClass.GeneralReaderQuery($"SELECT * FROM DocumentTable WHERE CollabID = {collabid}");
 
-             
+
                 while (TableReader.Read())
                 {
                     Table.Add(new DocumentTable
@@ -114,7 +115,7 @@ namespace SignalRChat.Pages
                         DocumentTableID = Convert.ToInt32(TableReader["DocumentTableID"]),
                         CollabID = Convert.ToInt32(TableReader["CollabID"]),
                         TableName = TableReader["TableName"].ToString()
-                    }) ;
+                    });
                 }
                 TableReader.Close();
                 DBClass.CollabFusionDBConnection.Close();
@@ -169,6 +170,29 @@ namespace SignalRChat.Pages
         public IActionResult OnPost(string tableName)
         {
             int collabId = HttpContext.Session.GetInt32("collabid") ?? 0;
+
+            List<string> existingTableNames = new List<string>();
+
+            using (SqlDataReader tableNamesReader = DBClass.GetAllTableNames())
+            {
+                while (tableNamesReader.Read())
+                {
+                    existingTableNames.Add(tableNamesReader["TableName"].ToString());
+                }
+                DBClass.CollabFusionDBConnection.Close();
+
+            } // SqlDataReader is automatically closed and disposed after exiting the using block
+
+            // Check if the entered table name already exists
+            if (existingTableNames.Contains(tableName))
+            {
+                // Display error message to the user
+                ErrorMessage = "Table name already exists. Please choose a different name.";
+                return Page();
+
+            }
+
+
             DocumentTable newTable = new DocumentTable
             {
                 CollabID = collabId,
@@ -238,7 +262,6 @@ namespace SignalRChat.Pages
             }
             TableReader.Close();
             DBClass.CollabFusionDBConnection.Close();
-            //TableDocument Logic Ends
 
 
             SqlDataReader previousAnalysisReader = DBClass.GetAllPreviousSpendingAnalysis();
@@ -254,6 +277,7 @@ namespace SignalRChat.Pages
 
                 });
             }
+            previousAnalysisReader.Close();
             DBClass.CollabFusionDBConnection.Close();
 
             return Page();

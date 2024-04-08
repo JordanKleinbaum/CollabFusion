@@ -15,6 +15,12 @@
         <label for="tableNameInput">Enter Table Name:</label>
         <input asp-for="NewTable.TableName" id="tableNameInput" name="tableName" />
         <button type="submit" class="btn btn-primary">Create Table</button>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+
+
     </div>
 </form>
 
@@ -47,8 +53,6 @@
                     </td>
                 </tr>
             }
-
-
 
         </tbody>
     </table>

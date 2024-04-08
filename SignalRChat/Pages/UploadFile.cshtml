@@ -2,6 +2,8 @@
 @model SignalRChat.Pages.UploadFileModel
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
+    ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+
 }
 
 <div style="max-width: 500px; margin: 0 auto; border-radius: 8px; padding: 20px; border: 1px solid gray;" class="mt-3">
@@ -33,7 +35,7 @@
                 <option disabled selected value="">Choose...</option>
                 @foreach(var documentTable in Model.DocumentTableList)
                 {
-                    <option value="@documentTable.DocumentTableID">@documentTable.TableName</option>
+                    <option value="@documentTable.TableName">@documentTable.TableName</option>
                 }
             </select>
         </div>
