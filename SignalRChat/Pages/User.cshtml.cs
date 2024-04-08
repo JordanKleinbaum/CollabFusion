@@ -31,19 +31,34 @@ namespace SignalRChat.Pages
             if (!ModelState.IsValid)
             {
                 ModelState.Clear();
-                NewUser.Username = "User100";
-                NewUser.Password = "UsersPassword100";
-                NewUser.FirstName = "Jeremy";
-                NewUser.LastName = "Ezell";
-                NewUser.Email = "SkittleWater@gmail.com";
+                NewUser.Username = "john123";
+                NewUser.Password = "john123";
+                NewUser.FirstName = "John";
+                NewUser.LastName = "Cathell";
+                NewUser.Email = "john@madisoncounty.org";
                 NewUser.Phone = "9176990397";
                 NewUser.Country = "United States of America";
-                NewUser.State = "New Jersey";
-                NewUser.City = "Scotch Plains";
-                NewUser.Street = "2220 New York Avenue";
-                NewUser.ZipCode = "07076";
+                NewUser.State = "Virginia";
+                NewUser.City = "Leesburg";
+                NewUser.Street = "2363 Bayberry Lane";
+                NewUser.ZipCode = "22801";
                 NewUser.Admin = "General User";
             }
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
+            // Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+            DBClass.AuthDBConnection.Close();
             return Page();
         }
 
@@ -66,6 +81,21 @@ namespace SignalRChat.Pages
                 NewUser.ZipCode = "";
                 NewUser.Admin = "";
             }
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
+            // Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+            DBClass.AuthDBConnection.Close();
             return Page();
         }
 
@@ -127,6 +157,9 @@ namespace SignalRChat.Pages
 
         public IActionResult OnPost()
         {
+
+
+
             // Retrieve selected collaboration IDs from form
             var selectedCollabIds = HttpContext.Request.Form["SelectedCollabs"];
 
