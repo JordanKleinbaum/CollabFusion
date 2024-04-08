@@ -123,6 +123,11 @@ CREATE TABLE Login (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
+CREATE TABLE DocumentTable (
+    DocumentTableID INT IDENTITY(1,1) PRIMARY KEY,
+    CollabID INT,
+    TableName NVARCHAR(100)
+);
 CREATE TABLE [Document]
 (
     Id INT PRIMARY KEY IDENTITY,
@@ -134,11 +139,6 @@ CREATE TABLE [Document]
     FOREIGN KEY (DocumentTableID) REFERENCES DocumentTable(DocumentTableID)
 );
 
-CREATE TABLE DocumentTable (
-    DocumentTableID INT IDENTITY(1,1) PRIMARY KEY,
-    CollabID INT,
-    TableName NVARCHAR(100)
-);
 
 CREATE TABLE PublicDocument
 (
