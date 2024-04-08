@@ -31,17 +31,17 @@ namespace SignalRChat.Pages
             if (!ModelState.IsValid)
             {
                 ModelState.Clear();
-                NewUser.Username = "User100";
-                NewUser.Password = "UsersPassword100";
-                NewUser.FirstName = "Jeremy";
-                NewUser.LastName = "Ezell";
-                NewUser.Email = "SkittleWater@gmail.com";
+                NewUser.Username = "john123";
+                NewUser.Password = "john123";
+                NewUser.FirstName = "John";
+                NewUser.LastName = "Cathell";
+                NewUser.Email = "john@madisoncounty.org";
                 NewUser.Phone = "9176990397";
                 NewUser.Country = "United States of America";
-                NewUser.State = "New Jersey";
-                NewUser.City = "Scotch Plains";
-                NewUser.Street = "2220 New York Avenue";
-                NewUser.ZipCode = "07076";
+                NewUser.State = "Virginia";
+                NewUser.City = "Leesburg";
+                NewUser.Street = "2363 Bayberry Lane";
+                NewUser.ZipCode = "22801";
                 NewUser.Admin = "General User";
             }
             SqlDataReader collabReader = DBClass.GetAllCollabs();
