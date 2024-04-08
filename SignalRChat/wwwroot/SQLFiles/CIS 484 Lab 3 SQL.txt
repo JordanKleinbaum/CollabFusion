@@ -128,17 +128,16 @@ CREATE TABLE DocumentTable (
     CollabID INT,
     TableName NVARCHAR(100)
 );
-
-CREATE TABLE [Document] (
+CREATE TABLE [Document]
+(
     Id INT PRIMARY KEY IDENTITY,
-    FileName NVARCHAR(255),
+    FileName NVARCHAR(255), -- Assuming file names are up to 255 characters
     FileData VARBINARY(MAX) NOT NULL,
     DateAdded DATETIME,
-    DocumentTableID INT, -- Foreign key referencing DocumentTable
-    TableName NVARCHAR(100), -- Not a foreign key
-    CONSTRAINT FK_Document_DocumentTable
-        FOREIGN KEY (DocumentTableID) REFERENCES DocumentTable(DocumentTableID)
+    DocumentTableID INT,
+    FOREIGN KEY (DocumentTableID) REFERENCES DocumentTable(DocumentTableID)
 );
+
 
 
 
