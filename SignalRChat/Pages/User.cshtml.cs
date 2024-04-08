@@ -44,6 +44,21 @@ namespace SignalRChat.Pages
                 NewUser.ZipCode = "07076";
                 NewUser.Admin = "General User";
             }
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
+            // Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+            DBClass.AuthDBConnection.Close();
             return Page();
         }
 
@@ -66,6 +81,21 @@ namespace SignalRChat.Pages
                 NewUser.ZipCode = "";
                 NewUser.Admin = "";
             }
+            SqlDataReader collabReader = DBClass.GetAllCollabs();
+            while (collabReader.Read())
+            {
+                CollabList.Add(new Collaboration
+                {
+                    CollabID = Convert.ToInt32(collabReader["CollabID"]),
+                    CollaborationName = collabReader["CollaborationName"].ToString(),
+                    NotesAndInformation = collabReader["NotesAndInformation"].ToString(),
+                });
+            }
+
+            collabReader.Close();
+            // Close your connection in DBClass
+            DBClass.CollabFusionDBConnection.Close();
+            DBClass.AuthDBConnection.Close();
             return Page();
         }
 
@@ -127,6 +157,9 @@ namespace SignalRChat.Pages
 
         public IActionResult OnPost()
         {
+
+
+
             // Retrieve selected collaboration IDs from form
             var selectedCollabIds = HttpContext.Request.Form["SelectedCollabs"];
 
