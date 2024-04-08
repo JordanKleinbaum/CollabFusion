@@ -27,7 +27,8 @@ namespace SignalRChat.Pages
         public int PageSize { get; private set; } = 6; // Number of items per page
 
         // SQL Server connection string
-        private readonly string _connectionString = "Server=sharpmindsdb.database.windows.net,1433;" + "Database=Lab3;" + "User Id=sharpminds484;" + "Password=fy02fJNVj1uf55b;" + "Encrypt=True;" + "TrustServerCertificate=True";
+        private readonly string _connectionString = "Server=localhost;Database=Lab3;Trusted_Connection=True;";
+
 
 
         // OnPost, Upload the files to the Uploads Folder in wwwroot
