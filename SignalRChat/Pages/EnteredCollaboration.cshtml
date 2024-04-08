@@ -5,6 +5,8 @@
 @{
     ViewData["username"] = HttpContext.Session.GetString("username");
     ViewData["collabid"] = HttpContext.Session.GetInt32("collabid");
+    int? collabid = HttpContext.Session.GetInt32("collabid");
+
 }
 
 <br />
@@ -66,7 +68,12 @@
 <a asp-page="/UploadFile" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Upload Document</a>
 <br />
 <br />
-<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>
+@if (collabid == 1)
+{
+    <a class="btn" style="background-color: #293A7F; color: white; width: 100%;" asp-page="/DataSets">View Excel Data</a>
+}
+
+@*<a asp-page="PrintReport" class="btn" style="background-color: #293A7F; color: white; width: 100%;">Print Report</a>*@
 <br />
 <br />
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
