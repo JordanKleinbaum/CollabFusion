@@ -4,6 +4,15 @@
     // ViewData["username"] = HttpContext.Session.GetString("username");
     Layout = "~/Pages/Shared/_LayoutPublicDocuments.cshtml";
 }
+
+<style>
+    .too-far{
+        max-height: 36em;
+        overflow-y: auto;
+    }
+</style>
+
+
 <br />
 <h1>Welcome Madison County Citizens</h1>
 <br />
@@ -17,7 +26,7 @@
 </form>
 
 <br />
-<div class="table-responsive">
+<div class="table-responsive too-far">
     <table class="table">
         <thead>
             <tr>
@@ -34,7 +43,7 @@
                     <td>@document.DateAdded.ToShortDateString()</td>
                     <td>
                         <!-- Add a button to trigger the download -->
-                        <button class="btn btn-primary" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                        <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                     </td>
                 </tr>
             }

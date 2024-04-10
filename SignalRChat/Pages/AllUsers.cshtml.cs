@@ -57,7 +57,7 @@ namespace SignalRChat.Pages
         //    else
         //    {
         //        HttpContext.Session.SetString("LoginError", "You must login to access that page!");
-        //        return RedirectToPage("Index");
+        //        return RedirectToPage("Login");
         //    }
         //}
     }
