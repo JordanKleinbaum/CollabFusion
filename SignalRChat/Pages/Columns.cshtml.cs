@@ -9,9 +9,20 @@ namespace SignalRChat.Pages
         public int column2 { get; set; }
         public string FileName { get; set; }
 
-        public void OnGet(string fileName)
+
+
+        public IActionResult OnGet(string fileName)
         {
-            FileName = fileName;
+            if (HttpContext.Session.GetString("username") != null)
+            {
+                FileName = fileName;
+                return Page();
+            }
+            else
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                return RedirectToPage("Login");
+            }
         }
 
 
