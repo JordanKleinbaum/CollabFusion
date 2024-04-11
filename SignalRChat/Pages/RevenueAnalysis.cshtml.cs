@@ -33,7 +33,10 @@ namespace SignalRChat.Pages
         [BindProperty]
         [Required(ErrorMessage = "Analysis Description is required")]
         public string AnalysisDescription { get; set; }
+
+        [BindProperty]
         public int column1 { get; set; }
+        [BindProperty]
         public int column2 { get; set; }
 
         private bool ColumnsSelected { get; set; } = false;
@@ -117,14 +120,17 @@ namespace SignalRChat.Pages
             {
                 SpendingAnalysisName = AnalysisName,
                 SpendingAnalysisDescription = AnalysisDescription,
-                BasedOffOf = fileName
+                BasedOffOf = fileName,
+                Column1 = column1,
+                Column2 = column2
             };
 
             // Insert the collaboration into the database
             DBClass.InsertPreviousSpendingAnalysis(spendingAnalysis);
 
             return RedirectToPage("CollabHub");
-
         }
+
+
     }
 }

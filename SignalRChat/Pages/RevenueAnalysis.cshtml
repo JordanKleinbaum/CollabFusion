@@ -47,6 +47,9 @@
 
     <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
 
+    <input type="hidden" name="column1" value="@Request.Query["column1"]" asp-for="column1" />
+    <input type="hidden" name="column2" value="@Request.Query["column2"]" asp-for="column2"/>
+
     <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Save Analysis</button>
 </form>
 
