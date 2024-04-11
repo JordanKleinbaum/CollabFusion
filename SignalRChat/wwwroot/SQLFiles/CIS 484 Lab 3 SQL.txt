@@ -167,6 +167,17 @@ CREATE TABLE PreviousSpendingAnalysis (
     Column2 INT
 );
 
+CREATE TABLE PublicPreviousSpendingAnalysis (
+	PublicPreviousSpendingAnalysis INT IDENTITY(1,1) PRIMARY KEY,
+    SpendingAnalysisID INT,
+    SpendingAnalysisName VARCHAR(255),
+    SpendingAnalysisDescription TEXT,
+    BasedOffOf VARCHAR(255),
+	SpendingAnalysisDate DATE,
+    Column1 INT,
+    Column2 INT
+);
+
 INSERT INTO Users (Username, FirstName, LastName, Email, Phone, Street, City, State, Country, ZipCode, Admin)
 VALUES
 ('ben.eidelkind', 'Ben', 'Eidelkind', 'ben.eidel@gmail.com', '123-456-7890', '123 Main St', 'Fairfax', 'VA', 'USA', '22039', 'General User'),
