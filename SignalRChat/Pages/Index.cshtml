@@ -26,6 +26,7 @@
 </form>
 
 <br />
+<h1>Files</h1>
 <div class="table-responsive too-far">
     <table class="table">
         <thead>
@@ -45,6 +46,34 @@
                         <!-- Add a button to trigger the download -->
                         <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
                     </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<h1>Analysis</h1>
+
+@*REGRESSION ANALYSIS*@
+<div class="table-responsive too-far">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Analysis Name</th>
+                <th>Analysis Description</th>
+                <th>Analyzed File</th>
+                <th>Date Uploaded</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analysis in Model.PublicPreviousSpendingAnalysis)
+            {
+                <tr>
+                    <td>@analysis.SpendingAnalysisName</td>
+                    <td>@analysis.SpendingAnalysisDescription</td>
+                    <td>@analysis.BasedOffOf</td>
+                    <td>@analysis.SpendingAnalysisDate</td>
+                    
                 </tr>
             }
         </tbody>
