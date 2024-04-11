@@ -70,8 +70,9 @@ namespace SignalRChat.Pages
                         SpendingAnalysisName = previousAnalysisReader["SpendingAnalysisName"].ToString(),
                         SpendingAnalysisDescription = previousAnalysisReader["SpendingAnalysisDescription"].ToString(),
                         BasedOffOf = previousAnalysisReader["BasedOffOf"].ToString(),
-                        SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date
-
+                        SpendingAnalysisDate = Convert.ToDateTime(previousAnalysisReader["SpendingAnalysisDate"]).Date,
+                        Column1 = Convert.ToInt32(previousAnalysisReader["Column1"]),
+                        Column2 = Convert.ToInt32(previousAnalysisReader["Column2"])
                     });
                 }
                 DBClass.CollabFusionDBConnection.Close();
