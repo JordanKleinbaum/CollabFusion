@@ -277,7 +277,60 @@ namespace SignalRChat.Pages
             return RedirectToPage();
         }
 
+        public IActionResult OnPostPushAnalysis(int spendinganalysisid)
+        {
+            List<PublicPreviousSpendingAnalysis> pushedAnalysis = new List<PublicPreviousSpendingAnalysis>();
 
+            // Step 1: Read data from the source table and close the SqlDataReader
+            using (SqlConnection connection = new SqlConnection(CollabFusionDBConnString))
+            {
+                connection.Open();
+                string selectQuery = "SELECT * FROM PreviousSpendingAnalysis WHERE SpendingAnalysisID = @spendinganalysisid";
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@spendinganalysisid", spendinganalysisid);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            PublicPreviousSpendingAnalysis previousSpendingAnalysis = new PublicPreviousSpendingAnalysis
+                            {
+                                SpendingAnalysisID = Convert.ToInt32(reader["SpendingAnalysisID"]),
+                                SpendingAnalysisName = reader["SpendingAnalysisName"].ToString(),
+                                SpendingAnalysisDescription = reader["SpendingAnalysisDescription"].ToString(),
+                                BasedOffOf = reader["BasedOffOf"].ToString(),
+                                SpendingAnalysisDate = Convert.ToDateTime(reader["SpendingAnalysisDate"]),
+                                Column1 = Convert.ToInt32(reader["Column1"]),
+                                Column2 = Convert.ToInt32(reader["Column2"])
+                            };
+                            pushedAnalysis.Add(previousSpendingAnalysis);
+                        }
+                    }
+                }
+            }
 
+            using (SqlConnection insertConnection = new SqlConnection(CollabFusionDBConnString))
+            {
+                insertConnection.Open();
+                foreach (var item in pushedAnalysis)
+                {
+                    string insertQuery = "INSERT INTO PublicPreviousSpendingAnalysis (SpendingAnalysisID, SpendingAnalysisName, SpendingAnalysisDescription, BasedOffOf, SpendingAnalysisDate, Column1, Column2) " +
+                        "VALUES (@SpendingAnalysisID, @SpendingAnalysisName, @SpendingAnalysisDescription, @BasedOffOf, @SpendingAnalysisDate, @Column1, @Column2)";
+                    using (SqlCommand insertCommand = new SqlCommand(insertQuery, insertConnection))
+                    {
+                        insertCommand.Parameters.AddWithValue("@SpendingAnalysisID", item.SpendingAnalysisID);
+                        insertCommand.Parameters.AddWithValue("@SpendingAnalysisName", item.SpendingAnalysisName);
+                        insertCommand.Parameters.AddWithValue("@SpendingAnalysisDescription", item.SpendingAnalysisDescription);
+                        insertCommand.Parameters.AddWithValue("@BasedOffOf", item.BasedOffOf);
+                        insertCommand.Parameters.AddWithValue("@SpendingAnalysisDate", item.SpendingAnalysisDate);
+                        insertCommand.Parameters.AddWithValue("@Column1", item.Column1);
+                        insertCommand.Parameters.AddWithValue("@Column2", item.Column2);
+                        insertCommand.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            return RedirectToPage();
+        }
     }
 }
