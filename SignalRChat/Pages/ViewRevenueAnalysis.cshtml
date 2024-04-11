@@ -1,11 +1,9 @@
 ﻿@page
 @model SignalRChat.Pages.ViewRevenueAnalysisModel
 @{
-}
-@{
     ViewData["username"] = HttpContext.Session.GetString("username");
-
 }
+
 <br />
 @if (Model.RegressionAnalysisResult != null)
 {
@@ -17,27 +15,7 @@
     <div id="scatterPlot" style="display: flex; justify-content: center;"></div>
 }
 <a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
-@* 
-<hr />
-<h2>Re-Save Analysis</h2>
 
-<form asp-page="RevenueAnalysis" style="margin-top: 20px;" method="post">
-    <div class="form-group">
-        <label class="form-label">Analysis Title</label>
-        <input asp-for="AnalysisName" class="form-control" placeholder="Enter Analysis Title">
-        <span asp-validation-for="AnalysisName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label class="form-label">Analysis Description</label>
-        <textarea asp-for="AnalysisDescription" rows="4" placeholder="Enter Analysis Description"></textarea>
-        <span asp-validation-for="AnalysisDescription" class="text-danger"></span>
-    </div>
-
-    <input type="hidden" name="fileName" value="@Request.Query["fileName"]" />
-
-    <button type="submit" class="btn btn-custom" style="background-color: #293a7f; color: white; border-radius: 20px; padding: 10px 20px; border: none; cursor: pointer;">Re-Save Analysis</button>
-</form> *@
 @section Scripts {
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>

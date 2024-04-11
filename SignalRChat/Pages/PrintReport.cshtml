@@ -64,7 +64,7 @@
 <button id="printDownloadButton" class="btn btn-primary">Download Report</button>
 <br />
 <br />
-<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub">&#8592; Back</a>
+<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/CollabHub" id="backButton">&#8592; Back</a>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 <script>
@@ -76,6 +76,9 @@
         // Hide the button before generating PDF
         var button = document.getElementById("printDownloadButton");
         button.style.visibility = "hidden";
+
+        var backButton = document.getElementById("backButton");
+        backButton.style.visibility = "hidden";
 
         setTimeout(function () {
             // Convert HTML content to PDF using html2pdf.js

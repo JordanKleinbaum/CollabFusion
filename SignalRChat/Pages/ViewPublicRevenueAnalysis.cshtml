@@ -1,0 +1,89 @@
+﻿@page
+@model SignalRChat.Pages.ViewPublicRevenueAnalysisModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    Layout = "~/Pages/Shared/_LayoutPublicDocuments.cshtml";
+
+}
+@if (Model.RegressionAnalysisResult != null)
+{
+    <h2>Regression Analysis Result:</h2>
+    <p>Intercept: @Model.RegressionAnalysisResult.Intercept</p>
+    <p>Slope: @Model.RegressionAnalysisResult.Slope</p>
+    <p>R-Squared: @Model.RegressionAnalysisResult.RSquared</p>
+
+    <div id="scatterPlot" style="display: flex; justify-content: center;"></div>
+}
+<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/Index" id="backButton">&#8592; Back</a>
+<button id="printDownloadButton" class="btn btn-primary">Download Report</button>
+
+@section Scripts {
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    <script>
+        var xValues = @Html.Raw(Json.Serialize(Model.XValues));
+        var yValues = @Html.Raw(Json.Serialize(Model.YValues));
+        var trendline = @Html.Raw(Json.Serialize(Model.Trendline));
+
+        var trace1 = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers',
+            type: 'scatter'
+        };
+
+        var trace2 = {
+            x: xValues,
+            y: trendline,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'Trendline'
+        };
+
+        var data = [trace1, trace2];
+
+        var layout = {
+            title: 'Revenue Analysis',
+            xaxis: {
+                title: '@Model.XColumnHeader'
+            },
+            yaxis: {
+                title: '@Model.YColumnHeader'
+            }
+        };
+
+        Plotly.newPlot('scatterPlot', data, layout);
+
+        document.getElementById("printDownloadButton").addEventListener("click", function () {
+            // Hide the navbar before generating PDF
+            var navbar = document.getElementById("navbarContainer");
+            navbar.style.visibility = "hidden";
+
+            // Hide the button before generating PDF
+            var button = document.getElementById("printDownloadButton");
+            button.style.visibility = "hidden";
+
+            var backButton = document.getElementById("backButton");
+            backButton.style.visibility = "hidden";
+
+            setTimeout(function () {
+                // Convert HTML content to PDF using html2pdf.js
+                var element = document.body; // Or any other element you want to convert
+                html2pdf(element, {
+                    margin: 1,
+                    filename: 'document.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { dpi: 192, letterRendering: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } // For vertical, change landscape to portrait
+                }).then(function () {
+                    // Show the button again after PDF generation
+                    button.style.visibility = "visible";
+                    // Show the navbar again after PDF generation
+                    navbar.style.visibility = "visible";
+                });
+            }, 1); // Adjust the delay as needed
+        });
+    </script>
+}
+

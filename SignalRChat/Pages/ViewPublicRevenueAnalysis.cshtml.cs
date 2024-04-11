@@ -8,8 +8,7 @@ using SignalRChat.Pages.DB;
 
 namespace SignalRChat.Pages
 {
-
-    public class ViewRevenueAnalysisModel : PageModel
+    public class ViewPublicRevenueAnalysisModel : PageModel
     {
         private readonly string _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
@@ -124,7 +123,5 @@ namespace SignalRChat.Pages
 
             return RedirectToPage("CollabHub");
         }
-
-
     }
 }

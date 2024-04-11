@@ -26,6 +26,7 @@
 </form>
 
 <br />
+<h1>Files</h1>
 <div class="table-responsive too-far">
     <table class="table">
         <thead>
@@ -44,6 +45,39 @@
                     <td>
                         <!-- Add a button to trigger the download -->
                         <button class="btn" style="background: #293A7F; color: white;" onclick="downloadDocument('@document.FileName', '@Convert.ToBase64String(document.FileData)')">Download</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<h1>Analysis</h1>
+
+@*REGRESSION ANALYSIS*@
+<div class="table-responsive too-far">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Analysis Name</th>
+                <th>Analysis Description</th>
+                <th>Analyzed File</th>
+                <th>Date Uploaded</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analysis in Model.PublicPreviousSpendingAnalysis)
+            {
+                <tr>
+                    <td>@analysis.SpendingAnalysisName</td>
+                    <td>@analysis.SpendingAnalysisDescription</td>
+                    <td>@analysis.BasedOffOf</td>
+                    <td>@analysis.SpendingAnalysisDate</td>
+                    <td>
+                        <form method="post">
+                            <button type="submit" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" asp-route-column1="@analysis.Column1" asp-route-column2="@analysis.Column2" class="btn" style="background-color: #293A7F; color: white;">View Analysis</button>
+                        </form>
                     </td>
                 </tr>
             }
