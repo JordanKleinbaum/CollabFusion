@@ -1,0 +1,57 @@
+﻿@page
+@model SignalRChat.Pages.ViewPublicRevenueAnalysisModel
+@{
+    ViewData["username"] = HttpContext.Session.GetString("username");
+    Layout = "~/Pages/Shared/_LayoutPublicDocuments.cshtml";
+
+}
+<br />
+@if (Model.RegressionAnalysisResult != null)
+{
+    <h2>Regression Analysis Result:</h2>
+    <p>Intercept: @Model.RegressionAnalysisResult.Intercept</p>
+    <p>Slope: @Model.RegressionAnalysisResult.Slope</p>
+    <p>R-Squared: @Model.RegressionAnalysisResult.RSquared</p>
+
+    <div id="scatterPlot" style="display: flex; justify-content: center;"></div>
+}
+<a class="btn" style="background-color: #293A7F; color: white;" asp-page="/Index">&#8592; Back</a>
+
+@section Scripts {
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        var xValues = @Html.Raw(Json.Serialize(Model.XValues));
+        var yValues = @Html.Raw(Json.Serialize(Model.YValues));
+        var trendline = @Html.Raw(Json.Serialize(Model.Trendline));
+
+        var trace1 = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers',
+            type: 'scatter'
+        };
+
+        var trace2 = {
+            x: xValues,
+            y: trendline,
+            mode: 'lines',
+            type: 'scatter',
+            name: 'Trendline'
+        };
+
+        var data = [trace1, trace2];
+
+        var layout = {
+            title: 'Revenue Analysis',
+            xaxis: {
+                title: '@Model.XColumnHeader'
+            },
+            yaxis: {
+                title: '@Model.YColumnHeader'
+            }
+        };
+
+        Plotly.newPlot('scatterPlot', data, layout);
+    </script>
+}
+

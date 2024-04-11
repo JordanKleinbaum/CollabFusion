@@ -100,5 +100,14 @@ namespace SignalRChat.Pages
             reader.Close();
             DB.DBClass.CollabFusionDBConnection.Close();
         }
+
+        public IActionResult OnPost(int column1, int column2, string fileName)
+        {
+            // Validate and process the column values
+            // You can also perform additional validation if needed
+
+            // Redirect to another page passing the required parameters
+            return RedirectToPage("/ViewPublicRevenueAnalysis", new { fileName, column1, column2 });
+        }
     }
 }
