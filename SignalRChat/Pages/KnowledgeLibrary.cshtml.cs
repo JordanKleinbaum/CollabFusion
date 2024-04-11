@@ -86,6 +86,15 @@ namespace SignalRChat.Pages
 
         }
 
+        public IActionResult OnPost(int column1, int column2, string fileName)
+        {
+            // Validate and process the column values
+            // You can also perform additional validation if needed
+
+            // Redirect to another page passing the required parameters
+            return RedirectToPage("/ViewRevenueAnalysis", new { fileName, column1, column2 });
+        }
+
 
         public IActionResult OnPostSearch(String SearchTerm)
         {

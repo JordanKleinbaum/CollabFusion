@@ -110,7 +110,9 @@
                             <td>@analysis.BasedOffOf</td>
                             <td>@analysis.SpendingAnalysisDate.ToShortDateString()</td>
                             <td>
-                                <a asp-page="/ViewRevenueAnalysis" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" class="btn" style="background-color: #293A7F; color: white;">View Analysis</a>
+                                <form method="post">
+                                    <button type="submit" asp-route-fileName="@analysis.BasedOffOf" asp-route-SpendingAnalysisID="@analysis.SpendingAnalysisID" asp-route-column1="@analysis.Column1" asp-route-column2="@analysis.Column2" class="btn" style="background-color: #293A7F; color: white;">View Analysis</button>
+                                </form>
                             </td>
                         </tr>
                     }
