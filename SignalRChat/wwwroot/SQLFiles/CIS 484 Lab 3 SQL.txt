@@ -168,7 +168,7 @@ CREATE TABLE PreviousSpendingAnalysis (
 );
 
 CREATE TABLE PublicPreviousSpendingAnalysis (
-	PublicPreviousSpendingAnalysis INT IDENTITY(1,1) PRIMARY KEY,
+	PublicPreviousSpendingAnalysisID INT IDENTITY(1,1) PRIMARY KEY,
     SpendingAnalysisID INT,
     SpendingAnalysisName VARCHAR(255),
     SpendingAnalysisDescription TEXT,
